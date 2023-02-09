@@ -1,0 +1,13 @@
+syntax = "proto3"
+
+message Marketer {
+    string id = 1;
+    string email = 1;
+    string name = 1;
+}
+
+message RegisterMarketerRequest {
+    string email = 1;
+    string name = 2;
+    string password = 3;   
+}
