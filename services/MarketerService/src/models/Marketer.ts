@@ -1,4 +1,4 @@
-import db from "../../../../db";
+import db from "../../../../db/src";
 
 class Marketer {
     async getMarketers() {
@@ -6,5 +6,6 @@ class Marketer {
         return marketers
     }
 }
+
 
 export default new Marketer()
