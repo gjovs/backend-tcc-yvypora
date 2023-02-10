@@ -1,6 +1,5 @@
-import Marketer from "./Marketer";
+import MarketerModel from './Marketer';
 
 export {
-    Marketer
-}
-
+  MarketerModel,
+};
