@@ -1,43 +1,28 @@
+import { Metadata, sendUnaryData, ServerErrorResponse, ServerUnaryCall } from "@grpc/grpc-js"
 import {
-  ServerUnaryCall,
-  sendUnaryData,
-  ServiceError,
-  ServerWritableStream,
-} from 'grpc';
+  Marketer,
+  MarketerRequest,
+  MarketersService
+} from "../proto/messages"
+import { MarketerModel } from "./models"
 
-import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
-import { IMarketersServer } from '../proto/messages_grpc_pb';
-import { Marketer, MarketerRequest } from '../proto/messages_pb';
 
-// model
-import { MarketerModel } from './models';
-
-class ServiceImplementations implements IMarketersServer {
-  async getMarketer(call: ServerUnaryCall<MarketerRequest>, callback: sendUnaryData<Marketer>): Promise<void> {
-    const id = call.request.getId();
-    const res = await MarketerModel.findById(id);
-
-    if (!res) {
-      const error: ServiceError = {
-        name: 'Marketer Missing',
-        message: `Marketer with ID ${id} does not exist.`,
-      };
-      callback(error, null);
+export const getMarketer = async (
+  call: ServerUnaryCall<MarketerRequest, Marketer>,
+  callback: sendUnaryData<Marketer>
+) => {
+  const user = await MarketerModel.findById(call.request.id)
+  if (!user) {
+    const error: ServerErrorResponse = {
+      message: `This ${call.request.id} is not founded`,
+      name: "Not Founded Content",
+      code: 404,
+      details: `This ${call.request.id} is not founded`,
+      metadata: new Metadata(),
+      stack: `This ${call.request.id} is not founded`,
     }
-
-    // @ts-ignore
-    callback(null, res);
+    callback(error, null)
   }
 
-  async getMarketers(call: ServerWritableStream<Empty, Marketer>): Promise<void> {
-    const marketers = await MarketerModel.findAll();
-
-    marketers.forEach((marketer) => {
-      call.write(marketer);
-    });
-
-    call.end();
-  }
+  callback(null, user)
 }
-
-export default new ServiceImplementations();

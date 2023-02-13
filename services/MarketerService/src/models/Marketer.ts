@@ -1,9 +1,8 @@
-import db from 'db';
+import db from './prisma';
 
-import {
-  marketer,
-} from '@prisma/client';
-import { Marketer } from '../../proto/messages_pb';
+import { marketer } from '@prisma/client';
+
+import { Marketer } from '../../proto/messages';
 
 class MarketerModel {
   async findAll(): Promise<marketer[]> {
@@ -11,7 +10,7 @@ class MarketerModel {
     return marketers;
   }
 
-  async findById(id: number): Promise<Marketer.AsObject | null> {
+  async findById(id: number): Promise<Marketer | null> {
     const res = await db.marketer.findUnique({
       where: {
         id,
@@ -22,6 +21,9 @@ class MarketerModel {
         email: true,
       },
     });
+
+    
+    // @ts-ignore
     return res;
   }
 }
