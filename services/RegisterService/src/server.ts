@@ -3,7 +3,7 @@ import { ServerCredentials } from '@grpc/grpc-js';
 import serverConfigs from '../configs/server';
 import { MarketersService } from '../proto/messages';
 import {
-getMarketer
+registerConsumer
 } from './implementations'
 
 const proto = grpc.loadPackageDefinition(serverConfigs.packageDefinitions);

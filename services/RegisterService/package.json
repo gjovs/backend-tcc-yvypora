@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "server": "ts-node src/server.ts",
-    "build-proto": "sh proto/build.sh",
+    "build-proto": "",
     "generate-prisma": "npx prisma generate --schema=./db/prisma/schema.prisma",
     "pull-prisma": "npx prisma db pull --schema=./db/prisma/schema.prisma",
     "migrate": "npx prisma migrate dev --schema=./db/prisma/schema.prisma"
