@@ -1,4 +1,4 @@
-import db from './prisma';
+import db from '../lib/prisma';
 
 import { Costumer } from '../../proto/register';
 

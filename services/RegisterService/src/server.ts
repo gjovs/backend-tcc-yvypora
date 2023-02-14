@@ -1,19 +1,18 @@
 import * as grpc from '@grpc/grpc-js';
 import { ServerCredentials } from '@grpc/grpc-js';
 import serverConfigs from '../configs/server';
-import { MarketersService } from '../proto/messages';
+import { RegisterServiceClient } from '../proto/register';
 import {
-registerConsumer
+registerCostumer
 } from './implementations'
 
 const proto = grpc.loadPackageDefinition(serverConfigs.packageDefinitions);
 
 const server = new grpc.Server();
 
-server.addService(MarketersService,  {
-    getMarketer: getMarketer
+server.addService(RegisterServiceClient,  {
+   registerCostumer 
 });
-
 
 server.bindAsync('localhost:3333', ServerCredentials.createInsecure(), (err, port) => {
     if (err) {
