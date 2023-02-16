@@ -138,7 +138,7 @@ model marketer {
   email          String           @unique @db.VarChar(255)
   password_hash  String           @db.VarChar(255)
   picture_uri    String?
-  review         Float
+  review         Float            @default(0)
   online         Boolean          @default(false)
   locationId     Int              @unique
   created_at     DateTime         @default(now())

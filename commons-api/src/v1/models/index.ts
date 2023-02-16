@@ -1,3 +1,5 @@
 import Costumer from './Costumer';
+import Marketer from './Marketer';
+import User from './User';
 
-export { Costumer };
+export { Costumer, Marketer, User };

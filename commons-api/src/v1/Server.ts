@@ -1,7 +1,9 @@
 import Fastify, { FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
-import { registerPlugin } from './plugins';
+import jwt from '@fastify/jwt';
+
+import { loginPlugin, registerPlugin, picturePlugin } from './plugins';
 
 class Server {
   declare app: FastifyInstance;
@@ -16,6 +18,12 @@ class Server {
   }
 
   private async middleware() {
+    this.app.register(jwt, {
+      secret: '12313123123',
+      sign: {
+        expiresIn: '7d',
+      },
+    });
     this.app.register(multipart, {
       attachFieldsToBody: true,
     });
@@ -28,6 +36,12 @@ class Server {
   private plugins() {
     this.app.register(registerPlugin, {
       prefix: '/register/',
+    });
+    this.app.register(loginPlugin, {
+      prefix: '/login/',
+    });
+    this.app.register(picturePlugin, {
+      prefix: '/picture/',
     });
   }
 }
