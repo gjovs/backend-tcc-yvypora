@@ -1,11 +1,7 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { User } from '../models';
+import { TypeOfUser } from '../models/utils/enums';
 
-enum TypeOfUser {
-  COSTUMER= 'COSTUMER',
-  MARKETER = 'MARKETER',
-  DELIVERYMAN = 'DELIVERYMAN'
-}
 export default async function picturePlugin(server: FastifyInstance) {
   // reference the user costumer or marketer
   server.put('/:id/', {

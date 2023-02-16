@@ -3,7 +3,7 @@ import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
 import jwt from '@fastify/jwt';
 
-import { loginPlugin, registerPlugin, picturePlugin } from './plugins';
+import { loginPlugin, picturePlugin, registerPlugin } from './plugins';
 
 class Server {
   declare app: FastifyInstance;

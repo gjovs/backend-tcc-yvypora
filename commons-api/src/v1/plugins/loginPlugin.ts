@@ -1,13 +1,7 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
-import bcryptjs from 'bcryptjs';
 import { User } from '../models';
 import { checkPassword } from '../utils/utils';
-
-enum TypeOfUser {
-  COSTUMER= 'COSTUMER',
-  MARKETER = 'MARKETER',
-  DELIVERYMAN = 'DELIVERYMAN'
-}
+import { TypeOfUser } from '../models/utils/enums';
 
 export default async function loginPlugin(server: FastifyInstance) {
   server.post('/', {

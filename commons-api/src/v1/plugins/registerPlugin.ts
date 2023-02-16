@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import bcryptjs from 'bcryptjs';
 import { Costumer, Marketer } from '../models';
+import { hashPassword } from '../utils/utils';
 
 export default async function registerPlugin(server: FastifyInstance) {
   server.post('/costumer', {
@@ -67,7 +68,7 @@ export default async function registerPlugin(server: FastifyInstance) {
     // female id
     if (gender.toUpperCase() === 'F') genderId = 2;
 
-    const password_hash = await bcryptjs.hash(password, 6);
+    const password_hash = await hashPassword(password);
 
     const res = await Costumer.createCostumer({
       name, email, password: password_hash, address, gender: genderId,
@@ -134,7 +135,7 @@ export default async function registerPlugin(server: FastifyInstance) {
       });
     }
 
-    const password_hash = await bcryptjs.hash(password, 6);
+    const password_hash = await hashPassword(password);
 
     // male Default
     let genderId = 1;
