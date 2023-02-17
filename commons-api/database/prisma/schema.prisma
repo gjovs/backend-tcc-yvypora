@@ -185,7 +185,7 @@ model costumer_addresses {
   costumerId Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  address    address  @relation(fields: [addressId], references: [id])
+  address    address  @relation(fields: [addressId], references: [id], onDelete: Cascade)
   costumer   costumer @relation(fields: [costumerId], references: [id])
   order      order[]
 
