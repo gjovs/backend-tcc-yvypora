@@ -63,7 +63,7 @@ model payment {
   orderId          Int            @unique
   created_at       DateTime       @default(now())
   updated_at       DateTime       @updatedAt
-  order            order          @relation(fields: [orderId], references: [id])
+  order            order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
   payment_method   payment_method @relation(fields: [payment_methodId], references: [id])
 
   @@index([payment_methodId], map: "payment_payment_methodId_fkey")
@@ -79,9 +79,9 @@ model order {
   created_at                  DateTime           @default(now())
   updated_at                  DateTime           @updatedAt
   costumer_addressesId        Int
-  costumer_addresses          costumer_addresses @relation(fields: [costumer_addressesId], references: [id])
-  deliveryman                 deliveryman        @relation(fields: [deliverymanId], references: [id])
-  shopping_list               shopping_list      @relation(fields: [shopping_listId], references: [id])
+  costumer_addresses          costumer_addresses @relation(fields: [costumer_addressesId], references: [id], onDelete: Cascade)
+  deliveryman                 deliveryman        @relation(fields: [deliverymanId], references: [id], onDelete: Cascade)
+  shopping_list               shopping_list      @relation(fields: [shopping_listId], references: [id], onDelete: Cascade)
   payment                     payment?
 
   @@index([costumer_addressesId], map: "order_costumer_addressesId_fkey")
@@ -97,7 +97,7 @@ model shopping_list {
   updated_at                DateTime                    @updatedAt
   order                     order?
   products_in_shopping_list products_in_shopping_list[]
-  costumer                  costumer                    @relation(fields: [costumerId], references: [id])
+  costumer                  costumer                    @relation(fields: [costumerId], references: [id], onDelete: Cascade)
 
   @@index([costumerId], map: "shopping_list_costumerId_fkey")
 }
@@ -109,7 +109,7 @@ model products_in_shopping_list {
   created_at      DateTime      @default(now())
   updated_at      DateTime      @updatedAt
   product         product       @relation(fields: [productId], references: [id])
-  shopping_list   shopping_list @relation(fields: [shopping_listId], references: [id])
+  shopping_list   shopping_list @relation(fields: [shopping_listId], references: [id], onDelete: Cascade)
 
   @@index([productId], map: "products_in_shopping_list_productId_fkey")
   @@index([shopping_listId], map: "products_in_shopping_list_shopping_listId_fkey")
@@ -126,7 +126,7 @@ model product {
   created_at                DateTime                    @default(now())
   updated_at                DateTime                    @updatedAt
   image_of_product          image_of_product[]
-  marketer                  marketer                    @relation(fields: [marketerId], references: [id])
+  marketer                  marketer                    @relation(fields: [marketerId], references: [id], onDelete: Cascade)
   products_in_shopping_list products_in_shopping_list[]
 
   @@index([marketerId], map: "product_marketerId_fkey")
@@ -173,7 +173,7 @@ model fair_marketers {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   fair       fair     @relation(fields: [fairId], references: [id])
-  marketer   marketer @relation(fields: [marketerId], references: [id])
+  marketer   marketer @relation(fields: [marketerId], references: [id], onDelete: Cascade)
 
   @@index([fairId], map: "fair_marketers_fairId_fkey")
   @@index([marketerId], map: "fair_marketers_marketerId_fkey")
@@ -186,7 +186,7 @@ model costumer_addresses {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   address    address  @relation(fields: [addressId], references: [id], onDelete: Cascade)
-  costumer   costumer @relation(fields: [costumerId], references: [id])
+  costumer   costumer @relation(fields: [costumerId], references: [id], onDelete: Cascade)
   order      order[]
 
   @@index([costumerId], map: "costumer_addresses_costumerId_fkey")
@@ -241,7 +241,7 @@ model image_of_product {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   image      image    @relation(fields: [imageId], references: [id])
-  product    product  @relation(fields: [productId], references: [id])
+  product    product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@index([imageId], map: "image_of_product_imageId_fkey")
   @@index([productId], map: "image_of_product_productId_fkey")

@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import bcryptjs from 'bcryptjs';
 import { Costumer, Marketer } from '../models';
 import { hashPassword } from '../utils/utils';
+import costumer from '../models/Costumer';
 
 export default async function registerPlugin(server: FastifyInstance) {
   server.post('/costumer', {
@@ -85,6 +86,183 @@ export default async function registerPlugin(server: FastifyInstance) {
     return rep.send(res?.data);
   });
 
+  // update costumer
+  server.put('/costumer/:id', {
+    schema: {
+      body: {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+          },
+          email: {
+            type: 'string',
+          },
+          password: {
+            type: 'string',
+          },
+          gender: {
+            type: 'string',
+          },
+        },
+      },
+    },
+  }, async (req: FastifyRequest<{
+    Body: {
+      name: string,
+      email: string,
+      password: string,
+      gender: string,
+    },
+    Params: {
+      id: string
+    }
+  }>, rep) => {
+    const { id } = req.params;
+    const { body } = req;
+    let password_hash = null;
+
+    if (body.password) {
+      password_hash = await hashPassword(body.password);
+    }
+
+    let genderId = 1;
+
+    // female id
+    if (body.gender.toUpperCase() === 'F') genderId = 2;
+
+    const res = await Costumer.updateCostumer({
+      name: body.name,
+      password_hash,
+      email: body.email,
+      id: parseInt(id, 10),
+      genderId,
+    });
+
+    if (res?.error) {
+      // @ts-ignore
+      return rep.status(res?.code).send({
+        error: true,
+        cause: res.message,
+      });
+    }
+
+    return rep.send(res?.data);
+  });
+
+  server.delete('/costumer/:id', async (req: FastifyRequest<{
+    Params: {
+      id: string
+    }
+  }>, rep) => {
+    const { id } = req.params;
+
+    const exists = await Costumer.getCostumer(parseInt(id, 10));
+
+    // @ts-ignore
+    if (!exists.data) {
+      return rep.status(404).send({
+        error: true,
+        message: 'This costumer do not exist',
+      });
+    }
+
+    const res = await Costumer.deleteCostumer(parseInt(id, 10));
+
+    if (res?.error) {
+      // @ts-ignore
+      return rep.status(res?.code).send({
+        error: true,
+        cause: res.message,
+      });
+    }
+    return rep.send(res?.data);
+  });
+
+  server.put('/costumer/address/:id', {
+    schema: {
+      body: {
+        type: 'object',
+        required: ['address'],
+        properties: {
+          address: {
+            type: 'object',
+            required: ['cep', 'number', 'complemento', 'addressTypeId'],
+            properties: {
+              cep: {
+                type: 'number',
+              },
+              number: {
+                type: 'number',
+              },
+              complemento: {
+                type: 'string',
+              },
+              addressTypeId: {
+                type: 'number',
+              },
+            },
+          },
+        },
+      },
+    },
+  }, async (req: FastifyRequest<{
+    Body: {
+      address: {
+        cep: number,
+        complemento: string,
+        addressTypeId: number,
+        number: number
+      }
+    },
+    Params: {
+      id: string
+    }
+}>, rep) => {
+    const { id } = req.params;
+    const { address } = req.body;
+    const exists = await Costumer.getCostumer(parseInt(id, 10));
+
+    // @ts-ignore
+    if (!exists.data) {
+      return rep.status(404).send({
+        error: true,
+        message: 'This costumer do not exist',
+      });
+    }
+
+    const res = await Costumer.addNewCostumerAddress({ address, id: parseInt(id, 10) });
+
+    if (res?.error) {
+      // @ts-ignore
+      return rep.status(res?.code).send({
+        error: true,
+        cause: res.message,
+      });
+    }
+    return rep.send(res?.message);
+  });
+
+  server.delete('/costumer/address/:id', async (req: FastifyRequest<{
+    Params: {
+      id: string
+    }
+  }>, rep) => {
+    const { id } = req.params;
+
+    const res = await Costumer.deleteCostumerAddress(parseInt(id, 10));
+
+    if (res?.error) {
+      // @ts-ignore
+      return rep.status(res?.code).send({
+        error: true,
+        cause: res.message,
+      });
+    }
+
+    return rep.send(res?.message);
+  });
+
   server.post('/marketer', {
     schema: {
       body: {
@@ -163,5 +341,96 @@ export default async function registerPlugin(server: FastifyInstance) {
     }
 
     return rep.send(res?.data);
+  });
+
+  server.delete('/marketer/:id', async (req: FastifyRequest<{
+    Params: {
+      id: string
+    }
+  }>, rep) => {
+    const { id } = req.params;
+
+    const res = await Marketer.delete(parseInt(id, 10));
+
+    if (res?.error) {
+      // @ts-ignore
+      return rep.status(res?.code).send({
+        error: true,
+        cause: res.message,
+      });
+    }
+
+    return rep.send(res?.message);
+  });
+
+  server.put('/marketer/:id', {
+    schema: {
+      body: {
+        type: 'object',
+        required: ['name', 'email', 'password', 'gender', 'phone'],
+        properties: {
+          name: { type: 'string' },
+          cpf: { type: 'string' },
+          cnpj: { type: 'string' },
+          email: { type: 'string' },
+          password: { type: 'string' },
+          gender: { type: 'string' },
+        },
+      },
+    },
+  }, async (req: FastifyRequest<{
+    Params: {
+      id: string
+    }
+    Body: {
+      name: string,
+      password: string | null,
+      cpf: string | null,
+      cnpj: string| null,
+      email: string,
+      gender: string
+    }
+  }>, rep) => {
+    const { id } = req.params;
+    const {
+      name, email, password, cpf, cnpj, gender,
+    } = req.body;
+
+    let newCnpj = null;
+    let newCpf = null;
+    let newPassword = null;
+
+    if (password) {
+      newPassword = await hashPassword(password);
+    }
+
+    if (cnpj) newCnpj = cnpj;
+    if (cpf) newCpf = cpf;
+
+    // male Default
+    let genderId = 1;
+
+    // female id
+    if (gender.toUpperCase() === 'F') genderId = 2;
+
+    const res = await Marketer.update({
+      id: parseInt(id, 10),
+      cnpj: newCnpj,
+      cpf: newCpf,
+      password_hash: newPassword,
+      email,
+      name,
+      genderId,
+    });
+
+    if (res?.error) {
+      // @ts-ignore
+      return rep.status(res?.code).send({
+        error: true,
+        cause: res.message,
+      });
+    }
+
+    return rep.send(res?.message);
   });
 }

@@ -63,20 +63,41 @@ class Marketer {
     }
   }
 
-  async updateMarketer(data: { id: number, name: string, password_hash: string, genderId: number, email: string, cnpj: string, cpf: string }) {
+  async delete(id: number) {
     try {
+      const res = await db.marketer.delete({ where: { id } });
+      return { error: false, message: 'Success deleted marketer!' };
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) {
+        return { error: true, message: 'Failed to delete marketer', code: 401 };
+      }
+    }
+  }
+
+  async update(data: { password_hash: any; cpf: any; name: string; genderId: number; cnpj: any; email: string, id: number }) {
+    try {
+      if (data.password_hash) {
+        await db.marketer.update({
+          where: {
+            id: data.id,
+          },
+          data: {
+            password_hash: data.password_hash,
+          },
+        });
+      }
       await db.marketer.update({
         where: { id: data.id },
         data: {
           name: data.name,
-          password_hash: data.password_hash,
           genderId: data.genderId,
           email: data.email,
           cnpj: data.cnpj,
           cpf: data.cpf,
         },
       });
-      return { error: false, message: 'Sucess updated marketer!' };
+      return { error: false, message: 'Success updated marketer!' };
     } catch (error) {
       if (error instanceof Error) {
         return { error: true, message: 'Failed to update marketer', code: 401 };
