@@ -1,4 +1,4 @@
-import Fastify, { FastifyInstance } from 'fastify';
+import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
 import jwt from '@fastify/jwt';
@@ -14,6 +14,7 @@ class Server {
     });
 
     this.middleware();
+    this.decorators();
     this.plugins();
   }
 
@@ -42,6 +43,16 @@ class Server {
     });
     this.app.register(picturePlugin, {
       prefix: '/picture/',
+    });
+  }
+
+  private decorators() {
+    this.app.decorate('auth', async (req: FastifyRequest, rep: FastifyReply) => {
+      try {
+        await req.jwtVerify();
+      } catch (e) {
+        return rep.send(e);
+      }
     });
   }
 }
