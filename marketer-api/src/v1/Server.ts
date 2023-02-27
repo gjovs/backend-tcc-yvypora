@@ -1,11 +1,10 @@
 import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+
 import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
 import jwt from '@fastify/jwt';
 
-import {
-  formFieldsPlugin, loginPlugin, picturePlugin, registerPlugin,
-} from './plugins';
+import { userPlugin } from './plugins';
 
 class Server {
   declare app: FastifyInstance;
@@ -37,24 +36,17 @@ class Server {
   }
 
   private plugins() {
-    this.app.register(registerPlugin, {
-      prefix: '/register/',
-    });
-    this.app.register(loginPlugin, {
-      prefix: '/login/',
-    });
-    this.app.register(picturePlugin, {
-      prefix: '/picture/',
-    });
-    this.app.register(formFieldsPlugin, {
-      prefix: '/forms/',
+    this.app.register(userPlugin, {
+      prefix: '/user/',
     });
   }
 
   private decorators() {
     this.app.decorate('auth', async (req: FastifyRequest, rep: FastifyReply) => {
       try {
-        await req.jwtVerify();
+        const user = await req.jwtVerify();
+        // @ts-ignore
+        req.user = user.payload;
       } catch (e) {
         return rep.send(e);
       }

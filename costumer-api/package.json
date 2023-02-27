@@ -9,7 +9,6 @@
     "pull-db": "npx prisma db pull --schema=./database/prisma/schema.prisma"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.2",
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.42.0",
@@ -21,12 +20,12 @@
   "dependencies": {
     "@fastify/cors": "^8.2.0",
     "@fastify/jwt": "^6.5.0",
-    "geolib": "^3.3.3",
     "@fastify/multipart": "^7.4.1",
+    "@googlemaps/google-maps-services-js": "^3.3.27",
     "@prisma/client": "^4.10.0",
-    "bcryptjs": "^2.4.3",
     "fastify": "^4.13.0",
     "firebase-admin": "^11.5.0",
+    "geolib": "^3.3.3",
     "prisma": "^4.10.0",
     "ts-node": "^10.9.1",
     "tsx": "^3.12.3"
