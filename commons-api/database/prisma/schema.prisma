@@ -218,11 +218,20 @@ model address {
   updated_at         DateTime             @updatedAt
   address_typeId     Int
   complemento        String
+  cityId             Int
+  neighborhoodId     Int
+  ufId               Int
   type               address_type         @relation(fields: [address_typeId], references: [id])
+  city               city                 @relation(fields: [cityId], references: [id])
+  neighborhood       neighborhood         @relation(fields: [neighborhoodId], references: [id])
+  uf                 uf                   @relation(fields: [ufId], references: [id])
   costumer_addresses costumer_addresses[]
   fair               fair?
 
   @@index([address_typeId], map: "address_address_typeId_fkey")
+  @@index([cityId], map: "address_cityId_fkey")
+  @@index([neighborhoodId], map: "address_neighborhoodId_fkey")
+  @@index([ufId], map: "address_ufId_fkey")
 }
 
 model address_type {
@@ -312,4 +321,22 @@ model gender {
   costumer    costumer[]
   deliveryman deliveryman[]
   marketer    marketer[]
+}
+
+model city {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique
+  address address[]
+}
+
+model neighborhood {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique
+  address address[]
+}
+
+model uf {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique(map: "UF_name_key")
+  address address[]
 }

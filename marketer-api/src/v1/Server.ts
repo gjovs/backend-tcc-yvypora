@@ -4,7 +4,7 @@ import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
 import jwt from '@fastify/jwt';
 
-import { userPlugin } from './plugins';
+import { fairPlugin, userPlugin } from './plugins';
 
 class Server {
   declare app: FastifyInstance;
@@ -39,6 +39,10 @@ class Server {
     this.app.register(userPlugin, {
       prefix: '/user/',
     });
+    
+    this.app.register(fairPlugin, {
+      prefix: '/fair/',
+    })
   }
 
   private decorators() {

@@ -220,7 +220,7 @@ export default async function registerPlugin(server: FastifyInstance) {
     }
 }>, rep) => {
     const { id } = req.params;
-    const { address } = req.body;
+    const { address } = req.body; 
     const exists = await Costumer.getCostumer(parseInt(id, 10));
 
     // @ts-ignore
