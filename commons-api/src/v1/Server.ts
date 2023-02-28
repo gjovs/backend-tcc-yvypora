@@ -13,6 +13,7 @@ class Server {
   constructor() {
     this.app = Fastify({
       logger: true,
+      
     });
 
     this.middleware();
