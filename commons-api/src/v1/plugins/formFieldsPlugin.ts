@@ -25,10 +25,10 @@ export default async function formFieldsPlugin(server: FastifyInstance) {
         properties: {
           lat: { type: 'number' },
           long: { type: 'number' },
-        }
+        },
       },
     },
-  } ,async (req: FastifyRequest<{
+  }, async (req: FastifyRequest<{
     Querystring: {
       lat: number,
       long: number
@@ -37,15 +37,15 @@ export default async function formFieldsPlugin(server: FastifyInstance) {
     const { lat, long } = req.query;
 
     const genders = await FormFields.indexGender();
-    const fairs = await Fair.index()
-    
+    const fairs = await Fair.index();
+
     const orderedFairs = orderByDistance({ latitude: lat, longitude: long }, fairs as any);
 
     return rep.send({
       code: 200,
       payload: [{
         genders,
-        closeFairs: orderedFairs.slice(0, 5)
+        closeFairs: orderedFairs.slice(0, 5),
       }],
       error: false,
     });
@@ -73,7 +73,7 @@ export default async function formFieldsPlugin(server: FastifyInstance) {
         properties: {
           lat: { type: 'number' },
           long: { type: 'number' },
-        }
+        },
       },
     },
   }, async (req: FastifyRequest<{
@@ -85,7 +85,8 @@ export default async function formFieldsPlugin(server: FastifyInstance) {
     const { lat, long } = req.query;
 
     const fairs = await Fair.index();
-    const daysOfWeeks = await FormFields.indexDaysOfWeek()
+
+    const daysOfWeeks = await FormFields.indexDaysOfWeek();
 
     const orderedFairs = orderByDistance({ latitude: lat, longitude: long }, fairs as any);
 
@@ -93,7 +94,7 @@ export default async function formFieldsPlugin(server: FastifyInstance) {
       code: 200,
       payload: [{
         fairs: orderedFairs,
-        daysOfWeeks
+        daysOfWeeks,
       }],
       error: false,
     });
