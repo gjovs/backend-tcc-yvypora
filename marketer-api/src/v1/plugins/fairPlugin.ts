@@ -5,6 +5,7 @@ import IAddress from '../utils/interfaces/address.interface';
 import Fair from '../model/Fair';
 
 export default async function fairPlugin(server: FastifyInstance) {
+  // ADD FAIRS
   server.put('/add/:id', {
     // @ts-ignore
     onRequest: [server.auth],
@@ -19,20 +20,19 @@ export default async function fairPlugin(server: FastifyInstance) {
     },
   }, async (req: FastifyRequest<{
         Params: {
-            fairId: string
+            id: string
         }
     }>, rep) => {
     // @ts-ignore
-    const { id } = req.user.payload;
-    const { fairId } = req.params;
+    const { id } = req.user;
 
-    const res = await Marketer.addFair(parseInt(id, 10), parseInt(fairId, 10));
+    const res = await Marketer.addFair(parseInt(id, 10), parseInt(req.params.id, 10));
 
     if (res?.error) {
       // @ts-ignore
       return rep.status(res?.code).send({
         error: true,
-        cause: res.message,
+        cause: 'Bad id or this relation already exist!',
       });
     }
 
@@ -43,6 +43,7 @@ export default async function fairPlugin(server: FastifyInstance) {
     });
   });
 
+  // REMOVE FAIRS
   server.delete('/remove/:id', {
     // @ts-ignore
     onRequest: [server.auth],
@@ -57,14 +58,13 @@ export default async function fairPlugin(server: FastifyInstance) {
     },
   }, async (req: FastifyRequest<{
         Params: {
-            fairId: string
+            id: string
         }
     }>, rep) => {
     // @ts-ignore
-    const { id } = req.user.payload;
-    const { fairId } = req.params;
+    const { id } = req.user;
 
-    const res = await Marketer.removeFair(parseInt(id, 10), parseInt(fairId, 10));
+    const res = await Marketer.removeFair(parseInt(id, 10), parseInt(req.params.id, 10));
 
     if (res?.error) {
       // @ts-ignore
@@ -81,6 +81,7 @@ export default async function fairPlugin(server: FastifyInstance) {
     });
   });
 
+  // CREATE
   server.post('/', {
     // @ts-ignore
     onRequest: [server.auth],
@@ -172,6 +173,16 @@ export default async function fairPlugin(server: FastifyInstance) {
         }
     }>, rep) => {
     const { dateAndHourOfWork, address } = req.body;
+
+    const check = await Fair.getByCep(address.cep);
+
+    if (check.length > 0) {
+      return rep.status(401).send({
+        code: 401,
+        error: true,
+        message: 'We already have this fair in this CEP value',
+      });
+    }
 
     dateAndHourOfWork.forEach((date) => {
       // @ts-ignore

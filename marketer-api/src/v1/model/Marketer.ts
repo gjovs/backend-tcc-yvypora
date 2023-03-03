@@ -1,6 +1,53 @@
 import db from '../libs/prisma';
+import Fair from './Fair';
 
 class Marketer {
+  async get(id: number) {
+    const res = await db.marketer.findUnique({ where: { id } });
+
+    return res;
+  }
+
+  async indexFairs(id: number) {
+    try {
+      const res = await db.fair_marketers.findMany({
+        where: {
+          marketerId: id,
+        },
+        include: {
+          fair: {
+            include: {
+              location: true,
+              fair_date_hour_of_work: {
+                include: {
+                  dates: {
+                    include: {
+                      day_of_week: true,
+                    },
+                  },
+                },
+              },
+              address: {
+                include: {
+                  type: true,
+                  city: true,
+                  uf: true,
+                  neighborhood: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return res;
+    } catch (error) {
+      if (error instanceof Error) {
+        return { error: true, messaeg: 'Bad id', code: 401 };
+      }
+    }
+  }
+
   async addFair(marketerId: number, fairId: number) {
     try {
       const res = await db.marketer.update({
@@ -19,9 +66,10 @@ class Marketer {
           },
         },
       });
-      return { data: res, error: true };
+      return { data: res, error: false };
     } catch (error) {
       if (error instanceof Error) {
+        console.log(error);
         return { message: error.message, error: true, code: 400 };
       }
     }
@@ -29,8 +77,19 @@ class Marketer {
 
   async removeFair(marketerId: number, fairId: number) {
     try {
+      console.log(marketerId, fairId);
+
       const findRelation = await db.fair_marketers.findMany({
-        where: { marketerId, fairId },
+        where: {
+          AND: [
+            {
+              fairId,
+            },
+            {
+              marketerId,
+            },
+          ],
+        },
       });
 
       await db.fair_marketers.delete({
@@ -39,10 +98,11 @@ class Marketer {
         },
       });
 
-      return { message: 'Succely removed relation with fair!', error: true };
+      return { message: 'Succely removed relation with fair!', error: false };
     } catch (error) {
       if (error instanceof Error) {
-        return { message: error.message, error: true };
+        console.log(error);
+        return { message: error.message, error: true, code: 401 };
       }
     }
   }

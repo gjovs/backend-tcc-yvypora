@@ -56,6 +56,7 @@ class Marketer {
       return { data: res, error: false };
     } catch (error) {
       if (error instanceof Error) {
+        console.log(error);
         return {
           error: true, message: 'Failed to save a new Marketer in Database', code: 401,
         };

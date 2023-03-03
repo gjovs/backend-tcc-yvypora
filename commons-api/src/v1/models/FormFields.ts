@@ -5,10 +5,10 @@ class FormFields {
     const res = await db.gender.findMany({
       select: {
         id: true,
-        name: true
-      }
+        name: true,
+      },
     });
-    
+
     return res;
   }
 
@@ -18,7 +18,7 @@ class FormFields {
         id: true,
         address: {
           select: {
-            CEP: true,
+            cep: true,
             complemento: true,
           },
         },
@@ -36,8 +36,8 @@ class FormFields {
     const res = await db.day_of_week.findMany({
       select: {
         id: true,
-        name: true
-      }
+        name: true,
+      },
     });
     return res;
   }
@@ -46,8 +46,8 @@ class FormFields {
     const res = await db.veicule.findMany({
       select: {
         id: true,
-        name: true
-      }
+        name: true,
+      },
     });
     return res;
   }
@@ -56,8 +56,8 @@ class FormFields {
     const res = await db.payment_method.findMany({
       select: {
         id: true,
-        name: true
-      }
+        name: true,
+      },
     });
     return res;
   }

@@ -4,6 +4,7 @@ import multipart from '@fastify/multipart';
 import jwt from '@fastify/jwt';
 
 import {
+  fairPlugin,
   formFieldsPlugin, loginPlugin, picturePlugin, registerPlugin,
 } from './plugins';
 
@@ -13,7 +14,7 @@ class Server {
   constructor() {
     this.app = Fastify({
       logger: true,
-      
+
     });
 
     this.middleware();
@@ -49,6 +50,9 @@ class Server {
     });
     this.app.register(formFieldsPlugin, {
       prefix: '/forms/',
+    });
+    this.app.register(fairPlugin, {
+      prefix: '/fair/',
     });
   }
 

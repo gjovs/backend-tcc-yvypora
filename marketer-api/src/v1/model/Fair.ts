@@ -26,7 +26,6 @@ class Fair {
           address: {
             create: {
               cep: data.address.cep,
-              // @ts-ignore
               uf: {
                 connectOrCreate: {
                   where: {
@@ -93,6 +92,18 @@ class Fair {
         return { error: true, message: error.message, code: 400 };
       }
     }
+  }
+
+  async getByCep(cep: string) {
+    const res = await db.fair.findMany({
+      where: {
+        address: {
+          cep,
+        },
+      },
+    });
+
+    return res;
   }
 }
 

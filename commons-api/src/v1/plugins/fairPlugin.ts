@@ -1,10 +1,10 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { orderByDistance } from 'geolib';
+import { GeolibInputCoordinates } from 'geolib/es/types';
+import { Fair } from '../models';
 
 export default async function fairPlugin(server: FastifyInstance) {
-  server.get('/fair', {
-    // @ts-ignore
-    onRequest: [server.auth],
+  server.get('/listByClose', {
     schema: {
       querystring: {
         type: 'object',
@@ -35,6 +35,8 @@ export default async function fairPlugin(server: FastifyInstance) {
       longitude: -46.783970,
     }];
 
+    const fairs = await Fair.index();
+
     const { lat, long } = req.query;
 
     const originLat = parseFloat(lat);
@@ -43,7 +45,7 @@ export default async function fairPlugin(server: FastifyInstance) {
     const nearPositions = orderByDistance({
       latitude: originLat,
       longitude: originLong,
-    }, MOCKED_DATA);
+    }, fairs as any);
 
     return rep.status(200).send({
       code: 200,

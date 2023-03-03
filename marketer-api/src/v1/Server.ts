@@ -4,7 +4,7 @@ import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
 import jwt from '@fastify/jwt';
 
-import { fairPlugin, userPlugin } from './plugins';
+import { fairPlugin, productPlugin, userPlugin } from './plugins';
 
 class Server {
   declare app: FastifyInstance;
@@ -39,16 +39,23 @@ class Server {
     this.app.register(userPlugin, {
       prefix: '/user/',
     });
-    
+
     this.app.register(fairPlugin, {
       prefix: '/fair/',
-    })
+    });
+
+    this.app.register(productPlugin, {
+      prefix: '/product/',
+    });
   }
 
   private decorators() {
     this.app.decorate('auth', async (req: FastifyRequest, rep: FastifyReply) => {
       try {
         const user = await req.jwtVerify();
+
+        // @ts-ignore
+        console.log(user.payload);
         // @ts-ignore
         req.user = user.payload;
       } catch (e) {

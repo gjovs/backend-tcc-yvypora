@@ -1,8 +1,6 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
-import bcryptjs from 'bcryptjs';
 import { Costumer, Marketer } from '../models';
 import { hashPassword } from '../utils/utils';
-import costumer from '../models/Costumer';
 
 export default async function registerPlugin(server: FastifyInstance) {
   server.post('/costumer', {
@@ -25,10 +23,10 @@ export default async function registerPlugin(server: FastifyInstance) {
           },
           address: {
             type: 'object',
-            required: ['cep', 'number', 'complemento', 'addressTypeId'],
+            required: ['cep', 'number', 'complemento', 'addressTypeId', 'city', 'uf', 'neighborhood', 'logradouro'],
             properties: {
               cep: {
-                type: 'number',
+                type: 'string',
               },
               number: {
                 type: 'number',
@@ -38,6 +36,19 @@ export default async function registerPlugin(server: FastifyInstance) {
               },
               addressTypeId: {
                 type: 'number',
+              },
+              city: {
+                type: 'string',
+
+              },
+              logradouro: {
+                type: 'string',
+              },
+              uf: {
+                type: 'string',
+              },
+              neighborhood: {
+                type: 'string',
               },
             },
           },
@@ -51,10 +62,14 @@ export default async function registerPlugin(server: FastifyInstance) {
       email: string,
       gender: string,
       address: {
-        cep: number,
+        cep: string,
         complemento: string,
         addressTypeId: number,
-        number: number
+        number: number,
+        city: string,
+        uf: string,
+        neighborhood: string,
+        logradouro: string
       }
     }
   }>, rep) => {
@@ -187,10 +202,10 @@ export default async function registerPlugin(server: FastifyInstance) {
         properties: {
           address: {
             type: 'object',
-            required: ['cep', 'number', 'complemento', 'addressTypeId'],
+            required: ['cep', 'number', 'complemento', 'addressTypeId', 'city', 'uf', 'neighborhood', 'logradouro'],
             properties: {
               cep: {
-                type: 'number',
+                type: 'string',
               },
               number: {
                 type: 'number',
@@ -201,6 +216,19 @@ export default async function registerPlugin(server: FastifyInstance) {
               addressTypeId: {
                 type: 'number',
               },
+              city: {
+                type: 'string',
+
+              },
+              logradouro: {
+                type: 'string',
+              },
+              uf: {
+                type: 'string',
+              },
+              neighborhood: {
+                type: 'string',
+              },
             },
           },
         },
@@ -209,10 +237,14 @@ export default async function registerPlugin(server: FastifyInstance) {
   }, async (req: FastifyRequest<{
     Body: {
       address: {
-        cep: number,
+        cep: string,
         complemento: string,
         addressTypeId: number,
-        number: number
+        number: number,
+        city: string,
+        uf: string,
+        neighborhood: string,
+        logradouro: string
       }
     },
     Params: {
@@ -220,7 +252,8 @@ export default async function registerPlugin(server: FastifyInstance) {
     }
 }>, rep) => {
     const { id } = req.params;
-    const { address } = req.body; 
+    const { address } = req.body;
+
     const exists = await Costumer.getCostumer(parseInt(id, 10));
 
     // @ts-ignore

@@ -1,3 +1,5 @@
 import userPlugin from './userPlugin';
 import fairPlugin from './fairPlugin';
-export { userPlugin, fairPlugin };
+import productPlugin from './productPlugin';
+
+export { userPlugin, fairPlugin, productPlugin };

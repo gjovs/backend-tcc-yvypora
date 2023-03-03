@@ -1,6 +1,16 @@
 import { address } from '@prisma/client';
 import db from '../libs/prisma';
 
+interface IAdress {
+  cep: string,
+  complemento: string,
+  addressTypeId: number,
+  number: number,
+  city: string,
+  uf: string,
+  neighborhood: string,
+  logradouro: string
+}
 class Costumer {
   async getCostumer(id: number) {
     try {
@@ -38,14 +48,10 @@ class Costumer {
     name: string,
     email: string,
     gender: number
-    address: {
-      cep: number,
-      complemento: string,
-      addressTypeId: number,
-      number: number
-    }
+    address: IAdress
   }) {
     try {
+      // @ts-ignore
       const res = await db.costumer.create({
         data: {
           gender: {
@@ -62,8 +68,42 @@ class Costumer {
                 create: {
                   number: data.address.number,
                   complemento: data.address.complemento,
-                  CEP: data.address.cep,
-                  address_typeId: data.address.addressTypeId,
+                  cep: data.address.cep,
+                  type: {
+                    connect: {
+                      id: data.address.addressTypeId,
+                    },
+                  },
+                  uf: {
+                    connectOrCreate: {
+                      where: {
+                        name: data.address.uf,
+                      },
+                      create: {
+                        name: data.address.uf,
+                      },
+                    },
+                  },
+                  city: {
+                    connectOrCreate: {
+                      where: {
+                        name: data.address.city,
+                      },
+                      create: {
+                        name: data.address.city,
+                      },
+                    },
+                  },
+                  neighborhood: {
+                    connectOrCreate: {
+                      create: {
+                        name: data.address.neighborhood,
+                      },
+                      where: {
+                        name: data.address.neighborhood,
+                      },
+                    },
+                  },
                 },
               },
             },
@@ -167,12 +207,7 @@ class Costumer {
     }
   }
 
-  async addNewCostumerAddress(data: { address: {
-      cep: number,
-      complemento: string,
-      addressTypeId: number,
-      number: number
-    }, id: number }) {
+  async addNewCostumerAddress(data: { address: IAdress, id: number }) {
     try {
       await db.costumer.update({
         where: { id: data.id },
@@ -181,10 +216,44 @@ class Costumer {
             create: {
               address: {
                 create: {
-                  CEP: data.address.cep,
-                  address_typeId: data.address.addressTypeId,
+                  type: {
+                    connect: {
+                      id: data.address.addressTypeId,
+                    },
+                  },
+                  cep: data.address.cep,
                   complemento: data.address.complemento,
                   number: data.address.number,
+                  uf: {
+                    connectOrCreate: {
+                      where: {
+                        name: data.address.uf,
+                      },
+                      create: {
+                        name: data.address.uf,
+                      },
+                    },
+                  },
+                  city: {
+                    connectOrCreate: {
+                      where: {
+                        name: data.address.city,
+                      },
+                      create: {
+                        name: data.address.city,
+                      },
+                    },
+                  },
+                  neighborhood: {
+                    connectOrCreate: {
+                      create: {
+                        name: data.address.neighborhood,
+                      },
+                      where: {
+                        name: data.address.neighborhood,
+                      },
+                    },
+                  },
                 },
               },
             },
