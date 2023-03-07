@@ -13,6 +13,7 @@ interface IProduct {
   },
   available_quantity: number
 }
+
 class Product {
   async create(data: IProduct, ownerId: number) {
     try {
@@ -42,7 +43,6 @@ class Product {
       return { error: false, data: res };
     } catch (error) {
       if (error instanceof Error) {
-        console.log(error);
         return { error: true, message: 'Failed to save new product in database', code: 401 };
       }
     }
@@ -56,6 +56,7 @@ class Product {
           active_for_selling: false,
         },
       });
+      return { error: false, message: "Success disabled", code: 200}
     } catch (error) {
       if (error instanceof Error) {
         return { error: true, message: 'Failed to disable this product, id is wrong!', code: 401 };
@@ -86,7 +87,7 @@ class Product {
         },
       });
 
-      return product;
+      return {data: product, error: false};
     } catch (error) {
       if (error instanceof Error) {
         return {
@@ -160,6 +161,22 @@ class Product {
     } catch (error) {
       if (error instanceof Error) {
         return { error: true, code: 401, message: error.message };
+      }
+    }
+  }
+
+  async enable(id: number) {
+    try {
+      await db.product.update({
+        where: { id },
+        data: {
+          active_for_selling: true,
+        },
+      });
+      return { error: false, message: "Success disabled", code: 200}
+    } catch (error) {
+      if (error instanceof Error) {
+        return { error: true, message: 'Failed to disable this product, id is wrong!', code: 401 };
       }
     }
   }
