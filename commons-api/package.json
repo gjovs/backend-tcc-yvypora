@@ -7,7 +7,7 @@
     "dev": "npx ts-node ./src/v1/www/server.ts",
     "generate": "npx prisma generate --schema=./database/prisma/schema.prisma",
     "pull-db": "npx prisma db pull --schema=./database/prisma/schema.prisma",
-    "build": "tsc",
+    "build": "npx tsc",
     "start": "node ./bin/v1/www/server.js"
   },
   "devDependencies": {
