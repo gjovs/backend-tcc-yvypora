@@ -1,8 +1,8 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import Product from '../model/Product';
 import { z } from 'zod';
-import FirebaseService from '../services/firebase.service';
 import { ZodError } from 'zod/lib';
+import Product from '../model/Product';
+import FirebaseService from '../services/firebase.service';
 
 interface IProduct {
   name: string
@@ -108,31 +108,28 @@ export default async function productPlugin(server: FastifyInstance) {
       picture: any
     }
   }>, rep) => {
-
     const { picture } = req.body;
 
-    await picture.toBuffer()
+    await picture.toBuffer();
 
     const picture_uri = await FirebaseService.uploadImage(picture);
 
-
-    const res = await Product.appendPicture(parseInt(req.params.id), picture_uri)
+    const res = await Product.appendPicture(parseInt(req.params.id), picture_uri);
 
     if (res?.error) {
-      //@ts-ignore
+      // @ts-ignore
       return rep.status(res?.code).send({
         code: res.code,
         message: res.message,
-        error: true
-      })
+        error: true,
+      });
     }
-
 
     return rep.send({
       code: 200,
       error: false,
-      message: res?.message
-    })
+      message: res?.message,
+    });
   });
 
   server.delete('picture/:id/', {
@@ -153,27 +150,24 @@ export default async function productPlugin(server: FastifyInstance) {
       productId: string
     }
   }>, rep) => {
-    const res = await Product.removePicture(parseInt(req.params.id, 10))
+    const res = await Product.removePicture(parseInt(req.params.id, 10));
     if (res?.error) {
-      //@ts-ignore
+      // @ts-ignore
       return rep.status(res?.code).send({
         code: res.code,
         message: res.message,
-        error: true
-      })
+        error: true,
+      });
     }
-
 
     return rep.send({
       code: 200,
       error: false,
-      message: res?.message
-    })
-  })
+      message: res?.message,
+    });
+  });
 
-
-
-  server.put("/:id", {
+  server.put('/:id', {
     schema: {
       params: {
         type: 'object',
@@ -195,44 +189,44 @@ export default async function productPlugin(server: FastifyInstance) {
       price: z.number(),
       price_type: z.object({
         id: z.number(),
-        name: z.string()
+        name: z.string(),
       }),
 
       category: z.object({
         name: z.string(),
-        id: z.number()
+        id: z.number(),
       }),
 
-      available_quantity: z.number()
-    })
+      available_quantity: z.number(),
+    });
 
     try {
-      const data = updateProductSchema.parse(req.body)
-      const res = await Product.update(data, parseInt(req.params.id, 10))
+      const data = updateProductSchema.parse(req.body);
+      const res = await Product.update(data, parseInt(req.params.id, 10));
 
       if (res?.error) {
         return rep.status(res?.code as number).send({
           code: res.code,
           error: true,
-          message: res.message
-        })
+          message: res.message,
+        });
       }
 
       return rep.send({
         code: 200,
         error: false,
-        data: res?.data
-      })
+        data: res?.data,
+      });
     } catch (error) {
       if (error instanceof ZodError) {
         return rep.status(400).send({
           code: 400,
           error: true,
-          message: error.message
-        })
+          message: error.message,
+        });
       }
     }
-  })
+  });
 
   server.delete('disable/:id', {
     schema: {
@@ -241,33 +235,33 @@ export default async function productPlugin(server: FastifyInstance) {
         required: ['id'],
         properties: {
           id: {
-            type: "number"
-          }
-        }
-      }
-    }
+            type: 'number',
+          },
+        },
+      },
+    },
   }, async (req: FastifyRequest<{
     Params: {
       id: string
     }
   }>, rep) => {
-    const { id } = req.params
-    const res = await Product.disable(parseInt(id, 10))
+    const { id } = req.params;
+    const res = await Product.disable(parseInt(id, 10));
 
     if (res?.error) {
       return rep.status(res.code).send({
         code: res.code,
         error: true,
-        message: res.message
-      })
+        message: res.message,
+      });
     }
 
     return rep.send({
       code: 200,
       error: false,
-      message: res?.message
-    })
-  })
+      message: res?.message,
+    });
+  });
 
   server.put('enable/:id', {
     schema: {
@@ -276,32 +270,31 @@ export default async function productPlugin(server: FastifyInstance) {
         required: ['id'],
         properties: {
           id: {
-            type: "number"
-          }
-        }
-      }
-    }
+            type: 'number',
+          },
+        },
+      },
+    },
   }, async (req: FastifyRequest<{
     Params: {
       id: string
     }
   }>, rep) => {
-    const { id } = req.params
-    const res = await Product.enable(parseInt(id, 10))
+    const { id } = req.params;
+    const res = await Product.enable(parseInt(id, 10));
 
     if (res?.error) {
       return rep.status(res.code).send({
         code: res.code,
         error: true,
-        message: res.message
-      })
+        message: res.message,
+      });
     }
 
     return rep.send({
       code: 200,
       error: false,
-      message: res?.message
-    })
-  })
-
+      message: res?.message,
+    });
+  });
 }

@@ -45,6 +45,9 @@ export default async function loginPlugin(server: FastifyInstance) {
     const isValid = await checkPassword(password, user.password_hash);
     if (!isValid) return rep.status(401).send({ error: true, message: ['The password is wrong'] });
 
+    // @ts-ignore
+    user.typeof = typeOfUser;
+
     const data = { payload: user };
 
     const token = server.jwt.sign(data);

@@ -5,7 +5,7 @@ import jwt from '@fastify/jwt';
 
 import {
   fairPlugin,
-  formFieldsPlugin, loginPlugin, picturePlugin, registerPlugin,
+  formFieldsPlugin, loginPlugin, picturePlugin, registerPlugin, userPlugin,
 } from './plugins';
 
 class Server {
@@ -53,6 +53,9 @@ class Server {
     });
     this.app.register(fairPlugin, {
       prefix: '/fair/',
+    });
+    this.app.register(userPlugin, {
+      prefix: '/user/',
     });
   }
 
