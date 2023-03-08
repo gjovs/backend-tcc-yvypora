@@ -6,12 +6,14 @@ export default async function formFieldsPlugin(server: FastifyInstance) {
   server.get('/costumer', async (_req, rep) => {
     const genders = await FormFields.indexGender();
     const paymentMethods = await FormFields.indexPaymentMethods();
+    const typesOfAddress = await FormFields.indexTypeOfAddress();
 
     return rep.send({
       code: 200,
       payload: [{
         genders,
         paymentMethods,
+        typesOfAddress,
       }],
       error: false,
     });

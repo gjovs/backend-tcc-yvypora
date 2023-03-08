@@ -61,6 +61,17 @@ class FormFields {
     });
     return res;
   }
+
+  async indexTypeOfAddress() {
+    const res = await db.address_type.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+
+    return res;
+  }
 }
 
 export default new FormFields();
