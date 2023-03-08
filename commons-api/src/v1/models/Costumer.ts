@@ -150,7 +150,9 @@ class Costumer {
         },
       });
 
+      // @ts-ignore
       await Promise.all(addresses.map(async ({ addressId }) => {
+        // @ts-ignore
         await db.address.delete({ where: { id: addressId as number } });
       }));
 
