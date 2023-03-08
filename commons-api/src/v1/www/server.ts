@@ -7,4 +7,6 @@ async function run() {
   });
 }
 
-run();
+run().then(() => {
+  console.log('HTTP SERVER RUNNING');
+});
