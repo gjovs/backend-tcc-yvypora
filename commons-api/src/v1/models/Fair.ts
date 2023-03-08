@@ -8,7 +8,7 @@ class Fair {
       },
     });
 
-    res.forEach((fair) => {
+    res.forEach((fair: any) => {
       const { latitude, longitude } = fair.location;
 
       // @ts-ignore

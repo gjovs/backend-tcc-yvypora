@@ -1,4 +1,3 @@
-import { address } from '@prisma/client';
 import db from '../libs/prisma';
 
 interface IAdress {
@@ -152,7 +151,7 @@ class Costumer {
       });
 
       await Promise.all(addresses.map(async ({ addressId }) => {
-        await db.address.delete({ where: { id: addressId } });
+        await db.address.delete({ where: { id: addressId as number } });
       }));
 
       await db.costumer.delete({ where: { id } });
