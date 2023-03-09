@@ -7,7 +7,6 @@ import Fair from '../model/Fair';
 export default async function fairPlugin(server: FastifyInstance) {
   // ADD FAIRS
   server.put('/add/:id', {
-    // @ts-ignore
     onRequest: [server.auth],
     schema: {
       params: {
@@ -26,7 +25,7 @@ export default async function fairPlugin(server: FastifyInstance) {
     // @ts-ignore
     const { id } = req.user;
 
-    const res = await Marketer.addFair(parseInt(id, 10), parseInt(req.params.id, 10));
+    const res = await Marketer.addFair(id, parseInt(req.params.id, 10));
 
     if (res?.error) {
       // @ts-ignore
@@ -45,7 +44,6 @@ export default async function fairPlugin(server: FastifyInstance) {
 
   // REMOVE FAIRS
   server.delete('/remove/:id', {
-    // @ts-ignore
     onRequest: [server.auth],
     schema: {
       params: {
@@ -64,7 +62,7 @@ export default async function fairPlugin(server: FastifyInstance) {
     // @ts-ignore
     const { id } = req.user;
 
-    const res = await Marketer.removeFair(parseInt(id, 10), parseInt(req.params.id, 10));
+    const res = await Marketer.removeFair(id, parseInt(req.params.id, 10));
 
     if (res?.error) {
       // @ts-ignore
@@ -83,7 +81,6 @@ export default async function fairPlugin(server: FastifyInstance) {
 
   // CREATE
   server.post('/', {
-    // @ts-ignore
     onRequest: [server.auth],
     schema: {
       body: {

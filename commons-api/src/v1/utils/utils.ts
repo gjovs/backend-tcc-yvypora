@@ -10,4 +10,9 @@ const hashPassword = async (password: string) => {
   return hash;
 };
 
-export { checkPassword, hashPassword };
+const isValidDate = (date: string): boolean => {
+  const regEx = /^\d{4}-\d{2}-\d{2}$/;
+  return date.match(regEx) != null;
+};
+
+export { checkPassword, hashPassword, isValidDate };

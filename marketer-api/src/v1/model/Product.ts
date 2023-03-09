@@ -56,7 +56,7 @@ class Product {
           active_for_selling: false,
         },
       });
-      return { error: false, message: "Success disabled", code: 200}
+      return { error: false, message: 'Success disabled', code: 200 };
     } catch (error) {
       if (error instanceof Error) {
         return { error: true, message: 'Failed to disable this product, id is wrong!', code: 401 };
@@ -87,7 +87,7 @@ class Product {
         },
       });
 
-      return {data: product, error: false};
+      return { data: product, error: false };
     } catch (error) {
       if (error instanceof Error) {
         return {
@@ -109,7 +109,7 @@ class Product {
     return res;
   }
 
-  async get(id: number) {
+  async get(id: number, ownerId: number) {
     try {
       const res = await db.product.findUnique({
         where: {
@@ -117,7 +117,21 @@ class Product {
         },
       });
 
-      return res;
+      if (!res) {
+        return {
+          error: true, message: 'Failed to get this product, check if this id is correct', code: 404,
+        };
+      }
+
+      if (res.marketerId !== ownerId) {
+        return {
+          error: true,
+          message: 'Unauthorized operation, this product does not match if the marketer token provided',
+          code: 401,
+        };
+      }
+
+      return { error: false, data: res, code: 200 };
     } catch (error) {
       if (error instanceof Error) {
         return { error: true, message: 'Failed to get this product, check if this ID is correct', code: 404 };
@@ -173,10 +187,29 @@ class Product {
           active_for_selling: true,
         },
       });
-      return { error: false, message: "Success disabled", code: 200}
+      return { error: false, message: 'Success enabled', code: 200 };
     } catch (error) {
       if (error instanceof Error) {
         return { error: true, message: 'Failed to disable this product, id is wrong!', code: 401 };
+      }
+    }
+  }
+
+  async checkOwner(ownerId: number, productId: number) {
+    try {
+      const res = await db.product.findMany({
+        where: {
+          id: productId,
+          marketerId: ownerId,
+        },
+      });
+
+      if (res.length === 0) return false;
+
+      return true;
+    } catch (error) {
+      if (error instanceof Error) {
+        return { error: true, code: 401, message: 'this operarion is not valid because the owner token is not the same of the product owner' };
       }
     }
   }

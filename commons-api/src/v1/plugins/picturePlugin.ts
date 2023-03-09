@@ -4,76 +4,71 @@ import { TypeOfUser } from '../models/utils/enums';
 import FirebaseService from '../services/firebase.service';
 
 export default async function picturePlugin(server: FastifyInstance) {
-  // reference the user costumer or marketer
-  server.post('/:id/', {
+  server.put('/', {
+    onRequest: [server.auth],
     schema: {
-      body: { type: 'object', required: ['picture'], properties: { picture: { type: 'object' } } },
-      querystring: {
+      body: {
         type: 'object',
+        required: ['picture'],
         properties: {
-          userType: {
-            type: 'string',
-            default: 'COSTUMER',
+          picture: {
+            type: 'object',
           },
         },
       },
     },
-  }, async (req: FastifyRequest<{
-    Querystring: {
-      userType: string
-    },
-    Params: {
-      id: string
-    },
+  }, async (req:FastifyRequest<{
+    Body: {
+      picture: any
+    }
   }>, rep) => {
-    const { id } = req.params;
-    const { userType } = req.query;
+    const { id } = req.user;
+
+    const userType = req.user.typeof;
 
     // @ts-ignore
     const { picture } = req.body;
 
     await picture.toBuffer();
 
-    const parsedId = parseInt(id, 10);
-
     let status;
 
-    // TODO Connect service of firebase to get image in cloud
-    if (userType.toUpperCase() === TypeOfUser.COSTUMER) {
-      const user = await User.findCostumerById(parsedId);
+    if (userType === TypeOfUser.COSTUMER) {
+      const user = await User.findCostumerById(id);
 
       if (!user) return rep.status(404).send({ error: true, message: ['id is wrong user not founded'] });
 
       const picture_uri = await FirebaseService.uploadImage(picture);
 
-      status = await User.updatePhotoCostumer({ id: parsedId, picture_uri });
+      status = await User.updatePhotoCostumer({ id, picture_uri });
     }
 
-    if (userType.toUpperCase() === TypeOfUser.MARKETER) {
-      const user = await User.findMarketerById(parsedId);
+    if (userType === TypeOfUser.MARKETER) {
+      const user = await User.findMarketerById(id);
 
       if (!user) return rep.status(404).send({ error: true, message: ['id is wrong user not founded'] });
 
       const picture_uri = await FirebaseService.uploadImage(picture);
 
-      status = await User.updatePhotoMarketer({ id: parsedId, picture_uri });
+      status = await User.updatePhotoMarketer({ id, picture_uri });
     }
 
-    if (userType.toUpperCase() === TypeOfUser.DELIVERYMAN) {
-      const user = await User.findDeliverymanById(parsedId);
+    if (userType === TypeOfUser.DELIVERYMAN) {
+      const user = await User.findDeliverymanById(id);
 
       if (!user) return rep.status(404).send({ error: true, message: ['id is wrong user not founded'] });
 
       const picture_uri = await FirebaseService.uploadImage(picture);
 
-      status = await User.updatePhotoDeliveryman({ id: parsedId, picture_uri });
+      status = await User.updatePhotoDeliveryman({ id, picture_uri });
     }
 
     if (!status) return rep.status(401).send({ error: true, message: ['Cant update the image for this user'] });
 
     return rep.send({
       error: false,
-      message: ['Updated Image of the User'],
+      message: 'Updated Image of the User',
+      code: 200,
     });
   });
 }

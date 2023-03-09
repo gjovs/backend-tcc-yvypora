@@ -1,13 +1,13 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { Costumer, Marketer } from '../models';
-import { hashPassword } from '../utils/utils';
+import { hashPassword, isValidDate } from '../utils/utils';
 
 export default async function registerPlugin(server: FastifyInstance) {
   server.post('/costumer', {
     schema: {
       body: {
         type: 'object',
-        required: ['name', 'email', 'password', 'address'],
+        required: ['name', 'email', 'password', 'address', 'birthday'],
         properties: {
           name: {
             type: 'string',
@@ -19,6 +19,9 @@ export default async function registerPlugin(server: FastifyInstance) {
             type: 'string',
           },
           gender: {
+            type: 'string',
+          },
+          birthday: {
             type: 'string',
           },
           address: {
@@ -61,6 +64,7 @@ export default async function registerPlugin(server: FastifyInstance) {
       name: string,
       email: string,
       gender: string,
+      birthday: string,
       address: {
         cep: string,
         complemento: string,
@@ -75,8 +79,16 @@ export default async function registerPlugin(server: FastifyInstance) {
   }>, rep) => {
     const { body } = req;
     const {
-      name, email, password, address, gender,
+      name, email, password, address, gender, birthday,
     } = body;
+
+    if (!isValidDate(birthday)) {
+      return rep.status(400).send({
+        code: 400,
+        error: true,
+        message: 'Date format to attribute birthday is wrong, need to be yyyy-mm-dd',
+      });
+    }
 
     // male Default
     let genderId = 1;
@@ -87,7 +99,7 @@ export default async function registerPlugin(server: FastifyInstance) {
     const password_hash = await hashPassword(password);
 
     const res = await Costumer.createCostumer({
-      name, email, password: password_hash, address, gender: genderId,
+      name, email, password: password_hash, address, gender: genderId, birthday,
     });
 
     if (res?.error) {
@@ -119,6 +131,9 @@ export default async function registerPlugin(server: FastifyInstance) {
           gender: {
             type: 'string',
           },
+          birthday: {
+            type: 'string',
+          },
         },
       },
     },
@@ -128,6 +143,7 @@ export default async function registerPlugin(server: FastifyInstance) {
       email: string,
       password: string,
       gender: string,
+      birthday: string
     },
     Params: {
       id: string
@@ -141,6 +157,16 @@ export default async function registerPlugin(server: FastifyInstance) {
       password_hash = await hashPassword(body.password);
     }
 
+    if (body.birthday) {
+      if (!isValidDate(body.birthday)) {
+        return rep.status(400).send({
+          code: 400,
+          error: true,
+          message: 'Date format to attribute birthday is wrong, need to be yyyy-mm-dd',
+        });
+      }
+    }
+
     let genderId = 1;
 
     // female id
@@ -152,6 +178,7 @@ export default async function registerPlugin(server: FastifyInstance) {
       email: body.email,
       id: parseInt(id, 10),
       genderId,
+      birthday: body.birthday,
     });
 
     if (res?.error) {
@@ -300,11 +327,12 @@ export default async function registerPlugin(server: FastifyInstance) {
     schema: {
       body: {
         type: 'object',
-        required: ['name', 'email', 'password', 'location', 'gender', 'phone'],
+        required: ['name', 'email', 'password', 'location', 'gender', 'phone', 'birthday'],
         properties: {
           name: { type: 'string' },
           cpf: { type: 'string' },
           cnpj: { type: 'string' },
+          birthday: { type: 'string' },
           email: { type: 'string' },
           password: { type: 'string' },
           phone: { type: 'string' },
@@ -327,6 +355,7 @@ export default async function registerPlugin(server: FastifyInstance) {
       email: string,
       password: string,
       phone: string,
+      birthday: string
       location: {
         longitude: number,
         latitude: number
@@ -335,8 +364,16 @@ export default async function registerPlugin(server: FastifyInstance) {
     }
   }>, rep) => {
     const {
-      cpf, cnpj, gender, email, name, password, location, phone,
+      cpf, cnpj, gender, email, name, password, location, phone, birthday,
     } = req.body;
+
+    if (!isValidDate(birthday)) {
+      return rep.status(400).send({
+        code: 400,
+        error: true,
+        message: 'Date format to attribute birthday is wrong, need to be yyyy-mm-dd',
+      });
+    }
 
     if (!cnpj && !cpf) {
       return rep.status(401).send({
@@ -361,6 +398,7 @@ export default async function registerPlugin(server: FastifyInstance) {
       password_hash,
       phone,
       genderId,
+      birthday,
     };
 
     const res = await Marketer.createMarketer(data);
@@ -400,7 +438,7 @@ export default async function registerPlugin(server: FastifyInstance) {
     schema: {
       body: {
         type: 'object',
-        required: ['name', 'email', 'password', 'gender', 'phone'],
+        required: ['name', 'email', 'password', 'gender', 'phone', 'birthday'],
         properties: {
           name: { type: 'string' },
           cpf: { type: 'string' },
@@ -408,6 +446,7 @@ export default async function registerPlugin(server: FastifyInstance) {
           email: { type: 'string' },
           password: { type: 'string' },
           gender: { type: 'string' },
+          birthday: { type: 'string' },
         },
       },
     },
@@ -421,13 +460,24 @@ export default async function registerPlugin(server: FastifyInstance) {
       cpf: string | null,
       cnpj: string| null,
       email: string,
-      gender: string
+      gender: string,
+      birthday: string
     }
   }>, rep) => {
     const { id } = req.params;
     const {
-      name, email, password, cpf, cnpj, gender,
+      name, email, password, cpf, cnpj, gender, birthday,
     } = req.body;
+
+    if (birthday) {
+      if (!isValidDate(birthday)) {
+        return rep.status(400).send({
+          code: 400,
+          error: true,
+          message: 'Date format to attribute birthday is wrong, need to be yyyy-mm-dd',
+        });
+      }
+    }
 
     let newCnpj = null;
     let newCpf = null;
@@ -454,6 +504,7 @@ export default async function registerPlugin(server: FastifyInstance) {
       email,
       name,
       genderId,
+      birthday,
     });
 
     if (res?.error) {

@@ -8,13 +8,10 @@ export default async function loginPlugin(server: FastifyInstance) {
     schema: {
       body: {
         type: 'object',
-        required: ['email', 'password', 'typeOfUser'],
+        required: ['email', 'password'],
         properties: {
           email: { type: 'string' },
           password: { type: 'string' },
-          typeOfUser: {
-            enum: ['COSTUMER', 'MARKETER', 'DELIVERYMAN'],
-          },
         },
       },
     },
@@ -22,31 +19,33 @@ export default async function loginPlugin(server: FastifyInstance) {
     Body: {
       email: string,
       password: string,
-      typeOfUser: TypeOfUser
     }
   }>, rep) => {
-    const { email, password, typeOfUser } = req.body;
+    const { email, password } = req.body;
 
     let user;
 
-    if (typeOfUser === TypeOfUser.COSTUMER) {
-      user = await User.findCostumerByEmail(email);
-    }
+    let typeofUser: TypeOfUser;
 
-    if (typeOfUser === TypeOfUser.DELIVERYMAN) {
+    user = await User.findCostumerByEmail(email);
+    typeofUser = TypeOfUser.COSTUMER;
+    if (!user) {
       user = await User.findDeliverymanByEmail(email);
+      typeofUser = TypeOfUser.DELIVERYMAN;
+      if (!user) {
+        user = await User.findMarketerByEmail(email);
+        typeofUser = TypeOfUser.MARKETER;
+      }
     }
 
-    if (typeOfUser === TypeOfUser.MARKETER) {
-      user = await User.findMarketerByEmail(email);
-    }
+    if (!user) return rep.status(404).send({ error: true, message: 'The user if this email doesnt exist!' });
 
-    if (!user) return rep.status(404).send({ error: true, message: ['The user if this email doesnt exist!'] });
     const isValid = await checkPassword(password, user.password_hash);
-    if (!isValid) return rep.status(401).send({ error: true, message: ['The password is wrong'] });
+
+    if (!isValid) return rep.status(401).send({ error: true, message: 'The password is wrong' });
 
     // @ts-ignore
-    user.typeof = typeOfUser;
+    user.typeof = typeofUser;
 
     const data = { payload: user };
 

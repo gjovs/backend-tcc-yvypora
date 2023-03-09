@@ -46,7 +46,8 @@ class Costumer {
     password: string,
     name: string,
     email: string,
-    gender: number
+    gender: number,
+    birthday: string,
     address: IAdress
   }) {
     try {
@@ -60,6 +61,7 @@ class Costumer {
           },
           name: data.name,
           password_hash: data.password,
+          birthday: data.birthday,
           email: data.email,
           costumer_addresses: {
             create: {
@@ -165,7 +167,7 @@ class Costumer {
     }
   }
 
-  async updateCostumer(data: { id: number, name: string, genderId: number, email: string, password_hash: string | null }) {
+  async updateCostumer(data: { id: number, name: string, genderId: number, email: string, password_hash: string | null, birthday: string}) {
     try {
       if (data.password_hash) {
         await db.costumer.update({
@@ -180,6 +182,7 @@ class Costumer {
           name: data.name,
           email: data.email,
           genderId: data.genderId,
+          birthday: data.birthday,
         },
         select: {
           gender: {

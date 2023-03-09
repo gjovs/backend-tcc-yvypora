@@ -9,6 +9,7 @@ class Marketer {
     cpf?: string,
     cnpj?: string,
     phone: string,
+    birthday: string
     location: {
       latitude: number,
       longitude: number
@@ -22,6 +23,7 @@ class Marketer {
               id: data.genderId,
             },
           },
+          birthday: data.birthday,
           name: data.name,
           email: data.email,
           password_hash: data.password_hash,
@@ -76,7 +78,7 @@ class Marketer {
     }
   }
 
-  async update(data: { password_hash: any; cpf: any; name: string; genderId: number; cnpj: any; email: string, id: number }) {
+  async update(data: { password_hash: any; cpf: any; name: string; genderId: number; cnpj: any; email: string, id: number, birthday: string}) {
     try {
       if (data.password_hash) {
         await db.marketer.update({
@@ -96,6 +98,7 @@ class Marketer {
           email: data.email,
           cnpj: data.cnpj,
           cpf: data.cpf,
+          birthday: data.birthday,
         },
       });
       return { error: false, message: 'Success updated marketer!' };

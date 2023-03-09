@@ -52,12 +52,9 @@ class Server {
   private decorators() {
     this.app.decorate('auth', async (req: FastifyRequest, rep: FastifyReply) => {
       try {
-        const user = await req.jwtVerify();
-
+        const data = await req.jwtVerify();
         // @ts-ignore
-        console.log(user.payload);
-        // @ts-ignore
-        req.user = user.payload;
+        req.user = data.payload;
       } catch (e) {
         return rep.send(e);
       }

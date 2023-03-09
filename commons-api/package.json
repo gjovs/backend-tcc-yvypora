@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx ts-node ./src/v1/www/server.ts",
+    "dev": "npx tsx ./src/v1/www/server.ts",
     "generate": "npx prisma generate --schema=./database/prisma/schema.prisma",
     "pull-db": "npx prisma db pull --schema=./database/prisma/schema.prisma",
     "build": "npx tsc",
@@ -30,7 +30,6 @@
     "firebase-admin": "^11.5.0",
     "geolib": "^3.3.3",
     "prisma": "^4.10.0",
-    "ts-node": "^10.9.1",
     "tsx": "^3.12.3"
   },
   "keywords": [],
