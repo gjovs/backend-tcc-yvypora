@@ -4,10 +4,7 @@ module.exports = {
     es2021: true,
     es6: true,
   },
-  extends: [
-    'airbnb',
-    'plugin:@typescript-eslint/recommended',
-  ],
+  extends: ['airbnb', 'plugin:@typescript-eslint/recommended'],
   parser: '@typescript-eslint/parser',
   overrides: [],
   parserOptions: {
@@ -22,6 +19,6 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'import/no-unresolved': 'off',
     camelcase: 'off',
-    '@typescript-eslint/ban-ts-comment': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',  
   },
 };
