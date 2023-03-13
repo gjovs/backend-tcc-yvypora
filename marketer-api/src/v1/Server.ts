@@ -5,6 +5,8 @@ import multipart from '@fastify/multipart';
 import jwt from '@fastify/jwt';
 
 import { fairPlugin, productPlugin, userPlugin } from './plugins';
+import Product from './model/Product';
+import product from './model/Product';
 
 class Server {
   declare app: FastifyInstance;
@@ -57,6 +59,32 @@ class Server {
         req.user = data.payload;
       } catch (e) {
         return rep.send(e);
+      }
+    });
+    this.app.decorate('checkOwner', async (req: FastifyRequest<{
+      Params: {
+        id: string
+      }
+    }>, rep: FastifyReply) => {
+      try {
+        const ownerId = req.user.id;
+        const productId = parseInt(req.params.id, 10);
+        const res = await Product.checkOwner(ownerId, productId);
+
+        // @ts-ignore
+        if (!res || res?.error) {
+          return rep.status(401).send({
+            error: true,
+            code: 401,
+            message: 'this operation is not allowed because the owner token is not the same of the product owner',
+          });
+        }
+      } catch (e) {
+        return rep.status(401).send({
+          error: true,
+          code: 401,
+          message: 'this operation is not allowed because the owner token is not the same of the product owner',
+        });
       }
     });
   }

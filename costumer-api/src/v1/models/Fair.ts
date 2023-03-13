@@ -101,5 +101,8 @@ class Fair {
         },
       },
     });
+    return fair;
   }
 }
+
+export default new Fair();

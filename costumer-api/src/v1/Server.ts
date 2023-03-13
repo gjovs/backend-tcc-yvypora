@@ -3,8 +3,7 @@ import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
 import jwt from '@fastify/jwt';
 
-import { fairPlugin, userPlugin } from './plugins';
-import user from './plugins/user';
+import { fairPlugin, userPlugin, productPlugin } from './plugins';
 
 class Server {
   declare app: FastifyInstance;
@@ -40,7 +39,10 @@ class Server {
       prefix: '/user/',
     });
     this.app.register(fairPlugin, {
-      prefix: '/',
+      prefix: '/fair',
+    });
+    this.app.register(productPlugin, {
+      prefix: '/product',
     });
   }
 

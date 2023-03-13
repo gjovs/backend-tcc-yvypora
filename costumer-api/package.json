@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "npx ts-node ./src/v1/www/server.ts",
+    "dev": "npx tsx ./src/v1/www/server.ts",
+    "start": "node ./bin/www/server.js",
     "generate": "npx prisma generate --schema=./database/prisma/schema.prisma",
     "pull-db": "npx prisma db pull --schema=./database/prisma/schema.prisma"
   },

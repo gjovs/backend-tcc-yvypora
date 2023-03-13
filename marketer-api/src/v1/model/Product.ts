@@ -213,6 +213,58 @@ class Product {
       }
     }
   }
+
+  async addSaleOff(ownerId: number, productId: number, value: number) {
+    try {
+      const product = await db.product.findMany({
+        where: {
+          id: productId,
+          marketerId: ownerId,
+        },
+      });
+      const { id } = product[0];
+
+      await db.sale_off.create({
+        data: {
+          productId: id,
+          value,
+        },
+      });
+
+      return { error: false, code: 200, message: 'Successfully sale off appended in the product!' };
+    } catch (error) {
+      if (error instanceof Error) {
+        return { error: true, code: 401, message: 'Bad id or bad value parsed to sale off appended' };
+      }
+    }
+
+    return { error: true, code: 401, message: 'Bad id or bad value parsed to sale off appended' };
+  }
+
+  async removeSaleOff(ownerId: number, productId: number) {
+    try {
+      const product = await db.product.findMany({
+        where: {
+          id: productId,
+          marketerId: ownerId,
+        },
+      });
+      const { id } = product[0];
+
+      await db.sale_off.deleteMany({
+        where: {
+          productId: id,
+        },
+      });
+
+      return { error: false, code: 200, message: 'Successfully sale off removed in the product!' };
+    } catch (error) {
+      if (error instanceof Error) {
+        return { error: true, code: 401, message: 'Bad id or bad value parsed to sale off appended' };
+      }
+    }
+    return { error: true, code: 401, message: 'Bad id or bad value parsed to sale off appended' };
+  }
 }
 
 export default new Product();

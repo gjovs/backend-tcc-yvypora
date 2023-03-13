@@ -31,7 +31,8 @@ export default async function productPlugin(server: FastifyInstance) {
   }, async (req: FastifyRequest<{
     Params: {
       id: string
-    }}>, rep) => {
+    }
+  }>, rep) => {
     const { id } = req.user;
 
     const res = await Product.get(parseInt(req.params.id, 10), id);
@@ -378,6 +379,95 @@ export default async function productPlugin(server: FastifyInstance) {
       code: 200,
       error: false,
       message: res?.message,
+    });
+  });
+
+  server.put('sale_off/:id', {
+    onRequest: [server.auth],
+    schema: {
+      params: {
+        type: 'object',
+        required: ['id'],
+        properties: {
+          id: { type: 'number' },
+        },
+      },
+      querystring: {
+        type: 'object',
+        required: ['value'],
+        properties: {
+          value: {
+            type: 'number',
+          },
+        },
+      },
+    },
+  }, async (req: FastifyRequest<{
+    Params: {
+      id: string
+    },
+    Querystring: {
+      value: string
+    }
+  }>, rep) => {
+    const { id } = req.user;
+    const productId = parseInt(req.params.id, 10);
+    const value = parseFloat(req.query.value);
+
+    const isSameOwner = await Product.checkOwner(id, parseInt(req.params.id, 10));
+
+    if (!isSameOwner) {
+      return rep.status(401).send({
+        error: true,
+        code: 401,
+        message: 'this operation is not allowed because the owner token is not the same of the product owner',
+      });
+    }
+
+    const res = await Product.addSaleOff(id, productId, value);
+
+    return rep.status(res.code).send({
+      code: res.code,
+      error: res.error,
+      message: res.message,
+    });
+  });
+
+  server.delete('sale_off/:id', {
+    onRequest: [server.auth],
+    schema: {
+      params: {
+        type: 'object',
+        required: ['id'],
+        properties: {
+          id: { type: 'number' },
+        },
+      },
+    },
+  }, async (req: FastifyRequest<{
+      Params: {
+        id: string
+      }
+    }>, rep) => {
+    const { id } = req.user;
+    const productId = parseInt(req.params.id, 10);
+
+    const isSameOwner = await Product.checkOwner(id, parseInt(req.params.id, 10));
+
+    if (!isSameOwner) {
+      return rep.status(401).send({
+        error: true,
+        code: 401,
+        message: 'this operation is not allowed because the owner token is not the same of the product owner',
+      });
+    }
+
+    const res = await Product.removeSaleOff(id, productId);
+
+    return rep.status(res.code).send({
+      code: res.code,
+      error: res.error,
+      message: res.message,
     });
   });
 }

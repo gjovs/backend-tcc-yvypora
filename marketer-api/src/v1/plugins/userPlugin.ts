@@ -12,8 +12,6 @@ export default async function (server: FastifyInstance) {
     async (req, rep) => {
       const res = await Marketer.indexFairs(req.user.id);
 
-      console.log(res);
-
       if (!res) {
         return rep.status(404).send({
           code: 404,

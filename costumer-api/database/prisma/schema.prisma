@@ -15,8 +15,9 @@ model costumer {
   picture_uri        String?
   created_at         DateTime             @default(now())
   updated_at         DateTime             @updatedAt
-  cpf                String?              @unique @db.VarChar(13)
   genderId           Int
+  birthday           String
+  cpf                String?              @unique @db.VarChar(13)
   gender             gender               @relation(fields: [genderId], references: [id])
   costumer_addresses costumer_addresses[]
   shopping_lists     shopping_list[]
@@ -34,6 +35,7 @@ model deliveryman {
   created_at          DateTime              @default(now())
   updated_at          DateTime              @updatedAt
   genderId            Int
+  birthday            String
   gender              gender                @relation(fields: [genderId], references: [id])
   location            location              @relation(fields: [locationId], references: [id])
   order               order[]
@@ -118,18 +120,25 @@ model products_in_shopping_list {
 model product {
   id                        Int                         @id @unique @default(autoincrement())
   name                      String                      @db.VarChar(120)
-  price_type                Boolean                     @default(false)
   price                     Float
   active_for_selling        Boolean                     @default(true)
   available_quantity        Int
   marketerId                Int
   created_at                DateTime                    @default(now())
   updated_at                DateTime                    @updatedAt
+  category_of_productId     Int
+  type_of_productId         Int
+  review                    Float                       @default(0)
   image_of_product          image_of_product[]
+  category_of_product       category_of_product         @relation(fields: [category_of_productId], references: [id])
   marketer                  marketer                    @relation(fields: [marketerId], references: [id], onDelete: Cascade)
+  type_of_price             type_of_price               @relation(fields: [type_of_productId], references: [id])
   products_in_shopping_list products_in_shopping_list[]
+  sale_off                  sale_off[]
 
   @@index([marketerId], map: "product_marketerId_fkey")
+  @@index([category_of_productId], map: "product_category_of_productId_fkey")
+  @@index([type_of_productId], map: "product_type_of_productId_fkey")
 }
 
 model marketer {
@@ -142,10 +151,11 @@ model marketer {
   online         Boolean          @default(false)
   locationId     Int              @unique
   created_at     DateTime         @default(now())
+  birthday       String
   updated_at     DateTime         @updatedAt
+  genderId       Int
   cnpj           String?          @unique @db.VarChar(18)
   cpf            String?          @unique @db.VarChar(13)
-  genderId       Int
   phone          String           @db.VarChar(15)
   fair_marketers fair_marketers[]
   gender         gender           @relation(fields: [genderId], references: [id])
@@ -179,6 +189,7 @@ model fair_marketers {
   fair       fair     @relation(fields: [fairId], references: [id], onDelete: Cascade)
   marketer   marketer @relation(fields: [marketerId], references: [id], onDelete: Cascade)
 
+  @@unique([fairId, marketerId])
   @@index([fairId], map: "fair_marketers_fairId_fkey")
   @@index([marketerId], map: "fair_marketers_marketerId_fkey")
 }
@@ -210,15 +221,15 @@ model location {
 
 model address {
   id                 Int                  @id @unique @default(autoincrement())
+  cep                String
   number             Int
   created_at         DateTime             @default(now())
   updated_at         DateTime             @updatedAt
   address_typeId     Int
   complemento        String
-  cep                String
   cityId             Int
-  neighborhoodId     Int
   uFId               Int
+  neighborhoodId     Int
   type               address_type         @relation(fields: [address_typeId], references: [id])
   city               city                 @relation(fields: [cityId], references: [id])
   neighborhood       neighborhood         @relation(fields: [neighborhoodId], references: [id])
@@ -254,7 +265,7 @@ model image_of_product {
   productId  Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  image      image    @relation(fields: [imageId], references: [id])
+  image      image    @relation(fields: [imageId], references: [id], onDelete: Cascade)
   product    product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@index([imageId], map: "image_of_product_imageId_fkey")
@@ -262,11 +273,12 @@ model image_of_product {
 }
 
 model image {
-  id               Int                @id @unique @default(autoincrement())
-  uri              String             @db.VarChar(255)
-  created_at       DateTime           @default(now())
-  updated_at       DateTime           @updatedAt
-  image_of_product image_of_product[]
+  id                  Int                   @id @unique @default(autoincrement())
+  uri                 String                @db.VarChar(255)
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt
+  category_of_product category_of_product[]
+  image_of_product    image_of_product[]
 }
 
 model payment_method {
@@ -305,7 +317,7 @@ model date_and_hour_of_work {
 
 model day_of_week {
   id                    Int                     @id @unique @default(autoincrement())
-  name                  String                  @db.VarChar(20)
+  name                  String                  @unique @db.VarChar(20)
   created_at            DateTime                @default(now())
   updated_at            DateTime                @updatedAt
   date_and_hour_of_work date_and_hour_of_work[]
@@ -337,4 +349,29 @@ model uf {
   id      Int       @id @default(autoincrement())
   name    String    @unique(map: "UF_name_key")
   address address[]
+}
+
+model category_of_product {
+  id      Int       @id @default(autoincrement())
+  imageId Int
+  name    String    @unique
+  image   image     @relation(fields: [imageId], references: [id])
+  product product[]
+
+  @@index([imageId], map: "category_of_product_imageId_fkey")
+}
+
+model sale_off {
+  id        Int     @id @default(autoincrement())
+  value     Float
+  productId Int
+  product   product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId], map: "sale_off_productId_fkey")
+}
+
+model type_of_price {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique
+  product product[]
 }

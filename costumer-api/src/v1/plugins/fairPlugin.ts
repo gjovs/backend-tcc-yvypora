@@ -1,24 +1,27 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { orderByDistance } from 'geolib';
-import { GeolibInputCoordinates } from 'geolib/es/types';
-import { Fair } from '../models';
+import Fair from '../models/Fair';
 
 export default async function fairPlugin(server: FastifyInstance) {
-  server.get('/listByClose', {
+  server.get('/moreSold', (_req, rep) => {
+
+  });
+
+  server.get('/', {
     schema: {
       querystring: {
         type: 'object',
         required: ['lat', 'long'],
         properties: {
-          lat: { type: 'string' },
-          long: { type: 'string' },
+          lat: { type: 'number' },
+          long: { type: 'number' },
         },
       },
     },
   }, async (req: FastifyRequest<{
     Querystring: {
       lat: string,
-      long: string,
+      long: string
     }
   }>, rep) => {
     const fairs = await Fair.index();
@@ -33,9 +36,29 @@ export default async function fairPlugin(server: FastifyInstance) {
       longitude: originLong,
     }, fairs as any);
 
-    return rep.status(200).send({
+    return rep.send({
       code: 200,
-      payload: nearPositions,
+      data: nearPositions,
+      error: false,
+    });
+  });
+
+  server.get('/:id', async (req: FastifyRequest<{ Params: { id: string } }>, rep) => {
+    const { id } = req.params;
+
+    const res = await Fair.get(parseInt(id, 10));
+
+    if (!res) {
+      return rep.status(404).send({
+        code: 404,
+        message: 'Bad ID, this fair does not exist',
+        error: false,
+      });
+    }
+
+    return rep.send({
+      code: 200,
+      data: res,
       error: false,
     });
   });

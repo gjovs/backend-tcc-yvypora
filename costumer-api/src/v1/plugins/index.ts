@@ -1,4 +1,5 @@
-import fairPlugin from '../../../../commons-api/src/v1/plugins/fairPlugin';
 import userPlugin from './user';
+import fairPlugin from './fairPlugin';
+import productPlugin from './productPlugin';
 
-export { fairPlugin, userPlugin };
+export { fairPlugin, userPlugin, productPlugin };
