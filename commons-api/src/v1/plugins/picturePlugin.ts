@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import { User } from '../models';
 import { TypeOfUser } from '../models/utils/enums';
 import FirebaseService from '../services/firebase.service';
+import { DatabaseService } from 'firebase-admin/lib/database/database';
 
 export default async function picturePlugin(server: FastifyInstance) {
   server.put(
@@ -28,8 +29,10 @@ export default async function picturePlugin(server: FastifyInstance) {
       }>,
       rep,
     ) => {
+      // @ts-ignore
       const { id } = req.user;
 
+      // @ts-ignore
       const userType = req.user.typeof;
 
       // @ts-ignore

@@ -1,3 +1,5 @@
 {
+    "appService.defaultWebAppToDeploy": "/subscriptions/a0c86b95-6e13-4cd6-9d8a-f9f783ae4b80/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/commonsapiyvypora",
+    "appService.deploySubpath": "commons-api"
  
 }

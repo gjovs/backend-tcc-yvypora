@@ -4,7 +4,7 @@ import { TypeOfUser } from '../models/utils/enums';
 declare module 'fastify' {
   export interface FastifyRequest {
     user: {
-      id: number
+      id: number,
       name: string,
       email: string,
       password_hash: string,

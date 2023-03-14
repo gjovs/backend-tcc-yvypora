@@ -17,7 +17,7 @@ declare module 'fastify' {
       genderId: number,
       cnpj: string | null,
       cpf: string | null,
-      phone: string
+      phone: string,
       typeof: TypeOfUser
     };
   }
