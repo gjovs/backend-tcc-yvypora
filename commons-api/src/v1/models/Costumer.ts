@@ -1,14 +1,14 @@
 import db from '../libs/prisma';
 
 interface IAdress {
-  cep: string,
-  complemento: string,
-  addressTypeId: number,
-  number: number,
-  city: string,
-  uf: string,
-  neighborhood: string,
-  logradouro: string
+  cep: string;
+  complemento: string;
+  addressTypeId: number;
+  number: number;
+  city: string;
+  uf: string;
+  neighborhood: string;
+  logradouro: string;
 }
 class Costumer {
   async getCostumer(id: number) {
@@ -43,15 +43,14 @@ class Costumer {
   }
 
   async createCostumer(data: {
-    password: string,
-    name: string,
-    email: string,
-    gender: number,
-    birthday: string,
-    address: IAdress
+    password: string;
+    name: string;
+    email: string;
+    gender: number;
+    birthday: string;
+    address: IAdress;
   }) {
     try {
-      // @ts-ignore
       const res = await db.costumer.create({
         data: {
           gender: {
@@ -134,7 +133,9 @@ class Costumer {
     } catch (error) {
       if (error instanceof Error) {
         return {
-          error: true, message: 'Failed to save a new Costumer in Database', code: 401,
+          error: true,
+          message: 'Failed to save a new Costumer in Database',
+          code: 401,
         };
       }
     }
@@ -153,10 +154,12 @@ class Costumer {
       });
 
       // @ts-ignore
-      await Promise.all(addresses.map(async ({ addressId }) => {
-        // @ts-ignore
-        await db.address.delete({ where: { id: addressId as number } });
-      }));
+      await Promise.all(
+        addresses.map(async ({ addressId }) => {
+          // @ts-ignore
+          await db.address.delete({ where: { id: addressId as number } });
+        }),
+      );
 
       await db.costumer.delete({ where: { id } });
       return { error: false, data: 'Success Deleted' };
@@ -167,7 +170,14 @@ class Costumer {
     }
   }
 
-  async updateCostumer(data: { id: number, name: string, genderId: number, email: string, password_hash: string | null, birthday: string}) {
+  async updateCostumer(data: {
+    id: number;
+    name: string;
+    genderId: number;
+    email: string;
+    password_hash: string | null;
+    birthday: string;
+  }) {
     try {
       if (data.password_hash) {
         await db.costumer.update({
@@ -206,12 +216,16 @@ class Costumer {
       return { error: false, data: res };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, message: 'Failed to update this costumer', code: 401 };
+        return {
+          error: true,
+          message: 'Failed to update this costumer',
+          code: 401,
+        };
       }
     }
   }
 
-  async addNewCostumerAddress(data: { address: IAdress, id: number }) {
+  async addNewCostumerAddress(data: { address: IAdress; id: number }) {
     try {
       await db.costumer.update({
         where: { id: data.id },
@@ -264,10 +278,18 @@ class Costumer {
           },
         },
       });
-      return { error: false, message: 'Success appended new address to costumer', code: 401 };
+      return {
+        error: false,
+        message: 'Success appended new address to costumer',
+        code: 401,
+      };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, message: 'Failed to append new address in this costumer', code: 401 };
+        return {
+          error: true,
+          message: 'Failed to append new address in this costumer',
+          code: 401,
+        };
       }
     }
   }
@@ -275,7 +297,10 @@ class Costumer {
   async deleteCostumerAddress(addressId: number) {
     try {
       await db.address.delete({ where: { id: addressId } });
-      return { error: false, message: 'Deleted address associated with this user' };
+      return {
+        error: false,
+        message: 'Deleted address associated with this user',
+      };
     } catch (error) {
       if (error instanceof Error) {
         return { error: true, message: 'Failed to delete this address' };

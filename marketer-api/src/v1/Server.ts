@@ -67,6 +67,7 @@ class Server {
       }
     }>, rep: FastifyReply) => {
       try {
+        // @ts-ignore
         const ownerId = req.user.id;
         const productId = parseInt(req.params.id, 10);
         const res = await Product.checkOwner(ownerId, productId);

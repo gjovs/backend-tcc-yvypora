@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "npx tsc",
     "dev": "npx tsx ./src/v1/www/server.ts",
     "start": "node ./bin/www/server.ts",
     "generate": "npx prisma generate --schema=./database/prisma/schema.prisma",

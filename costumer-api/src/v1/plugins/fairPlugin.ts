@@ -3,10 +3,6 @@ import { orderByDistance } from 'geolib';
 import Fair from '../models/Fair';
 
 export default async function fairPlugin(server: FastifyInstance) {
-  server.get('/moreSold', (_req, rep) => {
-
-  });
-
   server.get('/', {
     schema: {
       querystring: {

@@ -10,6 +10,7 @@ export default async function (server: FastifyInstance) {
       onRequest: [server.auth],
     },
     async (req, rep) => {
+      // @ts-ignore
       const res = await Marketer.indexFairs(req.user.id);
 
       if (!res) {
