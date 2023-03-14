@@ -1,9 +1,13 @@
 import server from '../Server';
 
+
 async function run() {
   await server.listen({
-    port: 3335,
+    port: process.env.PORT ? Number(process.env.PORT) : 3335,
+    host: '0.0.0.0',
   });
 }
 
-run();
+run().then(() => {
+  console.log('HTTP SERVER RUNNING');
+});
