@@ -3,7 +3,7 @@ import { z, ZodError } from "zod";
 import Product from "../model/Product";
 import FirebaseService from "../services/firebase.service";
 
-export default async function productPlugin(server: FastifyInstance) {
+export default async function productRoutes(server: FastifyInstance) {
   server.get(
     "/",
     {
