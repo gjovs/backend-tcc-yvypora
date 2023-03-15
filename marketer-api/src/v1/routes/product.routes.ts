@@ -35,8 +35,10 @@ export default async function productRoutes(server: FastifyInstance) {
             'price_type',
             'category',
             'available_quantity',
+            'description',
           ],
           properties: {
+            description: { type: 'string' },
             name: { type: 'string' },
             price: { type: 'number' },
             available_quantity: { type: 'number' },
