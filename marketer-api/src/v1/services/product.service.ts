@@ -1,6 +1,7 @@
 import db from '../libs/prisma';
 
 interface IProduct {
+  description: string,
   name: string;
   price: number;
   price_type: {
@@ -29,6 +30,7 @@ class Product {
               id: data.category.id,
             },
           },
+          description: data.description,
           price: data.price,
           name: data.name,
           available_quantity: data.available_quantity,

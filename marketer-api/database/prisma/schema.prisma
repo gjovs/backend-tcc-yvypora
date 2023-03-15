@@ -16,6 +16,7 @@ model costumer {
   created_at         DateTime             @default(now())
   updated_at         DateTime             @updatedAt
   genderId           Int
+  birthday           String
   cpf                String?              @unique @db.VarChar(13)
   gender             gender               @relation(fields: [genderId], references: [id])
   costumer_addresses costumer_addresses[]
@@ -34,6 +35,7 @@ model deliveryman {
   created_at          DateTime              @default(now())
   updated_at          DateTime              @updatedAt
   genderId            Int
+  birthday            String
   gender              gender                @relation(fields: [genderId], references: [id])
   location            location              @relation(fields: [locationId], references: [id])
   order               order[]
@@ -119,11 +121,13 @@ model product {
   id                        Int                         @id @unique @default(autoincrement())
   name                      String                      @db.VarChar(120)
   price                     Float
+  review                    Float                       @default(0)
   active_for_selling        Boolean                     @default(true)
   available_quantity        Int
   marketerId                Int
   created_at                DateTime                    @default(now())
   updated_at                DateTime                    @updatedAt
+  description               String
   category_of_productId     Int
   type_of_productId         Int
   image_of_product          image_of_product[]
@@ -148,6 +152,7 @@ model marketer {
   online         Boolean          @default(false)
   locationId     Int              @unique
   created_at     DateTime         @default(now())
+  birthday       String
   updated_at     DateTime         @updatedAt
   genderId       Int
   cnpj           String?          @unique @db.VarChar(18)
@@ -313,7 +318,7 @@ model date_and_hour_of_work {
 
 model day_of_week {
   id                    Int                     @id @unique @default(autoincrement())
-  name                  String                  @db.VarChar(20)
+  name                  String                  @unique @db.VarChar(20)
   created_at            DateTime                @default(now())
   updated_at            DateTime                @updatedAt
   date_and_hour_of_work date_and_hour_of_work[]

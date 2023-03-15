@@ -46,6 +46,7 @@ export class ProductController {
   async create(
     req: FastifyRequest<{
         Body: {
+            description: string
             name: string;
             price: number;
             price_type: {
