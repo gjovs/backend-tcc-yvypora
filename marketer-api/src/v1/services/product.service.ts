@@ -45,10 +45,11 @@ class Product {
       return { error: false, data: res };
     } catch (error) {
       if (error instanceof Error) {
+        console.log(error);
         return {
           error: true,
           message: 'Failed to save new product in database',
-          code: 401,
+          code: 400,
         };
       }
     }
