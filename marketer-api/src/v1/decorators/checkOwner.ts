@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { Product } from '../model';
+import { Product } from '../service';
 
 export default async (
   req: FastifyRequest<{ Params: { id: string } }>,

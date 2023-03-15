@@ -1,17 +1,17 @@
 import db from '../libs/prisma';
 
 interface IProduct {
-  name: string
-  price: number,
+  name: string;
+  price: number;
   price_type: {
-    id: number,
-    name: string
-  }
+    id: number;
+    name: string;
+  };
   category: {
-    name: string,
-    id: number
-  },
-  available_quantity: number
+    name: string;
+    id: number;
+  };
+  available_quantity: number;
 }
 
 class Product {
@@ -43,7 +43,11 @@ class Product {
       return { error: false, data: res };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, message: 'Failed to save new product in database', code: 401 };
+        return {
+          error: true,
+          message: 'Failed to save new product in database',
+          code: 401,
+        };
       }
     }
   }
@@ -59,7 +63,11 @@ class Product {
       return { error: false, message: 'Success disabled', code: 200 };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, message: 'Failed to disable this product, id is wrong!', code: 401 };
+        return {
+          error: true,
+          message: 'Failed to disable this product, id is wrong!',
+          code: 401,
+        };
       }
     }
   }
@@ -92,7 +100,8 @@ class Product {
       if (error instanceof Error) {
         return {
           error: true,
-          message: 'Failed to update this product, check if this id is correctly assigment',
+          message:
+            'Failed to update this product, check if this id is correctly assigment',
           code: 404,
         };
       }
@@ -119,14 +128,17 @@ class Product {
 
       if (!res) {
         return {
-          error: true, message: 'Failed to get this product, check if this id is correct', code: 404,
+          error: true,
+          message: 'Failed to get this product, check if this id is correct',
+          code: 404,
         };
       }
 
       if (res.marketerId !== ownerId) {
         return {
           error: true,
-          message: 'Unauthorized operation, this product does not match if the marketer token provided',
+          message:
+            'Unauthorized operation, this product does not match if the marketer token provided',
           code: 401,
         };
       }
@@ -134,7 +146,11 @@ class Product {
       return { error: false, data: res, code: 200 };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, message: 'Failed to get this product, check if this ID is correct', code: 404 };
+        return {
+          error: true,
+          message: 'Failed to get this product, check if this ID is correct',
+          code: 404,
+        };
       }
     }
   }
@@ -157,7 +173,10 @@ class Product {
           },
         },
       });
-      return { error: false, message: 'Successfully appended image to product' };
+      return {
+        error: false,
+        message: 'Successfully appended image to product',
+      };
     } catch (error) {
       if (error instanceof Error) {
         return { error: true, code: 401, message: error.message };
@@ -190,7 +209,11 @@ class Product {
       return { error: false, message: 'Success enabled', code: 200 };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, message: 'Failed to disable this product, id is wrong!', code: 401 };
+        return {
+          error: true,
+          message: 'Failed to disable this product, id is wrong!',
+          code: 401,
+        };
       }
     }
   }
@@ -209,7 +232,12 @@ class Product {
       return true;
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, code: 401, message: 'this operarion is not valid because the owner token is not the same of the product owner' };
+        return {
+          error: true,
+          code: 401,
+          message:
+            'this operarion is not valid because the owner token is not the same of the product owner',
+        };
       }
     }
   }
@@ -231,14 +259,26 @@ class Product {
         },
       });
 
-      return { error: false, code: 200, message: 'Successfully sale off appended in the product!' };
+      return {
+        error: false,
+        code: 200,
+        message: 'Successfully sale off appended in the product!',
+      };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, code: 401, message: 'Bad id or bad value parsed to sale off appended' };
+        return {
+          error: true,
+          code: 401,
+          message: 'Bad id or bad value parsed to sale off appended',
+        };
       }
     }
 
-    return { error: true, code: 401, message: 'Bad id or bad value parsed to sale off appended' };
+    return {
+      error: true,
+      code: 401,
+      message: 'Bad id or bad value parsed to sale off appended',
+    };
   }
 
   async removeSaleOff(ownerId: number, productId: number) {
@@ -257,13 +297,25 @@ class Product {
         },
       });
 
-      return { error: false, code: 200, message: 'Successfully sale off removed in the product!' };
+      return {
+        error: false,
+        code: 200,
+        message: 'Successfully sale off removed in the product!',
+      };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, code: 401, message: 'Bad id or bad value parsed to sale off appended' };
+        return {
+          error: true,
+          code: 401,
+          message: 'Bad id or bad value parsed to sale off appended',
+        };
       }
     }
-    return { error: true, code: 401, message: 'Bad id or bad value parsed to sale off appended' };
+    return {
+      error: true,
+      code: 401,
+      message: 'Bad id or bad value parsed to sale off appended',
+    };
   }
 }
 

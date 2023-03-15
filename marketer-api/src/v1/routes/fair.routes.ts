@@ -1,21 +1,21 @@
-import { FastifyInstance, FastifyRequest } from "fastify";
-import axios from "axios";
-import Marketer from "../model/Marketer";
-import IAddress from "../utils/interfaces/address.interface";
-import Fair from "../model/Fair";
+import { FastifyInstance, FastifyRequest } from 'fastify';
+import axios from 'axios';
+import Marketer from '../service/marketer.service';
+import IAddress from '../utils/interfaces/address.interface';
+import Fair from '../service/fair.service';
 
 export default async function fairRoutes(server: FastifyInstance) {
   // ADD FAIRS
   server.put(
-    "/add/:id",
+    '/add/:id',
     {
       onRequest: [server.auth],
       schema: {
         params: {
-          type: "object",
-          required: ["id"],
+          type: 'object',
+          required: ['id'],
           properties: {
-            id: { type: "number" },
+            id: { type: 'number' },
           },
         },
       },
@@ -26,7 +26,7 @@ export default async function fairRoutes(server: FastifyInstance) {
           id: string;
         };
       }>,
-      rep
+      rep,
     ) => {
       // @ts-ignore
       const { id } = req.user;
@@ -37,7 +37,7 @@ export default async function fairRoutes(server: FastifyInstance) {
         // @ts-ignore
         return rep.status(res?.code).send({
           error: true,
-          cause: "Bad id or this relation already exist!",
+          cause: 'Bad id or this relation already exist!',
         });
       }
 
@@ -46,20 +46,20 @@ export default async function fairRoutes(server: FastifyInstance) {
         payload: res?.data,
         error: false,
       });
-    }
+    },
   );
 
   // REMOVE FAIRS
   server.delete(
-    "/remove/:id",
+    '/remove/:id',
     {
       onRequest: [server.auth],
       schema: {
         params: {
-          type: "object",
-          required: ["id"],
+          type: 'object',
+          required: ['id'],
           properties: {
-            id: { type: "number" },
+            id: { type: 'number' },
           },
         },
       },
@@ -70,7 +70,7 @@ export default async function fairRoutes(server: FastifyInstance) {
           id: string;
         };
       }>,
-      rep
+      rep,
     ) => {
       // @ts-ignore
       const { id } = req.user;
@@ -90,78 +90,78 @@ export default async function fairRoutes(server: FastifyInstance) {
         payload: res?.message,
         error: false,
       });
-    }
+    },
   );
 
   // CREATE
   server.post(
-    "/",
+    '/',
     {
       onRequest: [server.auth],
       schema: {
         body: {
-          type: "object",
-          required: ["dateAndHourOfWork", "address"],
+          type: 'object',
+          required: ['dateAndHourOfWork', 'address'],
           properties: {
             dateAndHourOfWork: {
-              type: "array",
+              type: 'array',
               maxItems: 7,
               items: {
-                type: "object",
-                required: ["open", "close", "dayOfWeek"],
+                type: 'object',
+                required: ['open', 'close', 'dayOfWeek'],
                 properties: {
                   open: {
-                    type: "string",
+                    type: 'string',
                   },
                   close: {
-                    type: "string",
+                    type: 'string',
                   },
                   dayOfWeek: {
-                    type: "object",
+                    type: 'object',
                     properties: {
-                      id: { type: "integer" },
-                      name: { type: "string" },
+                      id: { type: 'integer' },
+                      name: { type: 'string' },
                     },
                   },
                 },
               },
             },
             address: {
-              type: "object",
+              type: 'object',
               required: [
-                "cep",
-                "number",
-                "complemento",
-                "addressTypeId",
-                "city",
-                "uf",
-                "neighborhood",
-                "logradouro",
+                'cep',
+                'number',
+                'complemento',
+                'addressTypeId',
+                'city',
+                'uf',
+                'neighborhood',
+                'logradouro',
               ],
               properties: {
                 cep: {
-                  type: "string",
+                  type: 'string',
                 },
                 number: {
-                  type: "number",
+                  type: 'number',
                 },
                 complemento: {
-                  type: "string",
+                  type: 'string',
                 },
                 addressTypeId: {
-                  type: "number",
+                  type: 'number',
                 },
                 city: {
-                  type: "string",
+                  type: 'string',
                 },
                 logradouro: {
-                  type: "string",
+                  type: 'string',
                 },
                 uf: {
-                  type: "string",
+                  type: 'string',
                 },
                 neighborhood: {
-                  type: "string",
+                  type: 'string',
                 },
               },
             },
@@ -193,7 +193,7 @@ export default async function fairRoutes(server: FastifyInstance) {
           };
         };
       }>,
-      rep
+      rep,
     ) => {
       const { dateAndHourOfWork, address } = req.body;
 
@@ -203,7 +203,7 @@ export default async function fairRoutes(server: FastifyInstance) {
         return rep.status(401).send({
           code: 401,
           error: true,
-          message: "We already have this fair in this CEP value",
+          message: 'We already have this fair in this CEP value',
         });
       }
 
@@ -230,19 +230,19 @@ export default async function fairRoutes(server: FastifyInstance) {
       try {
         const addressToSearch = `${address.city}, ${
           address.uf
-        }, ${address.logradouro.replace(" ", "+")}`;
+        }, ${address.logradouro.replace(' ', '+')}`;
         console.log(
-          `https://nominatim.openstreetmap.org/search?country=Brazil&q=${addressToSearch}&format=json&limit=1`
+          `https://nominatim.openstreetmap.org/search?country=Brazil&q=${addressToSearch}&format=json&limit=1`,
         );
         const latAndLonRes: {
           data: [
             {
               lat: string;
               lon: string;
-            }
+            },
           ];
         } = await axios.get(
-          `https://nominatim.openstreetmap.org/search?country=Brazil&q=${addressToSearch}&format=json&limit=1`
+          `https://nominatim.openstreetmap.org/search?country=Brazil&q=${addressToSearch}&format=json&limit=1`,
         );
 
         console.log(latAndLonRes.data);
@@ -254,7 +254,7 @@ export default async function fairRoutes(server: FastifyInstance) {
         console.log(e);
         return rep.code(400).send({
           error: true,
-          message: "This CEP value cant be search, probably is wrong!",
+          message: 'This CEP value cant be search, probably is wrong!',
         });
       }
 
@@ -263,7 +263,7 @@ export default async function fairRoutes(server: FastifyInstance) {
           code: 400,
           error: true,
           message:
-            "It is required some date and hour of work to save a new fair in the database",
+            'It is required some date and hour of work to save a new fair in the database',
         });
       }
       const data = { address: addressObject, dateAndHourOfWork };
@@ -271,6 +271,6 @@ export default async function fairRoutes(server: FastifyInstance) {
       const res = await Fair.create(data);
 
       return res;
-    }
+    },
   );
 }

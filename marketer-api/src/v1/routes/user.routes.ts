@@ -1,15 +1,15 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { Marketer } from "../model";
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { Marketer } from '../service';
 
 export default async function userRoutes(server: FastifyInstance) {
   server.get(
-    "/details",
+    '/details',
     { onRequest: [server.auth] },
-    (req: FastifyRequest, rep: FastifyReply) => rep.send(req.user)
+    (req: FastifyRequest, rep: FastifyReply) => rep.send(req.user),
   );
 
   server.get(
-    "/fairs",
+    '/fairs',
     {
       onRequest: [server.auth],
     },
@@ -21,7 +21,7 @@ export default async function userRoutes(server: FastifyInstance) {
         return rep.status(404).send({
           code: 404,
           error: true,
-          message: "Fairs not found with this marketer",
+          message: 'Fairs not found with this marketer',
         });
       }
 
@@ -30,6 +30,6 @@ export default async function userRoutes(server: FastifyInstance) {
         error: false,
         payload: res,
       });
-    }
+    },
   );
 }

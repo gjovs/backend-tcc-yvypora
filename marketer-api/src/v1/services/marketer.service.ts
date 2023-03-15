@@ -1,5 +1,5 @@
 import db from '../libs/prisma';
-import Fair from './Fair';
+import Fair from './fair.service';
 
 class Marketer {
   async get(id: number) {

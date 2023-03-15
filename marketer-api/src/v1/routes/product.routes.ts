@@ -1,11 +1,11 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { z, ZodError } from "zod";
-import Product from "../model/Product";
-import FirebaseService from "../services/firebase.service";
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { z, ZodError } from 'zod';
+import Product from '../service/product.service';
+import FirebaseService from '../services/firebase.service';
 
 export default async function productRoutes(server: FastifyInstance) {
   server.get(
-    "/",
+    '/',
     {
       onRequest: [server.auth],
     },
@@ -19,19 +19,19 @@ export default async function productRoutes(server: FastifyInstance) {
         error: false,
         data: products,
       });
-    }
+    },
   );
 
   server.get(
-    "/:id",
+    '/:id',
     {
       onRequest: [server.auth],
       schema: {
         params: {
-          type: "object",
-          required: ["id"],
+          type: 'object',
+          required: ['id'],
           properties: {
-            id: { type: "number" },
+            id: { type: 'number' },
           },
         },
       },
@@ -42,7 +42,7 @@ export default async function productRoutes(server: FastifyInstance) {
           id: string;
         };
       }>,
-      rep
+      rep,
     ) => {
       // @ts-ignore
       const { id } = req.user;
@@ -62,45 +62,45 @@ export default async function productRoutes(server: FastifyInstance) {
         error: false,
         payload: res?.data,
       });
-    }
+    },
   );
 
   server.post(
-    "/",
+    '/',
     {
       onRequest: [server.auth],
       schema: {
         body: {
-          type: "object",
+          type: 'object',
           required: [
-            "name",
-            "price",
-            "price_type",
-            "category",
-            "available_quantity",
+            'name',
+            'price',
+            'price_type',
+            'category',
+            'available_quantity',
           ],
           properties: {
-            name: { type: "string" },
-            price: { type: "number" },
-            available_quantity: { type: "number" },
+            name: { type: 'string' },
+            price: { type: 'number' },
+            available_quantity: { type: 'number' },
             price_type: {
-              type: "object",
-              required: ["name", "id"],
+              type: 'object',
+              required: ['name', 'id'],
               properties: {
                 id: {
-                  type: "number",
+                  type: 'number',
                 },
                 name: {
-                  type: "string",
+                  type: 'string',
                 },
               },
             },
             category: {
-              type: "object",
-              required: ["name", "id"],
+              type: 'object',
+              required: ['name', 'id'],
               properties: {
-                name: { type: "string" },
-                id: { type: "number" },
+                name: { type: 'string' },
+                id: { type: 'number' },
               },
             },
           },
@@ -123,7 +123,7 @@ export default async function productRoutes(server: FastifyInstance) {
           available_quantity: number;
         };
       }>,
-      rep
+      rep,
     ) => {
       const data = req.body;
 
@@ -143,30 +143,30 @@ export default async function productRoutes(server: FastifyInstance) {
         error: false,
         payload: res,
       });
-    }
+    },
   );
 
   // add picture to product
   server.put(
-    "picture/:id",
+    'picture/:id',
     {
       onRequest: [server.auth],
       schema: {
         params: {
-          type: "object",
-          required: ["id"],
+          type: 'object',
+          required: ['id'],
           properties: {
             id: {
-              type: "number",
+              type: 'number',
             },
           },
         },
         body: {
-          type: "object",
-          required: ["picture"],
+          type: 'object',
+          required: ['picture'],
           properties: {
             picture: {
-              type: "object",
+              type: 'object',
             },
           },
         },
@@ -181,7 +181,7 @@ export default async function productRoutes(server: FastifyInstance) {
           picture: any;
         };
       }>,
-      rep
+      rep,
     ) => {
       const { picture } = req.body;
 
@@ -191,7 +191,7 @@ export default async function productRoutes(server: FastifyInstance) {
 
       const res = await Product.appendPicture(
         parseInt(req.params.id, 10),
-        picture_uri
+        picture_uri,
       );
 
       if (res?.error) {
@@ -208,20 +208,20 @@ export default async function productRoutes(server: FastifyInstance) {
         error: false,
         message: res?.message,
       });
-    }
+    },
   );
 
   server.delete(
-    "picture/:id/",
+    'picture/:id/',
     {
       onRequest: [server.auth],
       schema: {
         params: {
-          type: "object",
-          required: ["id"],
+          type: 'object',
+          required: ['id'],
           properties: {
             id: {
-              type: "number",
+              type: 'number',
             },
           },
         },
@@ -234,7 +234,7 @@ export default async function productRoutes(server: FastifyInstance) {
           productId: string;
         };
       }>,
-      rep
+      rep,
     ) => {
       const res = await Product.removePicture(parseInt(req.params.id, 10));
       if (res?.error) {
@@ -251,20 +251,20 @@ export default async function productRoutes(server: FastifyInstance) {
         error: false,
         message: res?.message,
       });
-    }
+    },
   );
 
   server.put(
-    "/:id",
+    '/:id',
     {
       onRequest: [server.auth],
       schema: {
         params: {
-          type: "object",
-          required: ["id"],
+          type: 'object',
+          required: ['id'],
           properties: {
             id: {
-              type: "number",
+              type: 'number',
             },
           },
         },
@@ -276,14 +276,14 @@ export default async function productRoutes(server: FastifyInstance) {
           id: string;
         };
       }>,
-      rep
+      rep,
     ) => {
       // @ts-ignore
       const { id } = req.user;
 
       const isSameOwner = await Product.checkOwner(
         id,
-        parseInt(req.params.id, 10)
+        parseInt(req.params.id, 10),
       );
 
       if (!isSameOwner) {
@@ -291,7 +291,7 @@ export default async function productRoutes(server: FastifyInstance) {
           error: true,
           code: 401,
           message:
-            "this operation is not allowed because the owner token is not the same of the product owner",
+            'this operation is not allowed because the owner token is not the same of the product owner',
         });
       }
 
@@ -339,20 +339,20 @@ export default async function productRoutes(server: FastifyInstance) {
       }
 
       return false;
-    }
+    },
   );
 
   server.delete(
-    "disable/:id",
+    'disable/:id',
     {
       onRequest: [server.auth],
       schema: {
         params: {
-          type: "object",
-          required: ["id"],
+          type: 'object',
+          required: ['id'],
           properties: {
             id: {
-              type: "number",
+              type: 'number',
             },
           },
         },
@@ -364,13 +364,13 @@ export default async function productRoutes(server: FastifyInstance) {
           id: string;
         };
       }>,
-      rep
+      rep,
     ) => {
-// @ts-ignore
+      // @ts-ignore
       const { id } = req.user;
       const isSameOwner = await Product.checkOwner(
         id,
-        parseInt(req.params.id, 10)
+        parseInt(req.params.id, 10),
       );
 
       if (!isSameOwner) {
@@ -378,7 +378,7 @@ export default async function productRoutes(server: FastifyInstance) {
           error: true,
           code: 401,
           message:
-            "this operation is not allowed because the owner token is not the same of the product owner",
+            'this operation is not allowed because the owner token is not the same of the product owner',
         });
       }
 
@@ -397,20 +397,20 @@ export default async function productRoutes(server: FastifyInstance) {
         error: false,
         message: res?.message,
       });
-    }
+    },
   );
 
   server.put(
-    "enable/:id",
+    'enable/:id',
     {
       onRequest: [server.auth],
       schema: {
         params: {
-          type: "object",
-          required: ["id"],
+          type: 'object',
+          required: ['id'],
           properties: {
             id: {
-              type: "number",
+              type: 'number',
             },
           },
         },
@@ -422,14 +422,14 @@ export default async function productRoutes(server: FastifyInstance) {
           id: string;
         };
       }>,
-      rep
+      rep,
     ) => {
       // @ts-ignore
       const { id } = req.user;
 
       const isSameOwner = await Product.checkOwner(
         id,
-        parseInt(req.params.id, 10)
+        parseInt(req.params.id, 10),
       );
 
       if (!isSameOwner) {
@@ -437,7 +437,7 @@ export default async function productRoutes(server: FastifyInstance) {
           error: true,
           code: 401,
           message:
-            "this operation is not allowed because the owner token is not the same of the product owner",
+            'this operation is not allowed because the owner token is not the same of the product owner',
         });
       }
 
@@ -456,27 +456,27 @@ export default async function productRoutes(server: FastifyInstance) {
         error: false,
         message: res?.message,
       });
-    }
+    },
   );
 
   server.put(
-    "sale_off/:id",
+    'sale_off/:id',
     {
       onRequest: [server.auth],
       schema: {
         params: {
-          type: "object",
-          required: ["id"],
+          type: 'object',
+          required: ['id'],
           properties: {
-            id: { type: "number" },
+            id: { type: 'number' },
           },
         },
         querystring: {
-          type: "object",
-          required: ["value"],
+          type: 'object',
+          required: ['value'],
           properties: {
             value: {
-              type: "number",
+              type: 'number',
             },
           },
         },
@@ -491,7 +491,7 @@ export default async function productRoutes(server: FastifyInstance) {
           value: string;
         };
       }>,
-      rep
+      rep,
     ) => {
       // @ts-ignore
       const { id } = req.user;
@@ -500,7 +500,7 @@ export default async function productRoutes(server: FastifyInstance) {
 
       const isSameOwner = await Product.checkOwner(
         id,
-        parseInt(req.params.id, 10)
+        parseInt(req.params.id, 10),
       );
 
       if (!isSameOwner) {
@@ -508,7 +508,7 @@ export default async function productRoutes(server: FastifyInstance) {
           error: true,
           code: 401,
           message:
-            "this operation is not allowed because the owner token is not the same of the product owner",
+            'this operation is not allowed because the owner token is not the same of the product owner',
         });
       }
 
@@ -519,19 +519,19 @@ export default async function productRoutes(server: FastifyInstance) {
         error: res.error,
         message: res.message,
       });
-    }
+    },
   );
 
   server.delete(
-    "sale_off/:id",
+    'sale_off/:id',
     {
       onRequest: [server.auth],
       schema: {
         params: {
-          type: "object",
-          required: ["id"],
+          type: 'object',
+          required: ['id'],
           properties: {
-            id: { type: "number" },
+            id: { type: 'number' },
           },
         },
       },
@@ -542,7 +542,7 @@ export default async function productRoutes(server: FastifyInstance) {
           id: string;
         };
       }>,
-      rep
+      rep,
     ) => {
       // @ts-ignore
       const { id } = req.user;
@@ -550,7 +550,7 @@ export default async function productRoutes(server: FastifyInstance) {
 
       const isSameOwner = await Product.checkOwner(
         id,
-        parseInt(req.params.id, 10)
+        parseInt(req.params.id, 10),
       );
 
       if (!isSameOwner) {
@@ -558,7 +558,7 @@ export default async function productRoutes(server: FastifyInstance) {
           error: true,
           code: 401,
           message:
-            "this operation is not allowed because the owner token is not the same of the product owner",
+            'this operation is not allowed because the owner token is not the same of the product owner',
         });
       }
 
@@ -569,6 +569,6 @@ export default async function productRoutes(server: FastifyInstance) {
         error: res.error,
         message: res.message,
       });
-    }
+    },
   );
 }
