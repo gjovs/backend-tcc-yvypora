@@ -100,7 +100,7 @@ export class ProductController {
         id: z.number(),
         name: z.string(),
       }),
-
+      description: z.string(),
       category: z.object({
         name: z.string(),
         id: z.number(),
