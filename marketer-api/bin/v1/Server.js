@@ -7,8 +7,8 @@ const fastify_1 = __importDefault(require("fastify"));
 const cors_1 = __importDefault(require("@fastify/cors"));
 const multipart_1 = __importDefault(require("@fastify/multipart"));
 const jwt_1 = __importDefault(require("@fastify/jwt"));
-const plugins_1 = require("./plugins");
-const Product_1 = __importDefault(require("./model/Product"));
+const routes_1 = require("./routes");
+const decorators_1 = require("./decorators");
 class Server {
     constructor() {
         this.app = (0, fastify_1.default)({
@@ -33,47 +33,19 @@ class Server {
         });
     }
     plugins() {
-        this.app.register(plugins_1.userPlugin, {
+        this.app.register(routes_1.userRoutes, {
             prefix: '/user/',
         });
-        this.app.register(plugins_1.fairPlugin, {
+        this.app.register(routes_1.fairRoutes, {
             prefix: '/fair/',
         });
-        this.app.register(plugins_1.productPlugin, {
+        this.app.register(routes_1.productRoutes, {
             prefix: '/product/',
         });
     }
     decorators() {
-        this.app.decorate('auth', async (req, rep) => {
-            try {
-                const data = await req.jwtVerify();
-                req.user = data.payload;
-            }
-            catch (e) {
-                return rep.send(e);
-            }
-        });
-        this.app.decorate('checkOwner', async (req, rep) => {
-            try {
-                const ownerId = req.user.id;
-                const productId = parseInt(req.params.id, 10);
-                const res = await Product_1.default.checkOwner(ownerId, productId);
-                if (!res || res?.error) {
-                    return rep.status(401).send({
-                        error: true,
-                        code: 401,
-                        message: 'this operation is not allowed because the owner token is not the same of the product owner',
-                    });
-                }
-            }
-            catch (e) {
-                return rep.status(401).send({
-                    error: true,
-                    code: 401,
-                    message: 'this operation is not allowed because the owner token is not the same of the product owner',
-                });
-            }
-        });
+        this.app.decorate('auth', decorators_1.auth);
+        this.app.decorate('checkOwner', decorators_1.checkOwner);
     }
 }
 exports.default = new Server().app;

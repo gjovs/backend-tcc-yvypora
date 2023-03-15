@@ -1,4 +1,4 @@
-import db from "../libs/prisma";
+import db from '../libs/prisma';
 
 class Product {
   // filters
@@ -117,9 +117,9 @@ class Product {
   // list
   async moreSales(listSize: number) {
     const sales = await db.products_in_shopping_list.groupBy({
-      by: ["productId"],
+      by: ['productId'],
       orderBy: {
-        productId: "asc",
+        productId: 'asc',
       },
       _count: { productId: true },
       take: listSize,
