@@ -31,6 +31,7 @@ export class SaleOfController {
       id: string;
     };
   }>, rep: FastifyReply) {
+    // @ts-ignore
     const { id } = req.user;
     const productId = parseInt(req.params.id, 10);
 
