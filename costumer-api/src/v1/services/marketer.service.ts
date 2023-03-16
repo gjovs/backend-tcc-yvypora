@@ -1,6 +1,6 @@
-import db from "../libs/prisma";
+import db from '../libs/prisma';
 
-export class Marketer {
+export class MarketerService {
   async get(id: number) {
     const marketer = await db.marketer.findUnique({
       where: { id },
@@ -45,4 +45,4 @@ export class Marketer {
   }
 }
 
-export default new Marketer();
+export default new MarketerService();

@@ -1,8 +1,8 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { orderByDistance } from 'geolib';
-import Fair from '../models/Fair';
+import Fair from '../services/fair.service';
 
-export default async function fairPlugin(server: FastifyInstance) {
+export default async function fairRoutes(server: FastifyInstance) {
   server.get('/', {
     schema: {
       querystring: {

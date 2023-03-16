@@ -1,6 +1,6 @@
 import db from '../libs/prisma';
 
-class Product {
+class ProductService {
   // filters
   private async byPrice(lte: number, gte: number, data: any) {
     const products = await data.findMany({
@@ -145,4 +145,4 @@ class Product {
   }
 }
 
-export default new Product();
+export default new ProductService();

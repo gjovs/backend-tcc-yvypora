@@ -117,6 +117,8 @@ class Product {
         marketerId,
       },
       include: {
+        type_of_price_product: true,
+        category_of_product: true,
         image_of_product: {
           include: {
             image: true,
@@ -136,6 +138,8 @@ class Product {
           id,
         },
         include: {
+          type_of_price_product: true,
+          category_of_product: true,
           image_of_product: {
             include: {
               image: true,

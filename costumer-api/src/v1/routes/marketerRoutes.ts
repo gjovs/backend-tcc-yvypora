@@ -1,14 +1,14 @@
-import { FastifyInstance, FastifyRequest } from "fastify";
-import Marketer from "../models/Marketer";
+import { FastifyInstance, FastifyRequest } from 'fastify';
+import Marketer from '../services/marketer.service';
 
-export default async function marketerPlugin(server: FastifyInstance) {
+export default async function marketerRoutes(server: FastifyInstance) {
   server.get(
-    "/:id",
+    '/:id',
     async (
       req: FastifyRequest<{
         Params: { id: string };
       }>,
-      rep
+      rep,
     ) => {
       const { id } = req.params;
 
@@ -18,7 +18,7 @@ export default async function marketerPlugin(server: FastifyInstance) {
         return rep.status(404).send({
           code: 404,
           error: true,
-          message: "Content not found!, check the id",
+          message: 'Content not found!, check the id',
         });
       }
 
@@ -27,6 +27,6 @@ export default async function marketerPlugin(server: FastifyInstance) {
         error: false,
         data: marketer,
       });
-    }
+    },
   );
 }
