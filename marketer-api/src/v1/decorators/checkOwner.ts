@@ -28,10 +28,4 @@ export default async (
         'this operation is not allowed because the owner token is not the same of the product owner',
     });
   }
-  return rep.status(401).send({
-    error: true,
-    code: 401,
-    message:
-      'this operation is not allowed because the owner token is not the same of the product owner',
-  });
 };

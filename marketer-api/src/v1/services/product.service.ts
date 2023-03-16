@@ -116,6 +116,14 @@ class Product {
       where: {
         marketerId,
       },
+      include: {
+        image_of_product: {
+          include: {
+            image: true,
+          },
+        },
+        sale_off: true,
+      },
     });
 
     return res;
@@ -126,6 +134,14 @@ class Product {
       const res = await db.product.findUnique({
         where: {
           id,
+        },
+        include: {
+          image_of_product: {
+            include: {
+              image: true,
+            },
+          },
+          sale_off: true,
         },
       });
 
@@ -229,6 +245,8 @@ class Product {
           marketerId: ownerId,
         },
       });
+
+      console.log(res);
 
       if (res.length === 0) return false;
 
