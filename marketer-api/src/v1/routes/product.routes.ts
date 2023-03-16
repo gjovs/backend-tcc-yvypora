@@ -99,15 +99,18 @@ export default async function productRoutes(server: FastifyInstance) {
   );
 
   server.delete(
-    'picture/:id/',
+    'picture/:id/:pictureId',
     {
       onRequest: [server.auth, server.checkOwner],
       schema: {
         params: {
           type: 'object',
-          required: ['id'],
+          required: ['id', 'pictureId'],
           properties: {
             id: {
+              type: 'number',
+            },
+            pictureId: {
               type: 'number',
             },
           },

@@ -45,11 +45,12 @@ export class PictureController {
     req: FastifyRequest<{
            Params: {
              id: string;
+             pictureId: string
            };
          }>,
     rep: FastifyReply,
   ) {
-    const res = await Picture.delete(parseInt(req.params.id, 10));
+    const res = await Picture.delete(parseInt(req.params.pictureId, 10));
     if (res?.error) {
       // @ts-ignore
       return rep.status(res?.code).send({
