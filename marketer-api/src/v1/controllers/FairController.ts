@@ -10,7 +10,7 @@ export class FairController {
     }>,
     rep: FastifyReply,
   ) {
-    const { dateAndHourOfWork, address } = req.body;
+    const { dateAndHourOfWork, address, name } = req.body;
 
     const check = await Fair.getByCep(address.cep);
 
@@ -75,7 +75,7 @@ export class FairController {
           'It is required some date and hour of work to save a new fair in the database',
       });
     }
-    const data = { address: addressObject, dateAndHourOfWork };
+    const data = { address: addressObject, dateAndHourOfWork, name };
 
     const res = await Fair.create(data);
 

@@ -1,17 +1,53 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { Picture, Product } from '../services';
+import { Fair, Picture, Product } from '../services';
 import FirebaseService from '../services/firebase.service';
 
 export class PictureController {
+  async addInFair(
+    req: FastifyRequest<{
+      Params: {
+        id: string;
+      };
+      Body: {
+        picture: any;
+      };
+    }>,
+    rep: FastifyReply,
+  ) {
+    const { picture } = req.body;
+    const { id } = req.params;
+
+    await picture.toBuffer();
+
+    const uri = await FirebaseService.uploadImage(picture);
+
+    const res = await Fair.appendPicture(parseInt(id, 10), uri);
+
+    if (res?.error) {
+      // @ts-ignore
+      return rep.status(res?.code).send({
+        code: res.code,
+        message: res.message,
+        error: true,
+      });
+    }
+
+    return rep.send({
+      code: 200,
+      error: false,
+      message: res?.message,
+    });
+  }
+
   async addInProduct(
     req: FastifyRequest<{
-              Params: {
-                id: string;
-              };
-              Body: {
-                picture: any;
-              };
-            }>,
+      Params: {
+        id: string;
+      };
+      Body: {
+        picture: any;
+      };
+    }>,
     rep: FastifyReply,
   ) {
     const { picture } = req.body;
@@ -43,11 +79,11 @@ export class PictureController {
 
   async delete(
     req: FastifyRequest<{
-           Params: {
-             id: string;
-             pictureId: string
-           };
-         }>,
+      Params: {
+        id: string;
+        pictureId: string
+      };
+    }>,
     rep: FastifyReply,
   ) {
     const res = await Picture.delete(parseInt(req.params.pictureId, 10));

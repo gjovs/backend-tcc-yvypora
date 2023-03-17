@@ -173,10 +173,12 @@ model fair {
   created_at             DateTime                 @default(now())
   updated_at             DateTime                 @updatedAt
   locationId             Int
+  name                   String
   address                address                  @relation(fields: [addressId], references: [id])
   location               location                 @relation(fields: [locationId], references: [id], onDelete: Cascade)
   fair_date_hour_of_work fair_date_hour_of_work[]
   fair_marketers         fair_marketers[]
+  image                  image[]
 
   @@index([locationId], map: "fair_locationId_fkey")
 }
@@ -278,8 +280,12 @@ model image {
   uri                 String                @db.VarChar(255)
   created_at          DateTime              @default(now())
   updated_at          DateTime              @updatedAt
+  fairId              Int?
   category_of_product category_of_product[]
+  fair                fair?                 @relation(fields: [fairId], references: [id])
   image_of_product    image_of_product[]
+
+  @@index([fairId], map: "image_fairId_fkey")
 }
 
 model payment_method {

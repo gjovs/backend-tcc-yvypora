@@ -1,4 +1,6 @@
 export default interface IFair {
+
+  name: string,
   dateAndHourOfWork: {
     open: string;
     close: string;

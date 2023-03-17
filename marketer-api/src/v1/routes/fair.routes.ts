@@ -1,7 +1,30 @@
 import { FastifyInstance } from 'fastify';
-import { FairController, MarketerController } from '../controllers';
+import { FairController, MarketerController, PictureController } from '../controllers';
 
 export default async function fairRoutes(server: FastifyInstance) {
+  server.put('picture/:id', {
+    onRequest: [server.auth],
+    schema: {
+      params: {
+        type: 'object',
+        required: ['id'],
+        properties: {
+          id: {
+            type: 'number',
+          },
+        },
+      },
+      body: {
+        type: 'object',
+        required: ['picture'],
+        properties: {
+          picture: {
+            type: 'object',
+          },
+        },
+      },
+    },
+  }, PictureController.addInFair);
   server.put(
     '/add/:id',
     {
@@ -45,8 +68,9 @@ export default async function fairRoutes(server: FastifyInstance) {
       schema: {
         body: {
           type: 'object',
-          required: ['dateAndHourOfWork', 'address'],
+          required: ['dateAndHourOfWork', 'address', 'name'],
           properties: {
+            name: { type: 'string' },
             dateAndHourOfWork: {
               type: 'array',
               maxItems: 7,
@@ -85,6 +109,7 @@ export default async function fairRoutes(server: FastifyInstance) {
               properties: {
                 cep: {
                   type: 'string',
+                  minLength: 8,
                 },
                 number: {
                   type: 'number',

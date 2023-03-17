@@ -3,6 +3,7 @@ import address from '../utils/interfaces/address.interface';
 
 class Fair {
   async create(data: {
+    name: string,
     address: address,
     dateAndHourOfWork: {
       open: string,
@@ -16,6 +17,7 @@ class Fair {
     try {
       const res = await db.fair.create({
         data: {
+          name: data.name,
           location: {
             create: {
               latitude: data.address.latitude,
@@ -86,9 +88,10 @@ class Fair {
         });
       }));
 
-      return { error: false, message: 'Successfully saved a new fair' };
+      return { error: false, message: 'Successfully saved a new fair', payload: res };
     } catch (error) {
       if (error instanceof Error) {
+        console.log(error);
         return { error: true, message: error.message, code: 400 };
       }
     }
@@ -104,6 +107,20 @@ class Fair {
     });
 
     return res;
+  }
+
+  async appendPicture(id: number, uri: string) {
+    try {
+      await db.image.create({ data: { uri, fairId: id } });
+      return {
+        error: false,
+        message: 'Successfully appended image to product',
+      };
+    } catch (error) {
+      if (error instanceof Error) {
+        return { error: true, code: 401, message: error.message };
+      }
+    }
   }
 }
 
