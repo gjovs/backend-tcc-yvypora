@@ -110,6 +110,7 @@ class Costumer {
           },
         },
         select: {
+          id: true,
           gender: {
             select: {
               name: true,
@@ -132,6 +133,7 @@ class Costumer {
       return { data: res, error: false };
     } catch (error) {
       if (error instanceof Error) {
+        console.log(error);
         return {
           error: true,
           message: 'Failed to save a new Costumer in Database',
