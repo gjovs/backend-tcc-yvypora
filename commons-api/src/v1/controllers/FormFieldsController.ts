@@ -1,9 +1,9 @@
-import { FastifyInstance, FastifyRequest } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import { orderByDistance } from 'geolib';
-import { Fair, FormFields } from '../models';
+import { Fair, FormFields } from '../services';
 
-export default async function formFieldsPlugin(server: FastifyInstance) {
-  server.get('/costumer', async (_req, rep) => {
+export class FormFieldsController {
+  async forCostumer(_req: FastifyRequest, rep: FastifyReply) {
     const genders = await FormFields.indexGender();
     const paymentMethods = await FormFields.indexPaymentMethods();
     const typesOfAddress = await FormFields.indexTypeOfAddress();
@@ -17,25 +17,14 @@ export default async function formFieldsPlugin(server: FastifyInstance) {
       }],
       error: false,
     });
-  });
+  }
 
-  server.get('/marketer', {
-    schema: {
-      querystring: {
-        type: 'object',
-        required: ['lat', 'long'],
-        properties: {
-          lat: { type: 'number' },
-          long: { type: 'number' },
-        },
-      },
-    },
-  }, async (req: FastifyRequest<{
+  async forMarketer(req: FastifyRequest<{
     Querystring: {
       lat: number,
       long: number
     }
-  }>, rep) => {
+  }>, rep: FastifyReply) {
     const { lat, long } = req.query;
 
     const genders = await FormFields.indexGender();
@@ -51,9 +40,9 @@ export default async function formFieldsPlugin(server: FastifyInstance) {
       }],
       error: false,
     });
-  });
+  }
 
-  server.get('/deliveryman', async (_req, rep) => {
+  async forDeliveryman(_req: FastifyRequest, rep: FastifyReply) {
     const genders = await FormFields.indexGender();
     const veicules = await FormFields.indexTypeOfVeicules();
 
@@ -65,25 +54,14 @@ export default async function formFieldsPlugin(server: FastifyInstance) {
       }],
       error: false,
     });
-  });
+  }
 
-  server.get('/fairs', {
-    schema: {
-      querystring: {
-        type: 'object',
-        required: ['lat', 'long'],
-        properties: {
-          lat: { type: 'number' },
-          long: { type: 'number' },
-        },
-      },
-    },
-  }, async (req: FastifyRequest<{
+  async listCloseFairs(req: FastifyRequest<{
     Querystring: {
       lat: number,
       long: number
     }
-  }>, rep) => {
+  }>, rep: FastifyReply) {
     const { lat, long } = req.query;
 
     const fairs = await Fair.index();
@@ -100,5 +78,7 @@ export default async function formFieldsPlugin(server: FastifyInstance) {
       }],
       error: false,
     });
-  });
+  }
 }
+
+export default new FormFieldsController();

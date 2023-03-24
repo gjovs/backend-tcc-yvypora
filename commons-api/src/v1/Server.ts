@@ -4,9 +4,10 @@ import multipart from '@fastify/multipart';
 import jwt from '@fastify/jwt';
 
 import {
-  fairPlugin,
-  formFieldsPlugin, loginPlugin, picturePlugin, registerPlugin, userPlugin,
-} from './plugins';
+  fairRoutes,
+  formFieldsRoutes, loginRoutes, pictureRoutes, registerRoutes, userRoutes,
+} from './routes';
+import { auth } from './decorators';
 
 class Server {
   declare app: FastifyInstance;
@@ -39,36 +40,28 @@ class Server {
   }
 
   private plugins() {
-    this.app.register(registerPlugin, {
+    this.app.register(registerRoutes, {
       prefix: '/register/',
     });
-    this.app.register(loginPlugin, {
+    this.app.register(loginRoutes, {
       prefix: '/login/',
     });
-    this.app.register(picturePlugin, {
+    this.app.register(pictureRoutes, {
       prefix: '/picture/',
     });
-    this.app.register(formFieldsPlugin, {
+    this.app.register(formFieldsRoutes, {
       prefix: '/forms/',
     });
-    this.app.register(fairPlugin, {
+    this.app.register(fairRoutes, {
       prefix: '/fair/',
     });
-    this.app.register(userPlugin, {
+    this.app.register(userRoutes, {
       prefix: '/user/',
     });
   }
 
   private decorators() {
-    this.app.decorate('auth', async (req: FastifyRequest, rep: FastifyReply) => {
-      try {
-        const data = await req.jwtVerify();
-        // @ts-ignore
-        req.user = data.payload;
-      } catch (e) {
-        return rep.send(e);
-      }
-    });
+    this.app.decorate('auth', auth);
   }
 }
 

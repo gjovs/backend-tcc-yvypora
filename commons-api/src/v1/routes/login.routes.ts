@@ -1,9 +1,9 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
-import { User } from '../models';
+import { User } from '../services';
 import { checkPassword } from '../utils/utils';
-import { TypeOfUser } from '../models/utils/enums';
+import { TypeOfUser } from '../services/utils/enums';
 
-export default async function loginPlugin(server: FastifyInstance) {
+export default async function loginRoutes(server: FastifyInstance) {
   server.post(
     '/',
     {

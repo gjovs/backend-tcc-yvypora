@@ -1,5 +1,5 @@
 import fastify from 'fastify';
-import { TypeOfUser } from '../models/utils/enums';
+import { TypeOfUser } from '../services/utils/enums';
 
 declare module 'fastify' {
   export interface FastifyRequest {

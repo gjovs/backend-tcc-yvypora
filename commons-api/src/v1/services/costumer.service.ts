@@ -10,7 +10,7 @@ interface IAdress {
   neighborhood: string;
   logradouro: string;
 }
-class Costumer {
+class CostumerService {
   async getCostumer(id: number) {
     try {
       const res = await db.costumer.findUnique({
@@ -110,7 +110,6 @@ class Costumer {
           },
         },
         select: {
-          id: true,
           gender: {
             select: {
               name: true,
@@ -136,7 +135,7 @@ class Costumer {
         console.log(error);
         return {
           error: true,
-          message: 'Failed to save a new Costumer in Database',
+          message: 'Failed to save a new CostumerService in Database',
           code: 401,
         };
       }
@@ -311,4 +310,4 @@ class Costumer {
   }
 }
 
-export default new Costumer();
+export default new CostumerService();

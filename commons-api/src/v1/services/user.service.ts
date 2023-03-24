@@ -1,6 +1,6 @@
 import db from '../libs/prisma';
 
-class User {
+class UserService {
   async findCostumerByEmail(email: string) {
     const res = await db.costumer.findUnique({ where: { email } });
     return res;
@@ -69,4 +69,4 @@ class User {
     }
   }
 }
-export default new User();
+export default new UserService();

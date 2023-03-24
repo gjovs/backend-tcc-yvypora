@@ -1,6 +1,6 @@
 import db from '../libs/prisma';
 
-class Marketer {
+class MarketerService {
   async createMarketer(data: {
     email: string,
     genderId: number,
@@ -60,7 +60,7 @@ class Marketer {
       if (error instanceof Error) {
         console.log(error);
         return {
-          error: true, message: 'Failed to save a new Marketer in Database', code: 401,
+          error: true, message: 'Failed to save a new MarketerService in Database', code: 401,
         };
       }
     }
@@ -110,4 +110,4 @@ class Marketer {
   }
 }
 
-export default new Marketer();
+export default new MarketerService();
