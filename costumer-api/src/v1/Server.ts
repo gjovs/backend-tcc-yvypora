@@ -7,6 +7,7 @@ import {
   fairRoutes, userRoutes, productRoutes, marketerRoutes,
 } from './routes';
 import { auth } from './decorators';
+import purchaseRoutes from './routes/purchaseRoutes';
 
 class Server {
   declare app: FastifyInstance;
@@ -49,6 +50,9 @@ class Server {
     });
     this.app.register(marketerRoutes, {
       prefix: '/marketer/',
+    });
+    this.app.register(purchaseRoutes, {
+      prefix: '/purchases/',
     });
   }
 
