@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { database } from 'firebase-admin';
 import ProductService from '../services/product.service';
 import { createSession } from '../libs/stripe';
+import OrderService from '../services/order.service';
 
 interface IPurchase {
   costumer_address_id: number,
@@ -13,6 +14,10 @@ class PurchaseController {
     Body: IPurchase
   }>, rep: FastifyReply) {
     const { costumer_address_id, freight, products } = req.body;
+
+    // @ts-ignore
+    const costumerId = req.user.id as number;
+
     try {
       const data_products = await Promise.all(products.map(async (_product) => {
         const product = await ProductService.get(_product.id);
@@ -25,14 +30,23 @@ class PurchaseController {
             name: product.name,
           };
         }
+
         return new Error('Invalid Product Id');
       }));
 
-      // save to any local and get after to see the status
-
       const session = await createSession(data_products);
+
       console.log(session);
-      // intent of purchase
+
+      const { id } = session;
+
+      await OrderService.createIntent({
+        total: session.amount_total as number,
+        costumer: { id: costumerId, address_id: costumer_address_id },
+        freight,
+        products,
+        intent_payment_id: session.id,
+      });
 
       return rep.send({ code: 200, data: session.url });
     } catch (e) {

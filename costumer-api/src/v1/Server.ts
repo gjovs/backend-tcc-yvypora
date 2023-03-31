@@ -2,6 +2,7 @@ import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
 import jwt from '@fastify/jwt';
+import websocketFastify from '@fastify/websocket';
 
 import {
   fairRoutes, userRoutes, productRoutes, marketerRoutes,
@@ -17,12 +18,12 @@ class Server {
       logger: true,
     });
 
-    this.middleware();
+    this.middlewares();
     this.decorators();
-    this.plugins();
+    this.routes();
   }
 
-  private async middleware() {
+  private async middlewares() {
     this.app.register(jwt, {
       secret: '12313123123',
       sign: {
@@ -33,12 +34,14 @@ class Server {
       attachFieldsToBody: true,
     });
 
+    this.app.register(websocketFastify);
+
     await this.app.register(cors, {
       origin: true,
     });
   }
 
-  private plugins() {
+  private routes() {
     this.app.register(userRoutes, {
       prefix: '/user/',
     });

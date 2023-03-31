@@ -81,6 +81,7 @@ model order {
   created_at                  DateTime           @default(now())
   updated_at                  DateTime           @updatedAt
   costumer_addressesId        Int
+  intent_payment_id           String             @unique
   costumer_addresses          costumer_addresses @relation(fields: [costumer_addressesId], references: [id], onDelete: Cascade)
   deliveryman                 deliveryman?       @relation(fields: [deliverymanId], references: [id], onDelete: Cascade)
   shopping_list               shopping_list      @relation(fields: [shopping_listId], references: [id], onDelete: Cascade)
@@ -167,13 +168,13 @@ model marketer {
 }
 
 model fair {
+  name                   String
   id                     Int                      @id @unique @default(autoincrement())
   review                 Float                    @default(0)
   addressId              Int                      @unique
   created_at             DateTime                 @default(now())
   updated_at             DateTime                 @updatedAt
   locationId             Int
-  name                   String
   address                address                  @relation(fields: [addressId], references: [id])
   location               location                 @relation(fields: [locationId], references: [id], onDelete: Cascade)
   fair_date_hour_of_work fair_date_hour_of_work[]
