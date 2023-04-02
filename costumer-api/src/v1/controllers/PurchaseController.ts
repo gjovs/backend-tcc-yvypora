@@ -1,5 +1,4 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { database } from 'firebase-admin';
 import ProductService from '../services/product.service';
 import { createSession } from '../libs/stripe';
 import OrderService from '../services/order.service';
@@ -9,6 +8,7 @@ interface IPurchase {
   products: { id: number, amount: number }[],
   freight: number,
 }
+
 class PurchaseController {
   async save(req: FastifyRequest<{
     Body: IPurchase
@@ -35,10 +35,6 @@ class PurchaseController {
       }));
 
       const session = await createSession(data_products);
-
-      console.log(session);
-
-      const { id } = session;
 
       await OrderService.createIntent({
         total: session.amount_total as number,

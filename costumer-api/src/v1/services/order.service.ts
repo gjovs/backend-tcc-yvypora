@@ -22,7 +22,7 @@ class OrderService {
               products_in_shopping_list: {
                 include: {
                   product: {
-                    include: {
+                    include: {  
                       marketer: {
                         include: {
                           location: true,

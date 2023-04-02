@@ -1,23 +1,23 @@
 {
-  "name": "commons-api",
+  "name": "fairs-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx tsx ./src/v1/www/server.ts",
-    "generate": "npx prisma generate --schema=./database/prisma/schema.prisma",
-    "pull-db": "npx prisma db pull --schema=./database/prisma/schema.prisma",
     "build": "npx tsc",
-    "start": "node ./bin/v1/www/server.js"
+    "dev": "npx tsx ./src/v1/www/server.ts",
+    "start": "node ./bin/v1/www/server.js",
+    "generate": "npx prisma generate --schema=./database/prisma/schema.prisma",
+    "pull-db": "npx prisma db pull --schema=./database/prisma/schema.prisma"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.2",
-    "@types/node": "^18.15.11",
+    "@types/axios": "^0.14.0",
+    "@types/node": "^18.14.6",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.42.0",
     "eslint": "^8.33.0",
-    "eslint-config-airbnb": "19.0.4",
-    "eslint-plugin-import": "2.27.5",
+    "eslint-config-airbnb": "^19 .0.4",
+    "eslint-plugin-import": "^2.27.5",
     "typescript": "^4.9.5"
   },
   "dependencies": {
@@ -26,13 +26,12 @@
     "@fastify/multipart": "^7.4.1",
     "@prisma/client": "^4.10.0",
     "axios": "^1.3.4",
-    "bcryptjs": "^2.4.3",
-    "dotenv": "^16.0.3",
     "fastify": "^4.13.0",
     "firebase-admin": "^11.5.0",
     "geolib": "^3.3.3",
     "prisma": "^4.10.0",
-    "tsx": "^3.12.3"
+    "tsx": "^3.12.3",
+    "zod": "^3.21.4"
   },
   "keywords": [],
   "author": "",

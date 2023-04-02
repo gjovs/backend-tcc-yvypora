@@ -1,15 +1,11 @@
-import db from '../libs/prisma';
+import db from "../libs/prisma";
 
-interface IAdress {
-  cep: string;
-  complemento: string;
+import { IAddressOSM } from "../utils/interfaces";
+
+interface IAddress extends IAddressOSM {
   addressTypeId: number;
-  number: number;
-  city: string;
-  uf: string;
-  neighborhood: string;
-  logradouro: string;
 }
+
 class CostumerService {
   async getCostumer(id: number) {
     try {
@@ -37,7 +33,7 @@ class CostumerService {
       return { data: res, error: false };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, message: 'Failed to delete this costumer' };
+        return { error: true, message: "Failed to delete this costumer" };
       }
     }
   }
@@ -48,7 +44,7 @@ class CostumerService {
     email: string;
     gender: number;
     birthday: string;
-    address: IAdress;
+    address: IAddress;
   }) {
     try {
       const res = await db.costumer.create({
@@ -69,6 +65,12 @@ class CostumerService {
                   number: data.address.number,
                   complemento: data.address.complemento,
                   cep: data.address.cep,
+                  location: {
+                    create: {
+                      latitude: data.address.latitude,
+                      longitude: data.address.longitude,
+                    },
+                  },
                   type: {
                     connect: {
                       id: data.address.addressTypeId,
@@ -135,7 +137,7 @@ class CostumerService {
         console.log(error);
         return {
           error: true,
-          message: 'Failed to save a new CostumerService in Database',
+          message: "Failed to save a new CostumerService in Database",
           code: 401,
         };
       }
@@ -159,14 +161,14 @@ class CostumerService {
         addresses.map(async ({ addressId }) => {
           // @ts-ignore
           await db.address.delete({ where: { id: addressId as number } });
-        }),
+        })
       );
 
       await db.costumer.delete({ where: { id } });
-      return { error: false, data: 'Success Deleted' };
+      return { error: false, data: "Success Deleted" };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, message: 'Failed to delete this costumer' };
+        return { error: true, message: "Failed to delete this costumer" };
       }
     }
   }
@@ -219,14 +221,14 @@ class CostumerService {
       if (error instanceof Error) {
         return {
           error: true,
-          message: 'Failed to update this costumer',
+          message: "Failed to update this costumer",
           code: 401,
         };
       }
     }
   }
 
-  async addNewCostumerAddress(data: { address: IAdress; id: number }) {
+  async addNewCostumerAddress(data: { address: IAddress; id: number }) {
     try {
       await db.costumer.update({
         where: { id: data.id },
@@ -235,6 +237,12 @@ class CostumerService {
             create: {
               address: {
                 create: {
+                  location: {
+                    create: {
+                      latitude: data.address.latitude,
+                      longitude: data.address.longitude,
+                    },
+                  },
                   type: {
                     connect: {
                       id: data.address.addressTypeId,
@@ -281,14 +289,14 @@ class CostumerService {
       });
       return {
         error: false,
-        message: 'Success appended new address to costumer',
+        message: "Success appended new address to costumer",
         code: 401,
       };
     } catch (error) {
       if (error instanceof Error) {
         return {
           error: true,
-          message: 'Failed to append new address in this costumer',
+          message: "Failed to append new address in this costumer",
           code: 401,
         };
       }
@@ -300,11 +308,11 @@ class CostumerService {
       await db.address.delete({ where: { id: addressId } });
       return {
         error: false,
-        message: 'Deleted address associated with this user',
+        message: "Deleted address associated with this user",
       };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, message: 'Failed to delete this address' };
+        return { error: true, message: "Failed to delete this address" };
       }
     }
   }

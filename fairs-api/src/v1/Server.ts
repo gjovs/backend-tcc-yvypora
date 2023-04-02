@@ -1,13 +1,15 @@
-import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import Fastify, {
+  FastifyInstance,
+  FastifyReply,
+  FastifyRequest,
+} from 'fastify';
+
 import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
 import jwt from '@fastify/jwt';
 
-import {
-  fairRoutes,
-  formFieldsRoutes, loginRoutes, pictureRoutes, registerRoutes, userRoutes,
-} from './routes';
-import { auth } from './decorators';
+import { fairRoutes, productRoutes, userRoutes } from './routes';
+import { auth, checkOwner } from './decorators';
 
 class Server {
   declare app: FastifyInstance;
@@ -15,7 +17,6 @@ class Server {
   constructor() {
     this.app = Fastify({
       logger: true,
-
     });
 
     this.middleware();
@@ -40,28 +41,22 @@ class Server {
   }
 
   private routes() {
-    this.app.register(registerRoutes, {
-      prefix: '/register/',
+    this.app.register(userRoutes, {
+      prefix: '/user/',
     });
-    this.app.register(loginRoutes, {
-      prefix: '/login/',
-    });
-    this.app.register(pictureRoutes, {
-      prefix: '/picture/',
-    });
-    this.app.register(formFieldsRoutes, {
-      prefix: '/forms/',
-    });
+
     this.app.register(fairRoutes, {
       prefix: '/fair/',
     });
-    this.app.register(userRoutes, {
-      prefix: '/user/',
+
+    this.app.register(productRoutes, {
+      prefix: '/product/',
     });
   }
 
   private decorators() {
     this.app.decorate('auth', auth);
+    this.app.decorate('checkOwner', checkOwner);
   }
 }
 

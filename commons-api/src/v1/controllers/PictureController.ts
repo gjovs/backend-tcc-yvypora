@@ -1,7 +1,13 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { TypeOfUser } from '../services/utils/enums';
-import { User } from '../services';
-import FirebaseService from '../services/firebase.service';
+import { FastifyReply, FastifyRequest } from "fastify";
+import { TypeOfUser } from "../services/utils/enums";
+import { User } from "../services";
+import FirebaseService from "../services/firebase.service";
+
+interface IUploadImageToUser {
+  picture_64: string;
+  user: { id: number; typeof: TypeOfUser };
+}
+
 
 export class PictureController {
   async appendToUser(
@@ -10,7 +16,7 @@ export class PictureController {
         picture: any;
       };
     }>,
-    rep: FastifyReply,
+    rep: FastifyReply
   ) {
     // @ts-ignore
     const { id } = req.user;
@@ -20,6 +26,8 @@ export class PictureController {
 
     // @ts-ignore
     const { picture } = req.body;
+
+    // TODO convert base64 to png again
 
     await picture.toBuffer();
 
@@ -31,7 +39,7 @@ export class PictureController {
       if (!user) {
         return rep
           .status(404)
-          .send({ error: true, message: ['id is wrong user not founded'] });
+          .send({ error: true, message: ["id is wrong user not founded"] });
       }
 
       const picture_uri = await FirebaseService.uploadImage(picture);
@@ -45,7 +53,7 @@ export class PictureController {
       if (!user) {
         return rep
           .status(404)
-          .send({ error: true, message: ['id is wrong user not founded'] });
+          .send({ error: true, message: ["id is wrong user not founded"] });
       }
 
       const picture_uri = await FirebaseService.uploadImage(picture);
@@ -59,7 +67,7 @@ export class PictureController {
       if (!user) {
         return rep
           .status(404)
-          .send({ error: true, message: ['id is wrong user not founded'] });
+          .send({ error: true, message: ["id is wrong user not founded"] });
       }
 
       const picture_uri = await FirebaseService.uploadImage(picture);
@@ -70,13 +78,13 @@ export class PictureController {
     if (!status) {
       return rep.status(401).send({
         error: true,
-        message: ['Cant update the image for this user'],
+        message: ["Cant update the image for this user"],
       });
     }
 
     return rep.send({
       error: false,
-      message: 'Updated Image of the User',
+      message: "Updated Image of the User",
       code: 200,
     });
   }

@@ -135,7 +135,7 @@ model product {
   image_of_product          image_of_product[]
   category_of_product       category_of_product         @relation(fields: [category_of_productId], references: [id])
   marketer                  marketer                    @relation(fields: [marketerId], references: [id], onDelete: Cascade)
-  type_of_price             type_of_price               @relation(fields: [type_of_productId], references: [id])
+  type_of_price_product     type_of_price               @relation(fields: [type_of_productId], references: [id])
   products_in_shopping_list products_in_shopping_list[]
   sale_off                  sale_off[]
 

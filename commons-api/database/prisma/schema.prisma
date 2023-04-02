@@ -76,13 +76,14 @@ model order {
   accepted_status             Boolean            @default(false)
   delivered_status_for_client Boolean            @default(false)
   retreat_products_status     Boolean            @default(false)
-  deliverymanId               Int
+  deliverymanId               Int?
   shopping_listId             Int                @unique
   created_at                  DateTime           @default(now())
   updated_at                  DateTime           @updatedAt
   costumer_addressesId        Int
+  intent_payment_id           String             @unique
   costumer_addresses          costumer_addresses @relation(fields: [costumer_addressesId], references: [id], onDelete: Cascade)
-  deliveryman                 deliveryman        @relation(fields: [deliverymanId], references: [id], onDelete: Cascade)
+  deliveryman                 deliveryman?       @relation(fields: [deliverymanId], references: [id], onDelete: Cascade)
   shopping_list               shopping_list      @relation(fields: [shopping_listId], references: [id], onDelete: Cascade)
   payment                     payment?
 
@@ -121,11 +122,13 @@ model product {
   id                        Int                         @id @unique @default(autoincrement())
   name                      String                      @db.VarChar(120)
   price                     Float
+  review                    Float                       @default(0)
   active_for_selling        Boolean                     @default(true)
   available_quantity        Int
   marketerId                Int
   created_at                DateTime                    @default(now())
   updated_at                DateTime                    @updatedAt
+  description               String
   category_of_productId     Int
   type_of_productId         Int
   image_of_product          image_of_product[]
@@ -165,6 +168,7 @@ model marketer {
 }
 
 model fair {
+  name                   String
   id                     Int                      @id @unique @default(autoincrement())
   review                 Float                    @default(0)
   addressId              Int                      @unique
@@ -175,6 +179,7 @@ model fair {
   location               location                 @relation(fields: [locationId], references: [id], onDelete: Cascade)
   fair_date_hour_of_work fair_date_hour_of_work[]
   fair_marketers         fair_marketers[]
+  image                  image[]
 
   @@index([locationId], map: "fair_locationId_fkey")
 }
@@ -213,6 +218,7 @@ model location {
   latitude    Float
   created_at  DateTime     @default(now())
   updated_at  DateTime     @updatedAt
+  address     address[]
   deliveryman deliveryman?
   fair        fair[]
   marketer    marketer?
@@ -229,8 +235,10 @@ model address {
   cityId             Int
   uFId               Int
   neighborhoodId     Int
+  locationId         Int
   type               address_type         @relation(fields: [address_typeId], references: [id])
   city               city                 @relation(fields: [cityId], references: [id])
+  location           location             @relation(fields: [locationId], references: [id])
   neighborhood       neighborhood         @relation(fields: [neighborhoodId], references: [id])
   uf                 uf                   @relation(fields: [uFId], references: [id])
   costumer_addresses costumer_addresses[]
@@ -240,6 +248,7 @@ model address {
   @@index([cityId], map: "address_cityId_fkey")
   @@index([neighborhoodId], map: "address_neighborhoodId_fkey")
   @@index([uFId], map: "address_uFId_fkey")
+  @@index([locationId], map: "address_locationId_fkey")
 }
 
 model address_type {
@@ -276,8 +285,12 @@ model image {
   uri                 String                @db.VarChar(255)
   created_at          DateTime              @default(now())
   updated_at          DateTime              @updatedAt
+  fairId              Int?
   category_of_product category_of_product[]
+  fair                fair?                 @relation(fields: [fairId], references: [id])
   image_of_product    image_of_product[]
+
+  @@index([fairId], map: "image_fairId_fkey")
 }
 
 model payment_method {
@@ -316,7 +329,7 @@ model date_and_hour_of_work {
 
 model day_of_week {
   id                    Int                     @id @unique @default(autoincrement())
-  name                  String                  @db.VarChar(20)
+  name                  String                  @unique @db.VarChar(20)
   created_at            DateTime                @default(now())
   updated_at            DateTime                @updatedAt
   date_and_hour_of_work date_and_hour_of_work[]
