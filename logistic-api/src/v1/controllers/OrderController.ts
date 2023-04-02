@@ -4,7 +4,6 @@ import GoogleMapsService from "../services/googleMaps.service";
 import { LatLng } from "@googlemaps/google-maps-services-js";
 import { getMoreDistanceLocal, getMoreNeareastDeliverys } from "../utils/utils";
 import DeliverymanService from "../services/deliveryman.service";
-import { GeolibInputCoordinates } from "geolib/es/types";
 
 class OrderController {
   async toQueue(
@@ -39,8 +38,6 @@ class OrderController {
           product.marketer.location.longitude,
         ];
       });
-
-    // TODO geolib find the most distance location
 
     const startPoint = getMoreDistanceLocal(
       {
@@ -80,6 +77,8 @@ class OrderController {
     console.info("list de deliverys acesseveis", approachablesDeliverys);
 
     // TODO send info to best approachable deliveryman
+    // add mongoDB
+    // convert this info to json string
     // bind this to websocket (connect to mongoDB this data and make the websocket soundage or event) 
 
     return rep.status(201).send();

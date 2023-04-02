@@ -61,9 +61,9 @@ export default async function purchaseRoutes(server: FastifyInstance) {
     rep.redirect(`${process.env.SITE_URL as string}/?order=fail`);
   });
 
-  server.get("success", (_req, rep) =>
-    rep.redirect(`${process.env.SITE_URL as string}/?order=success`)
-  );
+  server.get("success", (_req, rep) => {
+    rep.redirect(`${process.env.SITE_URL as string}/?order=success`);
+  });
 
   // WEB HOOK
   server.post(
@@ -85,7 +85,7 @@ export default async function purchaseRoutes(server: FastifyInstance) {
             paymentIntent.description,
             paymentIntent.id
           );
-          // TODO call the logistic service 
+          // TODO call the logistic service
           break;
         case "payment_intent.canceled":
           await OrderService.updatePaymentStatus(
@@ -98,7 +98,9 @@ export default async function purchaseRoutes(server: FastifyInstance) {
         default:
           console.log(`Unhandled event type ${event.type}`);
       }
-      
+
+      // TODO req to logistic api
+
       return rep.send({ received: true });
     }
   );
