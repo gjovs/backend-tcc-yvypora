@@ -8,7 +8,9 @@ import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
 import jwt from '@fastify/jwt';
 
-import { fairRoutes, productRoutes, userRoutes } from './routes';
+import {
+  fairRoutes, productRoutes, reportsRoutes, userRoutes,
+} from './routes';
 import { auth, checkOwner } from './decorators';
 
 class Server {
@@ -51,6 +53,10 @@ class Server {
 
     this.app.register(productRoutes, {
       prefix: '/product/',
+    });
+
+    this.app.register(reportsRoutes, {
+      prefix: '/reports/',
     });
   }
 

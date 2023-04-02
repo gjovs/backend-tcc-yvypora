@@ -1,18 +1,74 @@
+import { FastifyReply, FastifyRequest } from "fastify";
+import ReportsService from "../services/reports.service";
+
 export class ReportsController {
-  async getCurrentEarnings() {
+  async getDailySells(req: FastifyRequest, rep: FastifyReply) {
+    // @ts-ignore
+    const { id } = req.user;
 
+    const res = await ReportsService.dailySellsReport(id);
+
+    // @ts-ignore
+    if (res?.error || !res) {
+      return rep.code(400).send({
+        code: 400,
+        error: true,
+        // @ts-ignore
+        message: res?.message,
+      });
+    }
+
+    return rep.send({
+      code: 200,
+      error: false,
+      data: res,
+    });
   }
 
-  async getLastsEarnings() {
-  // receive the range of the data of sells period
+  async getWeeklySells(req: FastifyRequest, rep: FastifyReply) {
+    // @ts-ignore
+    const { id } = req.user;
+
+    const res = await ReportsService.weeklySellsReport(id);
+
+    // @ts-ignore
+    if (res?.error || !res) {
+      return rep.code(400).send({
+        code: 400,
+        error: true,
+        // @ts-ignore
+        message: res?.message,
+      });
+    }
+
+    return rep.send({
+      code: 200,
+      error: false,
+      data: res,
+    });
   }
 
-  async getCurrentSells() {
+  async getMonthlySells(req: FastifyRequest, rep: FastifyReply) {
+    // @ts-ignore
+    const { id } = req.user;
 
-  }
+    const res = await ReportsService.monthlySellsReport(id);
 
-  async getLastSells() {
-    // receive the range of the date of selling periods
+    // @ts-ignore
+    if (res?.error || !res) {
+      return rep.code(400).send({
+        code: 400,
+        error: true,
+        // @ts-ignore
+        message: res?.message,
+      });
+    }
+
+    return rep.send({
+      code: 200,
+      error: false,
+      data: res,
+    });
   }
 }
 
