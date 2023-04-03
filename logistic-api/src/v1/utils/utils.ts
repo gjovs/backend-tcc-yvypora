@@ -12,10 +12,12 @@ export function getMoreDistanceLocal(
 export function getMoreNeareastDeliverys(
   point: { latitude: number; longitude: number },
   points: { latitude: number; longitude: number; id: number }[]
-) {
+): { id: number; latitude: number; longitude: number }[] | false {
   const res = orderByDistance(point, points);
+
 
   if (!res) return false;
 
+  // @ts-ignore
   return res;
 }

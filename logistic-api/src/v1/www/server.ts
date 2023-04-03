@@ -1,4 +1,5 @@
-import server from '../Server';
+import server from "../Server";
+import serverWss from "../WebSocket";
 
 async function run() {
   await server.listen({
@@ -6,5 +7,11 @@ async function run() {
   });
 }
 
+async function runSocket() {
+  serverWss.listen(3337, () => {
+    console.log("Websocket server running");
+  });
+}
+
 run();
-  
+runSocket();

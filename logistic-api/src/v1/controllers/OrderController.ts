@@ -1,29 +1,19 @@
-import { FastifyReply, FastifyRequest } from "fastify";
 import OrderService from "../services/order.service";
 import GoogleMapsService from "../services/googleMaps.service";
-import { LatLng } from "@googlemaps/google-maps-services-js";
-import { getMoreDistanceLocal, getMoreNeareastDeliverys } from "../utils/utils";
 import DeliverymanService from "../services/deliveryman.service";
 
-class OrderController {
-  async toQueue(
-    req: FastifyRequest<{
-      Params: {
-        intent_payment_id: string;
-      };
-    }>,
-    rep: FastifyReply
-  ) {
-    const { intent_payment_id } = req.params;
+import { LatLng } from "@googlemaps/google-maps-services-js";
+import { getMoreDistanceLocal, getMoreNeareastDeliverys } from "../utils/utils";
+import { wss } from "../WebSocket";
+import { log } from "console";
 
+class OrderController {
+  async toQueue(args: { intent_payment_id: string }) {
+    const { intent_payment_id } = args;
     const order = await OrderService.get(intent_payment_id);
 
     if (!order) {
-      return rep.status(404).send({
-        code: 404,
-        error: true,
-        message: "This order does not exist!",
-      });
+      return false;
     }
 
     const costumerLatLng: LatLng = [
@@ -65,24 +55,52 @@ class OrderController {
       })
     );
 
+    if (!approachablesDeliverys) {
+      return false;
+    }
+
     const googleRoute = await GoogleMapsService.findRoutes({
       arrived: costumerLatLng,
       origin: waypoints[0], // deliveryman
       waypoints: waypoints,
     });
 
+    if (!googleRoute) {
+      return false;
+    }
+
     console.info(googleRoute);
     console.info("lista de deliverys", listOfAvailableDeliverys);
     console.info("start point", startPoint);
     console.info("list de deliverys acesseveis", approachablesDeliverys);
 
-    // TODO send info to best approachable deliveryman
-    // add mongoDB
-    // convert this info to json string
-    // bind this to websocket (connect to mongoDB this data and make the websocket soundage or event) 
+    const roomId = approachablesDeliverys[0].id.toString();
+    const data = { route: googleRoute.data, order };
+    console.log(data);
+    wss.io.to(roomId).emit("data", data);
 
-    return rep.status(201).send();
+    // await Promise.all(
+    //   approachablesDeliverys.map(async (deliveyman) => {
+    //     console.log(deliveyman.id);
+    //     await wss.sendMessage(String(deliveyman.id), "intent_of_travel", {
+    //       googleRoute,
+    //       order,
+    //     });
+    //   })
+    // );
+
+    return null;
   }
 }
 
 export default new OrderController();
+// async function teste() {
+//   const instance = new OrderController();
+//
+//   await instance.toQueue({
+//     intent_payment_id:
+//       "cs_test_a1iFp0BxnqwGbcmatcf6wsdW25q5W3bUqEIvgAhYbZ9NQZjx8K9fD1usuf",
+//   });
+// }
+
+// teste();

@@ -3,7 +3,8 @@ import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
 import websocketFastify from "@fastify/websocket";
 import { auth } from "./decorators/";
-import { homeRoutes, orderRoutes } from "./routes";
+import { orderRoutes } from "./routes";
+import testRoutes from "./routes/test.routes";
 
 class Server {
   declare app: FastifyInstance;
@@ -34,8 +35,9 @@ class Server {
   }
 
   private routes() {
-    this.app.register(homeRoutes, { prefix: "/" });
+    // change this to kafka to be completely async
     this.app.register(orderRoutes, { prefix: "/order/" });
+    this.app.register(testRoutes, { prefix: '/test/'})
   }
 
   private decorators() {
