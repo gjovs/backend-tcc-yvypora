@@ -2,7 +2,8 @@ import { FastifyInstance, FastifyRequest } from "fastify";
 import { log } from "console";
 import { PurchaseController } from "../controllers";
 import OrderService from "../services/order.service";
-import GoogleMapsService from "../services/googleMaps.service";
+import KafkaProducer from '../Kafka'
+import { CompressionTypes } from "kafkajs";
 
 interface IStripePurchaseEvent {
   id: string;
@@ -85,7 +86,16 @@ export default async function purchaseRoutes(server: FastifyInstance) {
             paymentIntent.description,
             paymentIntent.id
           );
-          // TODO call the logistic service
+
+          const message = { succeeded: true, intent_payment_id: paymentIntent.id }
+          
+          // Calling the logistic service
+          await KafkaProducer.producer.send({
+            topic: 'payment_intent',
+            compression: CompressionTypes.GZIP,
+            messages: [{ value: JSON.stringify(message) }]
+          })
+
           break;
         case "payment_intent.canceled":
           await OrderService.updatePaymentStatus(

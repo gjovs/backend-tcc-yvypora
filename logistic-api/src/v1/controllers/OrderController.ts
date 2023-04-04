@@ -1,11 +1,9 @@
 import OrderService from "../services/order.service";
 import GoogleMapsService from "../services/googleMaps.service";
 import DeliverymanService from "../services/deliveryman.service";
-
 import { LatLng } from "@googlemaps/google-maps-services-js";
 import { getMoreDistanceLocal, getMoreNeareastDeliverys } from "../utils/utils";
 import { wss } from "../WebSocket";
-import { log } from "console";
 
 class OrderController {
   async toQueue(args: { intent_payment_id: string }) {
@@ -76,31 +74,12 @@ class OrderController {
 
     const roomId = approachablesDeliverys[0].id.toString();
     const data = { route: googleRoute.data, order };
-    console.log(data);
-    wss.io.to(roomId).emit("data", data);
-
-    // await Promise.all(
-    //   approachablesDeliverys.map(async (deliveyman) => {
-    //     console.log(deliveyman.id);
-    //     await wss.sendMessage(String(deliveyman.id), "intent_of_travel", {
-    //       googleRoute,
-    //       order,
-    //     });
-    //   })
-    // );
+    
+    // send to best deliveryman
+    wss.sendMessage(roomId, "intent_of_travel", data);
 
     return null;
   }
 }
 
 export default new OrderController();
-// async function teste() {
-//   const instance = new OrderController();
-//
-//   await instance.toQueue({
-//     intent_payment_id:
-//       "cs_test_a1iFp0BxnqwGbcmatcf6wsdW25q5W3bUqEIvgAhYbZ9NQZjx8K9fD1usuf",
-//   });
-// }
-
-// teste();

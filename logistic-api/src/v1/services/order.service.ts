@@ -7,6 +7,11 @@ class OrderService {
         intent_payment_id,
       },
       include: {
+        deliveryman: {
+          include: {
+            gender: true,
+          },
+        },
         costumer_addresses: {
           include: {
             address: {
@@ -49,6 +54,36 @@ class OrderService {
     console.info(res);
 
     return res;
+  }
+
+  async addDeliveryman(data: { intent_payment_id: string, deliverymanId: number}) {
+    try {
+      await db.order.update({
+        where: { intent_payment_id: data.intent_payment_id },
+        data: {
+          accepted_status: true,
+          deliveryman: {
+            connect: {
+              id: data.deliverymanId
+            }
+          }
+        }
+      })
+    } catch (error) {
+      console.log(error);
+      return false
+    }
+  }
+
+  async retreatOfProducsCompleted(id: number) {
+    await db.order.update({
+      where: {
+        id,
+      },
+      data: {
+        retreat_products_status: true
+      }
+    })
   }
 }
 

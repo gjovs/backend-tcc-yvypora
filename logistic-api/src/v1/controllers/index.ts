@@ -1,3 +1,3 @@
-import StatusController from "./StatusController";
+import OrderController from "./OrderController";
 
-export { StatusController };
+export { OrderController };

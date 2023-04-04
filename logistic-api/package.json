@@ -33,6 +33,7 @@
     "fastify": "^4.13.0",
     "geolib": "^3.3.3",
     "jsonwebtoken": "^9.0.0",
+    "kafkajs": "^2.2.4",
     "prisma": "^4.10.0",
     "socket.io": "^4.6.1",
     "tsx": "^3.12.3",

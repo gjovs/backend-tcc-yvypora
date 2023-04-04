@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+
+</head>
+<body>
+    <h1>Testing client websocket for logistic web api (CLIENT)</h1>
+</body>
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script>
+    window.onload = function() {
+        var socket = io.connect("ws://localhost:3337", {
+            query: { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImlkIjoxLCJuYW1lIjoiR3VpbGhlcm1lIEpvdmluaWFubyBkZSBTb3VzYSIsImVtYWlsIjoiMDBkcnBpeGVsc3NAZ21haWwuY29tIiwicGFzc3dvcmRfaGFzaCI6IiQyYSQwNSRzVmliQ3RKdldWS3FOUExwMy5iLmFlMTQvSFBqRmZsU2xERWhjTjV4M2NxTmUzUlhER0ZEUyIsInBpY3R1cmVfdXJpIjpudWxsLCJjcmVhdGVkX2F0IjoiMjAyMy0wNC0wMlQxMTo0Mzo0OS41MDZaIiwidXBkYXRlZF9hdCI6IjIwMjMtMDQtMDJUMTE6NDM6NDkuNTA2WiIsImdlbmRlcklkIjoxLCJiaXJ0aGRheSI6IjIwMDYtMDQtMDQiLCJjcGYiOiI0OTYyMDk2ODg1OSIsInR5cGVvZiI6IkNPU1RVTUVSIn0sImlhdCI6MTY4MDYxMzI0MiwiZXhwIjoxNjgxMjE4MDQyfQ.J5w-WZj6TXhusIpAO8ne8wifb-kVoTB4Y6gYJkuzdu0"}
+        });
+
+        socket.on("travel_accepted", (data) => { console.log(data);})
+    }
+</script>
+</html>

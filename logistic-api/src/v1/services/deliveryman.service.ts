@@ -37,6 +37,22 @@ class DeliverymanService {
     });
     return res;
   }
+
+  async updateLocation(id: number, location: { latitude: number, longitude: number}) {
+    await db.deliveryman.update({
+      where: {
+        id
+      },
+      data: {
+        location: {
+          update: {
+            latitude: location.latitude,
+            longitude: location.longitude
+          }
+        }
+      }
+    })
+  }
 }
 
 export default new DeliverymanService();
