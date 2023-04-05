@@ -1,7 +1,37 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import Product from '../services/product.service';
+import ProductService from '../services/product.service';
+import {getDayOfWeek} from "../utils";
 
 export class ProductController {
+  async search(req: FastifyRequest<{
+    Querystring: {
+      q: string
+    }
+  }>, rep: FastifyReply) {
+    let day_of_search: string = ''
+
+    const date = new Date();
+
+    const { q } = req.query;
+
+    const day = date.getDay();
+
+    const dayOfSearch = getDayOfWeek(day)
+
+    const hour = date.getHours()
+
+    const res = await ProductService.search(q, {
+      hour,
+      dayOfWeek: dayOfSearch
+    });
+
+    return rep.status(200).send({
+      code: 200,
+      error: false,
+      data: res,
+    });
+  }
+
   async index(req: FastifyRequest<{
     Querystring: {
       category: string;
@@ -16,7 +46,7 @@ export class ProductController {
     } = req.query;
 
     if (moreSales) {
-      const res = await Product.moreSales(parseInt(moreSales, 10));
+      const res = await ProductService.moreSales(parseInt(moreSales, 10));
       return rep.send({
         code: 200,
         error: false,
@@ -33,7 +63,7 @@ export class ProductController {
       });
     }
 
-    const res = await Product.filteredByPriceAndScoreAndCategory(
+    const res = await ProductService.filteredByPriceAndScoreAndCategory(
       parseInt(category, 10),
       parseFloat(score),
       parseFloat(lowerPrice),
@@ -54,7 +84,7 @@ export class ProductController {
   }>, rep: FastifyReply) {
     const { id } = req.params;
 
-    const product = await Product.get(parseInt(id, 10));
+    const product = await ProductService.get(parseInt(id, 10));
 
     if (!product) {
       return rep.status(404).send({

@@ -143,6 +143,55 @@ class ProductService {
 
     return product;
   }
+
+  async search(context: string, date: { dayOfWeek: string, hour: number }) {
+    const products = await db.product.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              search: context,
+            },
+          },
+          {
+            description: {
+              search: context,
+            },
+          },
+        ],
+        AND: [
+          {
+            marketer: {
+              fair_marketers: {
+                some: {
+                  fair: {
+                    fair_date_hour_of_work: {
+                      some: {
+                        dates: {
+                          day_of_week: {
+                            name: date.dayOfWeek
+                          },
+                          close_datetime: {
+                            lte: new Date(`1900-01-01T${date.hour}.000Z`),
+                          },
+                          open_datetime: {
+                            gte: new Date(`1900-01-01T${date.hour}.000Z`),
+                          }
+                        },
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+    });
+
+
+    return products;
+  }
 }
 
 export default new ProductService();

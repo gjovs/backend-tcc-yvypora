@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -36,13 +37,15 @@ model deliveryman {
   updated_at          DateTime              @updatedAt
   genderId            Int
   birthday            String
-  online              Boolean               @default(false)
   gender              gender                @relation(fields: [genderId], references: [id])
   location            location              @relation(fields: [locationId], references: [id])
   order               order[]
   veicule_deliveryman veicule_deliveryman[]
 
   @@index([genderId], map: "deliveryman_genderId_fkey")
+  @@fulltext([email])
+  @@fulltext([name, email])
+  @@fulltext([name])
 }
 
 model veicule_deliveryman {
@@ -142,6 +145,9 @@ model product {
   @@index([marketerId], map: "product_marketerId_fkey")
   @@index([category_of_productId], map: "product_category_of_productId_fkey")
   @@index([type_of_productId], map: "product_type_of_productId_fkey")
+  @@fulltext([description])
+  @@fulltext([description, name])
+  @@fulltext([name])
 }
 
 model marketer {
@@ -166,6 +172,7 @@ model marketer {
   products       product[]
 
   @@index([genderId], map: "marketer_genderId_fkey")
+  @@fulltext([name])
 }
 
 model fair {
@@ -183,6 +190,7 @@ model fair {
   image                  image[]
 
   @@index([locationId], map: "fair_locationId_fkey")
+  @@fulltext([name])
 }
 
 model fair_marketers {
@@ -219,7 +227,6 @@ model location {
   latitude    Float
   created_at  DateTime     @default(now())
   updated_at  DateTime     @updatedAt
-  address     address[]
   deliveryman deliveryman?
   fair        fair[]
   marketer    marketer?
@@ -236,10 +243,8 @@ model address {
   cityId             Int
   uFId               Int
   neighborhoodId     Int
-  locationId         Int
   type               address_type         @relation(fields: [address_typeId], references: [id])
   city               city                 @relation(fields: [cityId], references: [id])
-  location           location             @relation(fields: [locationId], references: [id])
   neighborhood       neighborhood         @relation(fields: [neighborhoodId], references: [id])
   uf                 uf                   @relation(fields: [uFId], references: [id])
   costumer_addresses costumer_addresses[]
@@ -249,7 +254,6 @@ model address {
   @@index([cityId], map: "address_cityId_fkey")
   @@index([neighborhoodId], map: "address_neighborhoodId_fkey")
   @@index([uFId], map: "address_uFId_fkey")
-  @@index([locationId], map: "address_locationId_fkey")
 }
 
 model address_type {

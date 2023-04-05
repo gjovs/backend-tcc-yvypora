@@ -98,7 +98,7 @@ class SocketConnector {
 
       // TODO add socket handler to arrived of deliveryman
 
-
+      // TODO add message handler here
     });
   }
 
