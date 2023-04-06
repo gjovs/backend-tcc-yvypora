@@ -14,6 +14,8 @@ class SocketConnector {
     this.io = require("socket.io")(server, props);
 
     this.io.on("connection", async (socket) => {
+      console.log("socket", socket.id);
+      
       let decoded;
 
       if (socket.handshake.query && socket.handshake.query.token) {
