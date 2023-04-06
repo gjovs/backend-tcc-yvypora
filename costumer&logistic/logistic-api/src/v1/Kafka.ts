@@ -33,4 +33,4 @@ class KafkaConsumer {
 }
 
 
-export default new KafkaConsumer({ clientId: 'logistic', brokers: ['localhost:9095']})
+export default new KafkaConsumer({ clientId: 'logistic', brokers: ['localhost:9092']})

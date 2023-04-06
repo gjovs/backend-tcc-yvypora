@@ -79,6 +79,9 @@ export default async function purchaseRoutes(server: FastifyInstance) {
 
       const paymentIntent = event.data.object;
 
+      console.log("EVENTO STRIPE!");
+      
+
       switch (event.type) {
         case 'payment_intent.succeeded':
           await OrderService.updatePaymentStatus(

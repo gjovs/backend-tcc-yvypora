@@ -8,7 +8,7 @@ class KafkaProducer {
   constructor(args: { clientId: string, brokers: string[]}) {
     this.kafka = new Kafka({
       ...args,
-      logLevel: logLevel.DEBUG,
+      logLevel: logLevel.NOTHING,
       retry: {
         initialRetryTime: 300,
         retries: 10,
@@ -25,4 +25,4 @@ class KafkaProducer {
   }
 }
 
-export default new KafkaProducer({ clientId: 'api', brokers: ['localhost:9095'] });
+export default new KafkaProducer({ clientId: 'api', brokers: ['localhost:9092'] });
