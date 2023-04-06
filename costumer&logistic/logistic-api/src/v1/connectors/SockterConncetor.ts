@@ -2,9 +2,6 @@ import jwt from "jsonwebtoken";
 import DeliverymanService from "../services/deliveryman.service";
 import { Server } from "socket.io";
 import OrderService from "../services/order.service";
-import { decode } from "punycode";
-import { wss } from "../WebSocket";
-import { resourceLimits } from "worker_threads";
 
 class SocketConnector {
   public io: Server;

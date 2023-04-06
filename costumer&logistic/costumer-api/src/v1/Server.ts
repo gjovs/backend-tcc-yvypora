@@ -43,19 +43,19 @@ class Server {
 
   private routes() {
     this.app.register(userRoutes, {
-      prefix: '/user/',
+      prefix: '/api/costumer/user/',
     });
     this.app.register(fairRoutes, {
-      prefix: '/fair/',
+      prefix: '/api/costumer/fair/',
     });
     this.app.register(productRoutes, {
-      prefix: '/product/',
+      prefix: '/api/costumer/product/',
     });
     this.app.register(marketerRoutes, {
-      prefix: '/marketer/',
+      prefix: '/api/costumer/marketer/',
     });
     this.app.register(purchaseRoutes, {
-      prefix: '/purchases/',
+      prefix: '/api/costumer/purchases/',
     });
   }
 

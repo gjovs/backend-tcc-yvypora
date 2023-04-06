@@ -5,7 +5,7 @@ class KafkaConsumer {
     public consumer: Consumer | undefined
 
     constructor(args: { clientId: string, brokers: string[]}) {
-        this.kafka = new Kafka({...args, logLevel: logLevel.DEBUG })       
+        this.kafka = new Kafka({...args, logLevel: logLevel.NOTHING })       
         this.initConsumer()
     }
     
@@ -15,11 +15,11 @@ class KafkaConsumer {
 
     public async start() {
         await this.consumer?.connect()
-        await this.consumer.subscribe({ topic: 'payment_intent' })
+        await this.consumer?.subscribe({ topic: 'payment_intent' })
     } 
     
     public async runConsumer() {
-        await this.consumer.run({
+        await this.consumer?.run({
             eachMessage: async ({ topic, partition, message}) => {
                 // @ts-ignore
                 const payload = JSON.parse(message.value)

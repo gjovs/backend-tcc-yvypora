@@ -13,7 +13,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.get("/", (req, res) => {
+app.get("/api/logistic", (req, res) => {
   res.send("ok");
 });
 
