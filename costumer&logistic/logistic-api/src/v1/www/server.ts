@@ -9,6 +9,7 @@ async function run() {
   await server.listen({
     port: 3336,
   });
+  
   await KafkaConsumer.start()
   await KafkaConsumer.runConsumer()
 }
