@@ -3,6 +3,13 @@ import DeliverymanService from "../services/deliveryman.service";
 import { Server } from "socket.io";
 import OrderService from "../services/order.service";
 
+import {
+  IDeliveryLocationInTravel,
+  IMessage,
+  IRetreatProductFinished,
+  IntentOfTravel,
+} from "../interfaces/interfaces";
+
 class SocketConnector {
   public io: Server;
 
@@ -125,7 +132,7 @@ class SocketConnector {
       // TODO add message handler here
       socket.on("send_message", async (args: IMessage) => {
         const { content, from, to } = args;
-        
+
         if (decoded.payload.typeof === "COSTUMER") {
           this.sendMessage(String(to), "chat_message", { from, content });
           return;

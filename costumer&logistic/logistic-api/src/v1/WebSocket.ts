@@ -1,5 +1,5 @@
 import express from "express";
-import SocketConnector from "./connectors/SockterConncetor";
+import SocketConnector from "./connectors/SockterConnector";
 import cors from "cors";
 const express = require("express");
 const app = express();

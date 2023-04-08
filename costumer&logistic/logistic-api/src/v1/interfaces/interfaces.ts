@@ -21,3 +21,6 @@ interface IDeliveryLocationInTravel {
 interface IRetreatProductFinished {
   order: any;
 }
+
+
+export { IMessage, IntentOfTravel, IDeliveryLocationInTravel, IRetreatProductFinished}
