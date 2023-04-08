@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import DeliverymanService from "../services/deliveryman.service";
 import { Server } from "socket.io";
 import OrderService from "../services/order.service";
+import StatusService from "../services/status.service";
 
 import {
   IDeliveryLocationInTravel,
@@ -21,8 +22,6 @@ class SocketConnector {
     this.io = require("socket.io")(server, props);
 
     this.io.on("connection", async (socket) => {
-      console.log("socket", socket.id);
-
       let decoded;
 
       if (socket.handshake.query && socket.handshake.query.token) {
@@ -51,13 +50,21 @@ class SocketConnector {
         return null;
       }
 
+      if (decoded.payload.typeof === "MARKETER") {
+        socket.join(String("marketer_" + decoded.payload.id.toString()));
+        await StatusService.marketer(true, decoded.payload.id);
+        return null;
+      }
+
       const deliveryId: number = decoded.payload.id;
 
-      await DeliverymanService.status(true, deliveryId);
+      await StatusService.deliveryman(true, deliveryId);
       socket.join(String(deliveryId));
 
       socket.on("disconnect", async () => {
-        await DeliverymanService.status(false, deliveryId);
+        if (decoded.payload.typeof === "MARKETER")
+          await StatusService.marketer(false, decoded.payload.id);
+        else await StatusService.deliveryman(false, deliveryId);
       });
 
       socket.on("intent_of_travel", async (data: IntentOfTravel) => {

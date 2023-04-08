@@ -1,12 +1,6 @@
 import { db } from "../libs";
 
 class DeliverymanService {
-  async status(online: boolean, id: number) {
-    await db.deliveryman.update({
-      where: { id },
-      data: { online },
-    });
-  }
   async listByOnline() {
     const res = await db.deliveryman.findMany({
       where: {
