@@ -1,14 +1,22 @@
-import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import cors from '@fastify/cors';
-import multipart from '@fastify/multipart';
-import jwt from '@fastify/jwt';
-import websocketFastify from '@fastify/websocket';
+import Fastify, {
+  FastifyInstance,
+  FastifyReply,
+  FastifyRequest,
+} from "fastify";
+import cors from "@fastify/cors";
+import multipart from "@fastify/multipart";
+import jwt from "@fastify/jwt";
+import websocketFastify from "@fastify/websocket";
 
 import {
-  fairRoutes, userRoutes, productRoutes, marketerRoutes,
-} from './routes';
-import { auth } from './decorators';
-import purchaseRoutes from './routes/purchaseRoutes';
+  fairRoutes,
+  userRoutes,
+  productRoutes,
+  marketerRoutes,
+  searchRoutes,
+} from "./routes";
+import { auth } from "./decorators";
+import purchaseRoutes from "./routes/purchaseRoutes";
 
 class Server {
   declare app: FastifyInstance;
@@ -25,9 +33,9 @@ class Server {
 
   private async middlewares() {
     this.app.register(jwt, {
-      secret: '12313123123',
+      secret: "12313123123",
       sign: {
-        expiresIn: '7d',
+        expiresIn: "7d",
       },
     });
     this.app.register(multipart, {
@@ -43,24 +51,27 @@ class Server {
 
   private routes() {
     this.app.register(userRoutes, {
-      prefix: '/api/costumer/user/',
+      prefix: "/api/costumer/user/",
     });
     this.app.register(fairRoutes, {
-      prefix: '/api/costumer/fair/',
+      prefix: "/api/costumer/fair/",
     });
     this.app.register(productRoutes, {
-      prefix: '/api/costumer/product/',
+      prefix: "/api/costumer/product/",
     });
     this.app.register(marketerRoutes, {
-      prefix: '/api/costumer/marketer/',
+      prefix: "/api/costumer/marketer/",
     });
     this.app.register(purchaseRoutes, {
-      prefix: '/api/costumer/purchases/',
+      prefix: "/api/costumer/purchases/",
+    });
+    this.app.register(searchRoutes, {
+      prefix: "/api/costumer/search/",
     });
   }
 
   private decorators() {
-    this.app.decorate('auth', auth);
+    this.app.decorate("auth", auth);
   }
 }
 

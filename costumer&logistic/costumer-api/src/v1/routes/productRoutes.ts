@@ -24,18 +24,5 @@ export default async function productRoutes(server: FastifyInstance) {
     ProductController.index,
   );
 
-
-  server.get('/search/', {
-    schema: {
-      querystring: {
-        type: 'object',
-        required: ['q'],
-        properties: {
-          q: {type: 'string'}
-        },
-      },
-    }
-  }, ProductController.search)
-
   server.get('/:id', ProductController.get);
 }

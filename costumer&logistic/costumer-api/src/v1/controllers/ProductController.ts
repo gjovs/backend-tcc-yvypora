@@ -3,35 +3,6 @@ import ProductService from '../services/product.service';
 import {getDayOfWeek} from "../utils";
 
 export class ProductController {
-  async search(req: FastifyRequest<{
-    Querystring: {
-      q: string
-    }
-  }>, rep: FastifyReply) {
-    let day_of_search: string = ''
-
-    const date = new Date();
-
-    const { q } = req.query;
-
-    const day = date.getDay();
-
-    const dayOfSearch = getDayOfWeek(day)
-
-    const hour = date.getHours()
-
-    const res = await ProductService.search(q, {
-      hour,
-      dayOfWeek: dayOfSearch
-    });
-
-    return rep.status(200).send({
-      code: 200,
-      error: false,
-      data: res,
-    });
-  }
-
   async index(req: FastifyRequest<{
     Querystring: {
       category: string;
