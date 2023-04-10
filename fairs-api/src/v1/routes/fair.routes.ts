@@ -3,6 +3,8 @@ import { FairController, MarketerController, PictureController } from '../contro
 
 export default async function fairRoutes(server: FastifyInstance) {
   server.put('picture/:id', {
+
+    // @ts-ignore
     onRequest: [server.auth],
     schema: {
       params: {
@@ -46,6 +48,7 @@ export default async function fairRoutes(server: FastifyInstance) {
   server.delete(
     '/remove/:id',
     {
+      // @ts-ignore
       onRequest: [server.auth],
       schema: {
         params: {
@@ -63,7 +66,7 @@ export default async function fairRoutes(server: FastifyInstance) {
   // CREATE
   server.post(
     '/',
-    {
+    {// @ts-ignore
       onRequest: [server.auth],
       schema: {
         body: {

@@ -1,4 +1,4 @@
-import db from '../libs/prisma';
+import db from "../libs/prisma";
 
 class FormFieldService {
   async indexGender() {
@@ -67,6 +67,16 @@ class FormFieldService {
       select: {
         id: true,
         name: true,
+      },
+    });
+
+    return res;
+  }
+
+  async indexCategories() {
+    const res = await db.category_of_product.findMany({
+      include: {
+        image: true,
       },
     });
 

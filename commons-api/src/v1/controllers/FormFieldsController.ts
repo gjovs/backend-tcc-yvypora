@@ -1,8 +1,18 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { orderByDistance } from 'geolib';
-import { Fair, FormFields } from '../services';
+import { FastifyReply, FastifyRequest } from "fastify";
+import { orderByDistance } from "geolib";
+import { Fair, FormFields } from "../services";
 
 export class FormFieldsController {
+  async listCategories(_req: FastifyRequest, rep: FastifyReply) {
+    const categories = await FormFields.indexCategories();
+
+    return rep.send({
+      code: 200,
+      error: false,
+      data: categories,
+    });
+  }
+
   async forCostumer(_req: FastifyRequest, rep: FastifyReply) {
     const genders = await FormFields.indexGender();
     const paymentMethods = await FormFields.indexPaymentMethods();
@@ -10,34 +20,44 @@ export class FormFieldsController {
 
     return rep.send({
       code: 200,
-      payload: [{
-        genders,
-        paymentMethods,
-        typesOfAddress,
-      }],
+      payload: [
+        {
+          genders,
+          paymentMethods,
+          typesOfAddress,
+        },
+      ],
       error: false,
     });
   }
 
-  async forMarketer(req: FastifyRequest<{
-    Querystring: {
-      lat: number,
-      long: number
-    }
-  }>, rep: FastifyReply) {
+  async forMarketer(
+    req: FastifyRequest<{
+      Querystring: {
+        lat: number;
+        long: number;
+      };
+    }>,
+    rep: FastifyReply
+  ) {
     const { lat, long } = req.query;
 
     const genders = await FormFields.indexGender();
     const fairs = await Fair.index();
 
-    const orderedFairs = orderByDistance({ latitude: lat, longitude: long }, fairs as any);
+    const orderedFairs = orderByDistance(
+      { latitude: lat, longitude: long },
+      fairs as any
+    );
 
     return rep.send({
       code: 200,
-      payload: [{
-        genders,
-        closeFairs: orderedFairs.slice(0, 5),
-      }],
+      payload: [
+        {
+          genders,
+          closeFairs: orderedFairs.slice(0, 5),
+        },
+      ],
       error: false,
     });
   }
@@ -48,34 +68,44 @@ export class FormFieldsController {
 
     return rep.send({
       code: 200,
-      payload: [{
-        genders,
-        veicules,
-      }],
+      payload: [
+        {
+          genders,
+          veicules,
+        },
+      ],
       error: false,
     });
   }
 
-  async listCloseFairs(req: FastifyRequest<{
-    Querystring: {
-      lat: number,
-      long: number
-    }
-  }>, rep: FastifyReply) {
+  async listCloseFairs(
+    req: FastifyRequest<{
+      Querystring: {
+        lat: number;
+        long: number;
+      };
+    }>,
+    rep: FastifyReply
+  ) {
     const { lat, long } = req.query;
 
     const fairs = await Fair.index();
 
     const daysOfWeeks = await FormFields.indexDaysOfWeek();
 
-    const orderedFairs = orderByDistance({ latitude: lat, longitude: long }, fairs as any);
+    const orderedFairs = orderByDistance(
+      { latitude: lat, longitude: long },
+      fairs as any
+    );
 
     return rep.send({
       code: 200,
-      payload: [{
-        fairs: orderedFairs,
-        daysOfWeeks,
-      }],
+      payload: [
+        {
+          fairs: orderedFairs,
+          daysOfWeeks,
+        },
+      ],
       error: false,
     });
   }

@@ -1,20 +1,21 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
-import ProductService from '../services/product.service';
-import {getDayOfWeek} from "../utils";
+import { FastifyReply, FastifyRequest } from "fastify";
+import ProductService from "../services/product.service";
+import { getDayOfWeek } from "../utils";
 
 export class ProductController {
-  async index(req: FastifyRequest<{
-    Querystring: {
-      category: string;
-      score: string;
-      lowerPrice: string;
-      higherPrice: string;
-      moreSales: string | undefined;
-    };
-  }>, rep: FastifyReply) {
-    const {
-      category, score, lowerPrice, higherPrice, moreSales,
-    } = req.query;
+  async index(
+    req: FastifyRequest<{
+      Querystring: {
+        category: string;
+        score: string;
+        lowerPrice: string;
+        higherPrice: string;
+        moreSales: string | undefined;
+      };
+    }>,
+    rep: FastifyReply
+  ) {
+    const { category, score, lowerPrice, higherPrice, moreSales } = req.query;
 
     if (moreSales) {
       const res = await ProductService.moreSales(parseInt(moreSales, 10));
@@ -30,7 +31,7 @@ export class ProductController {
         code: 400,
         error: true,
         message:
-          'Bad request, the lower price value is higher than the higher price value',
+          "Bad request, the lower price value is higher than the higher price value",
       });
     }
 
@@ -38,7 +39,7 @@ export class ProductController {
       parseInt(category, 10),
       parseFloat(score),
       parseFloat(lowerPrice),
-      parseFloat(higherPrice),
+      parseFloat(higherPrice)
     );
 
     return rep.send({
@@ -48,11 +49,14 @@ export class ProductController {
     });
   }
 
-  async get(req: FastifyRequest<{
-    Params: {
-      id: string;
-    };
-  }>, rep: FastifyReply) {
+  async get(
+    req: FastifyRequest<{
+      Params: {
+        id: string;
+      };
+    }>,
+    rep: FastifyReply
+  ) {
     const { id } = req.params;
 
     const product = await ProductService.get(parseInt(id, 10));
@@ -61,7 +65,7 @@ export class ProductController {
       return rep.status(404).send({
         code: 404,
         erro: true,
-        message: 'Content not found, check the id',
+        message: "Content not found, check the id",
       });
     }
 
@@ -69,6 +73,29 @@ export class ProductController {
       code: 200,
       error: false,
       data: product,
+    });
+  }
+
+  async inSaleOff(_req: FastifyRequest, rep: FastifyReply) {
+    const res = await ProductService.inSaleOff();
+
+    return rep.send({
+      code: 200,
+      error: false,
+      data: res,
+    });
+  }
+
+  async nearToClient(req: FastifyRequest, rep: FastifyReply) {
+    // @ts-ignore
+    const { id } = req.user;
+
+    const res = await ProductService.findNearest(id);
+
+    return rep.send({
+      code: 200,
+      error: false,
+      data: res,
     });
   }
 }

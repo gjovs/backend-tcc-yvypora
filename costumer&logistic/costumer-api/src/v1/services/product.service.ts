@@ -1,4 +1,6 @@
-import db from '../libs/prisma';
+import db from "../libs/prisma";
+import { getDayOfWeek } from "../utils";
+import { orderByDistance } from "geolib";
 
 class ProductService {
   // filters
@@ -23,7 +25,7 @@ class ProductService {
     return products;
   }
 
-  private async inSaleOff() {
+  async inSaleOff() {
     const products = await db.sale_off.findMany({
       include: {
         product: {
@@ -88,10 +90,42 @@ class ProductService {
     category: number,
     score: number,
     lte: number,
-    gte: number,
+    gte: number
   ) {
+    let data;
+    const now = new Date();
+
+    if (now.getHours().toString().length == 1)
+      data = new Date(`1900-01-01T0${now.getHours()}:00:00.000Z`);
+    else data = new Date(`1900-01-01T${now.getHours()}:00:00.000Z`);
+
+    const dayOfWeek = getDayOfWeek(now.getDay());
+
     const products = await db.product.findMany({
       where: {
+        marketer: {
+          fair_marketers: {
+            some: {
+              fair: {
+                fair_date_hour_of_work: {
+                  some: {
+                    dates: {
+                      day_of_week: {
+                        name: dayOfWeek,
+                      },
+                      close_datetime: {
+                        lte: data,
+                      },
+                      open_datetime: {
+                        gte: data,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         review: {
           gte: score,
         },
@@ -117,9 +151,9 @@ class ProductService {
   // list
   async moreSales(listSize: number) {
     const sales = await db.products_in_shopping_list.groupBy({
-      by: ['productId'],
+      by: ["productId"],
       orderBy: {
-        productId: 'asc',
+        productId: "asc",
       },
       _count: { productId: true },
       take: listSize,
@@ -141,7 +175,94 @@ class ProductService {
       },
     });
 
-    return products;
+    return product;
+  }
+
+  async findNearest(id: number) {
+    let data;
+    const now = new Date();
+
+    if (now.getHours().toString().length == 1)
+      data = new Date(`1900-01-01T0${now.getHours()}:00:00.000Z`);
+    else data = new Date(`1900-01-01T${now.getHours()}:00:00.000Z`);
+
+    const dayOfWeek = getDayOfWeek(now.getDay());
+
+    let productsWithLocations = await db.product.findMany({
+      where: {
+        marketer: {
+          fair_marketers: {
+            some: {
+              fair: {
+                fair_date_hour_of_work: {
+                  some: {
+                    dates: {
+                      day_of_week: {
+                        name: dayOfWeek,
+                      },
+                      close_datetime: {
+                        lte: data,
+                      },
+                      open_datetime: {
+                        gte: data,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      include: {
+        marketer: {
+          include: {
+            location: {
+              select: {
+                longitude: true,
+                latitude: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    let userLocation = await db.address.findMany({
+      where: {
+        costumer_addresses: {
+          some: {
+            costumerId: id,
+          },
+        },
+      },
+      include: {
+        location: true,
+      },
+    });
+
+    productsWithLocations = productsWithLocations.map((product) => {
+      // @ts-ignore
+      product.latitude = product.marketer.location.latitude;
+      // @ts-ignore
+      product.longitude = product.marketer.location.longitude;
+
+      return product;
+    });
+
+    userLocation = userLocation.map((address) => {
+      // @ts-ignore
+      address.latitude = address.location.latitude;
+      // @ts-ignore
+      address.longitude = address.location.longitude;
+
+      return address;
+    });
+
+    // @ts-ignore
+    const orderedList = orderByDistance(userLocation[0], productsWithLocations);
+
+    return orderedList;
   }
 }
 

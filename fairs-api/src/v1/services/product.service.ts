@@ -34,7 +34,7 @@ class Product {
           price: data.price,
           name: data.name,
           available_quantity: data.available_quantity,
-          type_of_price_product: {
+          type_of_price: {
             connect: {
               id: data.price_type.id,
             },

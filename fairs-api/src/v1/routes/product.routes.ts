@@ -1,222 +1,234 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { z, ZodError } from 'zod';
-import { PictureController, ProductController, SaleOfFController } from '../controllers';
+import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { z, ZodError } from "zod";
+import {
+  PictureController,
+  ProductController,
+  SaleOfFController,
+} from "../controllers";
 
 export default async function productRoutes(server: FastifyInstance) {
-  server.get('/', { onRequest: [server.auth] }, ProductController.index);
+  // @ts-ignore
+  server.get("/", { onRequest: [server.auth] }, ProductController.index);
 
   server.get(
-    '/:id',
-    {
+    "/:id",
+    {// @ts-ignore
       onRequest: [server.auth, server.checkOwner],
       schema: {
         params: {
-          type: 'object',
-          required: ['id'],
+          type: "object",
+          required: ["id"],
           properties: {
-            id: { type: 'number' },
+            id: { type: "number" },
           },
         },
       },
     },
-    ProductController.get,
+    ProductController.get
   );
 
   server.post(
-    '/',
-    {
+    "/",
+    {// @ts-ignore
       onRequest: [server.auth],
       schema: {
         body: {
-          type: 'object',
+          type: "object",
           required: [
-            'name',
-            'price',
-            'price_type',
-            'category',
-            'available_quantity',
-            'description',
+            "name",
+            "price",
+            "price_type",
+            "category",
+            "available_quantity",
+            "description",
           ],
           properties: {
-            description: { type: 'string' },
-            name: { type: 'string' },
-            price: { type: 'number' },
-            available_quantity: { type: 'number' },
+            description: { type: "string" },
+            name: { type: "string" },
+            price: { type: "number" },
+            available_quantity: { type: "number" },
             price_type: {
-              type: 'object',
-              required: ['name', 'id'],
+              type: "object",
+              required: ["name", "id"],
               properties: {
                 id: {
-                  type: 'number',
+                  type: "number",
                 },
                 name: {
-                  type: 'string',
+                  type: "string",
                 },
               },
             },
             category: {
-              type: 'object',
-              required: ['name', 'id'],
+              type: "object",
+              required: ["name", "id"],
               properties: {
-                name: { type: 'string' },
-                id: { type: 'number' },
+                name: { type: "string" },
+                id: { type: "number" },
               },
             },
           },
         },
       },
     },
-    ProductController.create,
+    ProductController.create
   );
 
   // add picture to product
   server.put(
-    'picture/:id',
+    "picture/:id",
     {
+      // @ts-ignore
       onRequest: [server.auth, server.checkOwner],
       schema: {
         params: {
-          type: 'object',
-          required: ['id'],
+          type: "object",
+          required: ["id"],
           properties: {
             id: {
-              type: 'number',
+              type: "number",
             },
           },
         },
         body: {
-          type: 'object',
-          required: ['picture'],
+          type: "object",
+          required: ["picture"],
           properties: {
             picture: {
-              type: 'object',
+              type: "object",
             },
           },
         },
       },
     },
-    PictureController.addInProduct,
+    PictureController.addInProduct
   );
 
   server.delete(
-    'picture/:id/:pictureId',
+    "picture/:id/:pictureId",
     {
+      // @ts-ignore
       onRequest: [server.auth, server.checkOwner],
       schema: {
         params: {
-          type: 'object',
-          required: ['id', 'pictureId'],
+          type: "object",
+          required: ["id", "pictureId"],
           properties: {
             id: {
-              type: 'number',
+              type: "number",
             },
             pictureId: {
-              type: 'number',
+              type: "number",
             },
           },
         },
       },
     },
-    PictureController.delete,
+    PictureController.delete
   );
 
   server.put(
-    '/:id',
+    "/:id",
     {
+      // @ts-ignore
       onRequest: [server.auth, server.checkOwner],
       schema: {
         params: {
-          type: 'object',
-          required: ['id'],
+          type: "object",
+          required: ["id"],
           properties: {
             id: {
-              type: 'number',
+              type: "number",
             },
           },
         },
       },
     },
-    ProductController.update,
+    ProductController.update
   );
 
   server.delete(
-    'disable/:id',
+    "disable/:id",
     {
+      // @ts-ignore
       onRequest: [server.auth, server.checkOwner],
       schema: {
         params: {
-          type: 'object',
-          required: ['id'],
+          type: "object",
+          required: ["id"],
           properties: {
             id: {
-              type: 'number',
+              type: "number",
             },
           },
         },
       },
     },
-    ProductController.disable,
+    ProductController.disable
   );
 
   server.put(
-    'enable/:id',
+    "enable/:id",
     {
+      // @ts-ignore
       onRequest: [server.auth],
       schema: {
         params: {
-          type: 'object',
-          required: ['id'],
+          type: "object",
+          required: ["id"],
           properties: {
             id: {
-              type: 'number',
+              type: "number",
             },
           },
         },
       },
     },
-    ProductController.enable,
+    ProductController.enable
   );
 
   server.put(
-    'sale_off/:id',
+    "sale_off/:id",
     {
+      // @ts-ignore
       onRequest: [server.auth, server.checkOwner],
       schema: {
         params: {
-          type: 'object',
-          required: ['id'],
+          type: "object",
+          required: ["id"],
           properties: {
-            id: { type: 'number' },
+            id: { type: "number" },
           },
         },
         querystring: {
-          type: 'object',
-          required: ['value'],
+          type: "object",
+          required: ["value"],
           properties: {
             value: {
-              type: 'number',
+              type: "number",
             },
           },
         },
       },
     },
-    SaleOfFController.create,
+    SaleOfFController.create
   );
 
   server.delete(
-    'sale_off/:id',
+    "sale_off/:id",
     {
+      // @ts-ignore
       onRequest: [server.auth, server.checkOwner],
       schema: {
         params: {
-          type: 'object',
-          required: ['id'],
+          type: "object",
+          required: ["id"],
           properties: {
-            id: { type: 'number' },
+            id: { type: "number" },
           },
         },
       },
     },
-    SaleOfFController.delete,
+    SaleOfFController.delete
   );
 }

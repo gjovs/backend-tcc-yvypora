@@ -4,6 +4,7 @@ import { MarketerController } from '../controllers';
 export default async function userRoutes(server: FastifyInstance) {
   server.get(
     '/details',
+    // @ts-ignore
     { onRequest: [server.auth] },
     MarketerController.details,
   );
@@ -11,6 +12,7 @@ export default async function userRoutes(server: FastifyInstance) {
   server.get(
     '/fairs',
     {
+      // @ts-ignore
       onRequest: [server.auth],
     },
     MarketerController.listFairs,

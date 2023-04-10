@@ -1,28 +1,31 @@
-import {FastifyInstance, FastifyRequest} from 'fastify';
-import Product from '../services/product.service';
-import {ProductController} from '../controllers';
-import ProductService from "../services/product.service";
+import { FastifyInstance } from "fastify";
+import { ProductController } from "../controllers";
 
 export default async function productRoutes(server: FastifyInstance) {
   server.get(
-    '/',
+    "/",
     {
       schema: {
         querystring: {
-          type: 'object',
-          required: ['category', 'score', 'lowerPrice', 'higherPrice'],
+          type: "object",
+          required: ["category", "score", "lowerPrice", "higherPrice"],
           properties: {
-            category: {type: 'number'},
-            score: {type: 'number'},
-            lowerPrice: {type: 'number'},
-            higherPrice: {type: 'number'},
-            moreSales: {type: 'number'},
+            category: { type: "number" },
+            score: { type: "number" },
+            lowerPrice: { type: "number" },
+            higherPrice: { type: "number" },
+            moreSales: { type: "number" },
           },
         },
       },
     },
-    ProductController.index,
+    ProductController.index
   );
 
-  server.get('/:id', ProductController.get);
+  server.get("/:id", ProductController.get);
+
+  server.get("/inSaleOff", ProductController.inSaleOff);
+
+
+  server.get("/findNearest", {onRequest: [server.auth]},ProductController.nearToClient)
 }
