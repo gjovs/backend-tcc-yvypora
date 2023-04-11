@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { hashPassword, isValidDate } from '../utils/utils';
-import { Costumer } from '../services';
+import { Costumer, OsmService } from '../services';
 
 export class CostumerController {
   async create(
@@ -48,11 +48,24 @@ export class CostumerController {
 
     const password_hash = await hashPassword(password);
 
+    const addressWithLocation = await OsmService.getGeocoding(address)
+
+    console.log(addressWithLocation);
+
+    if(!addressWithLocation) {
+      return rep.status(400).send({
+        code: 400,
+        error: true,
+        message: "This address is not valid to be saveable"
+      })
+    }
+    
+
     const res = await Costumer.createCostumer({
       name,
       email,
       password: password_hash,
-      address,
+      address: {...addressWithLocation, addressTypeId:  1 },
       gender: genderId,
       birthday,
     });

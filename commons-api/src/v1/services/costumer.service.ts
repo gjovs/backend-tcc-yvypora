@@ -47,6 +47,55 @@ class CostumerService {
     address: IAddress;
   }) {
     try {
+      const address = await db.address.create({
+        data: {
+          number: data.address.number,
+          complemento: data.address.complemento,
+          cep: data.address.cep,
+          location: {
+            create: {
+              latitude: data.address.latitude,
+              longitude: data.address.longitude,
+            },
+          },
+          type: {
+            connect: {
+              id: data.address.addressTypeId,
+            },
+          },
+          uf: {
+            connectOrCreate: {
+              where: {
+                name: data.address.uf,
+              },
+              create: {
+                name: data.address.uf,
+              },
+            },
+          },
+          city: {
+            connectOrCreate: {
+              where: {
+                name: data.address.city,
+              },
+              create: {
+                name: data.address.city,
+              },
+            },
+          },
+          neighborhood: {
+            connectOrCreate: {
+              create: {
+                name: data.address.neighborhood,
+              },
+              where: {
+                name: data.address.neighborhood,
+              },
+            },
+          },
+        },
+      });
+
       const res = await db.costumer.create({
         data: {
           gender: {
@@ -60,54 +109,7 @@ class CostumerService {
           email: data.email,
           costumer_addresses: {
             create: {
-              address: {
-                create: {
-                  number: data.address.number,
-                  complemento: data.address.complemento,
-                  cep: data.address.cep,
-                  location: {
-                    create: {
-                      latitude: data.address.latitude,
-                      longitude: data.address.longitude,
-                    },
-                  },
-                  type: {
-                    connect: {
-                      id: data.address.addressTypeId,
-                    },
-                  },
-                  uf: {
-                    connectOrCreate: {
-                      where: {
-                        name: data.address.uf,
-                      },
-                      create: {
-                        name: data.address.uf,
-                      },
-                    },
-                  },
-                  city: {
-                    connectOrCreate: {
-                      where: {
-                        name: data.address.city,
-                      },
-                      create: {
-                        name: data.address.city,
-                      },
-                    },
-                  },
-                  neighborhood: {
-                    connectOrCreate: {
-                      create: {
-                        name: data.address.neighborhood,
-                      },
-                      where: {
-                        name: data.address.neighborhood,
-                      },
-                    },
-                  },
-                },
-              },
+              addressId: address.id
             },
           },
         },

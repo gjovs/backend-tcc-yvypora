@@ -3,12 +3,6 @@ import { TypeOfUser } from "../services/utils/enums";
 import { User } from "../services";
 import FirebaseService from "../services/firebase.service";
 
-interface IUploadImageToUser {
-  picture_64: string;
-  user: { id: number; typeof: TypeOfUser };
-}
-
-
 export class PictureController {
   async appendToUser(
     req: FastifyRequest<{

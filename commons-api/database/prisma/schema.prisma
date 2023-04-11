@@ -32,6 +32,7 @@ model deliveryman {
   password_hash       String                @db.VarChar(255)
   picture_uri         String                @db.VarChar(255)
   locationId          Int                   @unique
+  online              Boolean               @default(false)
   created_at          DateTime              @default(now())
   updated_at          DateTime              @updatedAt
   genderId            Int
@@ -141,6 +142,9 @@ model product {
   @@index([marketerId], map: "product_marketerId_fkey")
   @@index([category_of_productId], map: "product_category_of_productId_fkey")
   @@index([type_of_productId], map: "product_type_of_productId_fkey")
+  @@index([description])
+  @@index([name, description])
+  @@index([name])
 }
 
 model marketer {
@@ -165,6 +169,7 @@ model marketer {
   products       product[]
 
   @@index([genderId], map: "marketer_genderId_fkey")
+  @@index([name])
 }
 
 model fair {
@@ -182,6 +187,7 @@ model fair {
   image                  image[]
 
   @@index([locationId], map: "fair_locationId_fkey")
+  @@index([name])
 }
 
 model fair_marketers {

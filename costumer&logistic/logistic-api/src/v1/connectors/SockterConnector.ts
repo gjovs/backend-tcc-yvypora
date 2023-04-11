@@ -43,18 +43,22 @@ class SocketConnector {
         return false;
       }
 
-      console.log(decoded.payload.typeof);
-
       if (decoded.payload.typeof === "COSTUMER") {
         socket.join(String("costumer_" + decoded.payload.id.toString()));
+        console.log("new costumer is online");
+        
         return null;
       }
 
       if (decoded.payload.typeof === "MARKETER") {
         socket.join(String("marketer_" + decoded.payload.id.toString()));
+        console.log("new marketer is online");
         await StatusService.marketer(true, decoded.payload.id);
         return null;
       }
+
+      console.log("new deliveryman is online");
+
 
       const deliveryId: number = decoded.payload.id;
 
