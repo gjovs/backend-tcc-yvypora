@@ -7,6 +7,7 @@ import StatusService from "../services/status.service";
 import {
   IDeliveryLocationInTravel,
   IMessage,
+  IOrderArrived,
   IRetreatProductFinished,
   IntentOfTravel,
 } from "../interfaces/interfaces";
@@ -46,7 +47,7 @@ class SocketConnector {
       if (decoded.payload.typeof === "COSTUMER") {
         socket.join(String("costumer_" + decoded.payload.id.toString()));
         console.log("new costumer is online");
-        
+
         return null;
       }
 
@@ -58,7 +59,6 @@ class SocketConnector {
       }
 
       console.log("new deliveryman is online");
-
 
       const deliveryId: number = decoded.payload.id;
 
@@ -85,7 +85,6 @@ class SocketConnector {
 
           const newOrder = await OrderService.get(order.intent_payment_id);
 
-          // TODO notify the costumer
           this.sendMessage(
             "costumer_" + order.costumer_addresses.costumerId.toString(),
             "travel_accepted",
@@ -138,18 +137,34 @@ class SocketConnector {
         }
       );
 
-      // TODO add socket handler to arrived of deliveryman
+      socket.on("order_arrived", async (args: IOrderArrived) => {
+        const { order } = args;
+        const costumerID = order.costumer_addresses.costumerId.toString();
+        this.sendMessage(costumerID, "order_arrived", {
+          ...order,
+          delivered_status_for_client: true,
+        });
+      });
 
-      // TODO add message handler here
+      socket.on("confirm_order_arrived", async (args: IOrderArrived) => {
+        const { order } = args;
+        
+        await OrderService.acceptOrder(order.id)
+
+        this.sendMessage(order.deliverymanId.toString(), "accept_order", {
+          accepted: true,
+          value_received: order.shopping_list.freight
+        })
+      });
+
       socket.on("send_message", async (args: IMessage) => {
-        const { content, from, to } = args;
+        const { content, from, to, timestamp } = args;
 
-        if (decoded.payload.typeof === "COSTUMER") {
+        if (decoded.payload.typeof === "COSTUMER")
           this.sendMessage(String(to), "chat_message", { from, content });
-          return;
-        }
+        else
+          this.sendMessage(`costumer_${to}`, "chat_message", { from, content });
 
-        this.sendMessage(`costumer_${to}`, "chat_message", { from, content });
         // add saving in mongo db database ><
       });
     });
