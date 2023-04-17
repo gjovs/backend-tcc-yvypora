@@ -18,6 +18,7 @@ export class MarketerController {
           latitude: number;
         };
         gender: string;
+        tent_name: string;
       };
     }>,
     rep: FastifyReply
@@ -32,6 +33,7 @@ export class MarketerController {
       location,
       phone,
       birthday,
+      tent_name,
     } = req.body;
 
     if (!isValidDate(birthday)) {
@@ -67,6 +69,7 @@ export class MarketerController {
       phone,
       genderId,
       birthday,
+      tent_name,
     };
 
     const res = await Marketer.createMarketer(data);
@@ -117,6 +120,7 @@ export class MarketerController {
         cnpj: string | null;
         email: string;
         gender: string;
+        tent_name: string;
         birthday: string;
         phone: string;
       };
@@ -124,8 +128,7 @@ export class MarketerController {
     rep: FastifyReply
   ) {
     const { id } = req.params;
-    const { name, email, password, cpf, cnpj, gender, birthday, phone } =
-      req.body;
+    const { name, email, password, cpf, cnpj, gender, birthday, tent_name } = req.body;
 
     if (birthday) {
       if (!isValidDate(birthday)) {
@@ -149,12 +152,19 @@ export class MarketerController {
     if (cnpj) newCnpj = cnpj;
     if (cpf) newCpf = cpf;
 
+    // male Default
+    let genderId = 1;
+
+    // female id
+    if (gender.toUpperCase() === "F") genderId = 2;
+
     const res = await Marketer.update({
       id: parseInt(id, 10),
       cnpj: newCnpj,
       cpf: newCpf,
       password_hash: newPassword,
       email,
+      tent_name,
       name,
       phone,
       birthday,

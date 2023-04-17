@@ -10,6 +10,10 @@ class MarketerService {
     cnpj?: string;
     phone: string;
     birthday: string;
+<<<<<<< HEAD
+=======
+    tent_name: string;
+>>>>>>> e98b5d0db8f83f6c1be4f35a7d76b2312a7b1efe
     location: {
       latitude: number;
       longitude: number;
@@ -18,6 +22,7 @@ class MarketerService {
     try {
       const res = await db.marketer.create({
         data: {
+          tent_name: data.tent_name,
           gender: {
             connect: {
               id: data.genderId,
@@ -81,13 +86,14 @@ class MarketerService {
   }
 
   async update(data: {
-    phone: string;
     password_hash: any;
     cpf: any;
     name: string;
+    genderId: number;
     cnpj: any;
     email: string;
     id: number;
+    tent_name: string;
     birthday: string;
   }) {
     try {
@@ -109,7 +115,11 @@ class MarketerService {
           cnpj: data.cnpj,
           cpf: data.cpf,
           birthday: data.birthday,
+<<<<<<< HEAD
           phone: data.phone,
+=======
+          tent_name: data.tent_name,
+>>>>>>> e98b5d0db8f83f6c1be4f35a7d76b2312a7b1efe
         },
       });
       return { error: false, message: "Success updated marketer!" };

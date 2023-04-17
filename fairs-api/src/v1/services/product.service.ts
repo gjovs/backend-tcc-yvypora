@@ -12,6 +12,7 @@ interface IProduct {
     name: string;
     id: number;
   };
+  quantity?: number;
   available_quantity: number;
 }
 
@@ -84,7 +85,7 @@ class Product {
         data: {
           available_quantity: data.available_quantity,
           price: data.price,
-          type_of_price_product: {
+          type_of_price: {
             connect: {
               id: data.price_type.id,
             },
@@ -138,7 +139,7 @@ class Product {
           id,
         },
         include: {
-          type_of_price_product: true,
+          type_of_price: true,
           category_of_product: true,
           image_of_product: {
             include: {

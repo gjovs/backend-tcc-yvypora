@@ -56,7 +56,10 @@ class OrderService {
     return res;
   }
 
-  async addDeliveryman(data: { intent_payment_id: string, deliverymanId: number}) {
+  async addDeliveryman(data: {
+    intent_payment_id: string;
+    deliverymanId: number;
+  }) {
     try {
       await db.order.update({
         where: { intent_payment_id: data.intent_payment_id },
@@ -64,14 +67,14 @@ class OrderService {
           accepted_status: true,
           deliveryman: {
             connect: {
-              id: data.deliverymanId
-            }
-          }
-        }
-      })
+              id: data.deliverymanId,
+            },
+          },
+        },
+      });
     } catch (error) {
       console.log(error);
-      return false
+      return false;
     }
   }
 
@@ -81,9 +84,20 @@ class OrderService {
         id,
       },
       data: {
-        retreat_products_status: true
-      }
-    })
+        retreat_products_status: true,
+      },
+    });
+  }
+
+  async acceptOrder(id: number) {
+    await db.order.update({
+      where: {
+        id,
+      },
+      data: {
+        delivered_status_for_client: true,
+      },
+    });
   }
 }
 

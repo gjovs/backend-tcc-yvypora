@@ -1,7 +1,4 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
-import { orderByDistance } from 'geolib';
-import { GeolibInputCoordinates } from 'geolib/es/types';
-import { Fair } from '../services';
 import { FairController } from '../controllers';
 
 export default async function fairRoutes(server: FastifyInstance) {
@@ -9,10 +6,10 @@ export default async function fairRoutes(server: FastifyInstance) {
     schema: {
       querystring: {
         type: 'object',
-        required: ['lat', 'long'],
+        required: ['latitude', 'longitude'],
         properties: {
-          lat: { type: 'string' },
-          long: { type: 'string' },
+          latitude: { type: 'string' },
+          longitude: { type: 'string' },
         },
       },
     },

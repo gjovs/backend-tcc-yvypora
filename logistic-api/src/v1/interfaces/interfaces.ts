@@ -1,7 +1,8 @@
 interface IMessage {
-    from: number
-    to: number
-    content: string
+  from: number;
+  to: number;
+  content: string;
+  timestamp: Date;
 }
 
 interface IntentOfTravel {
@@ -22,5 +23,14 @@ interface IRetreatProductFinished {
   order: any;
 }
 
+interface IOrderArrived {
+  order: any;  
+}
 
-export { IMessage, IntentOfTravel, IDeliveryLocationInTravel, IRetreatProductFinished}
+export {
+  IMessage,
+  IntentOfTravel,
+  IDeliveryLocationInTravel,
+  IRetreatProductFinished,
+  IOrderArrived
+};
