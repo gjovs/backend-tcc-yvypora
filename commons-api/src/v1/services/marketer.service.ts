@@ -1,19 +1,19 @@
-import db from '../libs/prisma';
+import db from "../libs/prisma";
 
 class MarketerService {
   async createMarketer(data: {
-    email: string,
-    genderId: number,
-    name: string,
-    password_hash: string,
-    cpf?: string,
-    cnpj?: string,
-    phone: string,
-    birthday: string
+    email: string;
+    genderId: number;
+    name: string;
+    password_hash: string;
+    cpf?: string;
+    cnpj?: string;
+    phone: string;
+    birthday: string;
     location: {
-      latitude: number,
-      longitude: number
-    }
+      latitude: number;
+      longitude: number;
+    };
   }) {
     try {
       const res = await db.marketer.create({
@@ -60,7 +60,9 @@ class MarketerService {
       if (error instanceof Error) {
         console.log(error);
         return {
-          error: true, message: 'Failed to save a new MarketerService in Database', code: 401,
+          error: true,
+          message: "Failed to save a new MarketerService in Database",
+          code: 401,
         };
       }
     }
@@ -69,16 +71,25 @@ class MarketerService {
   async delete(id: number) {
     try {
       const res = await db.marketer.delete({ where: { id } });
-      return { error: false, message: 'Success deleted marketer!' };
+      return { error: false, message: "Success deleted marketer!" };
     } catch (error) {
       console.log(error);
       if (error instanceof Error) {
-        return { error: true, message: 'Failed to delete marketer', code: 401 };
+        return { error: true, message: "Failed to delete marketer", code: 401 };
       }
     }
   }
 
-  async update(data: { password_hash: any; cpf: any; name: string; genderId: number; cnpj: any; email: string, id: number, birthday: string}) {
+  async update(data: {
+    phone: string;
+    password_hash: any;
+    cpf: any;
+    name: string;
+    cnpj: any;
+    email: string;
+    id: number;
+    birthday: string;
+  }) {
     try {
       if (data.password_hash) {
         await db.marketer.update({
@@ -94,17 +105,17 @@ class MarketerService {
         where: { id: data.id },
         data: {
           name: data.name,
-          genderId: data.genderId,
           email: data.email,
           cnpj: data.cnpj,
           cpf: data.cpf,
           birthday: data.birthday,
+          phone: data.phone,
         },
       });
-      return { error: false, message: 'Success updated marketer!' };
+      return { error: false, message: "Success updated marketer!" };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, message: 'Failed to update marketer', code: 401 };
+        return { error: true, message: "Failed to update marketer", code: 401 };
       }
     }
   }

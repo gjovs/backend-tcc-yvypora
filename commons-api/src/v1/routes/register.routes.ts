@@ -217,14 +217,6 @@ export default async function registerRoutes(server: FastifyInstance) {
       schema: {
         body: {
           type: 'object',
-          required: [
-            'name',
-            'email',
-            'password',
-            'gender',
-            'phone',
-            'birthday',
-          ],
           properties: {
             name: { type: 'string' },
             cpf: { type: 'string' },

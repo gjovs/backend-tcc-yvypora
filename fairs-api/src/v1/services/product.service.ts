@@ -117,7 +117,7 @@ class Product {
         marketerId,
       },
       include: {
-        type_of_price_product: true,
+        type_of_price: true,
         category_of_product: true,
         image_of_product: {
           include: {

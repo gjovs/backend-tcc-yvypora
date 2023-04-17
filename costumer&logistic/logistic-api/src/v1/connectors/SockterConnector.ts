@@ -72,7 +72,7 @@ class SocketConnector {
       });
 
       socket.on("intent_of_travel", async (data: IntentOfTravel) => {
-        console.log(decoded.payload.id);
+        conole.log(decoded.payload.id);s
         const { accepted, order, routes } = data;
 
         if (accepted) {

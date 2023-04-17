@@ -99,7 +99,10 @@ class ProductService {
       data = new Date(`1900-01-01T0${now.getHours()}:00:00.000Z`);
     else data = new Date(`1900-01-01T${now.getHours()}:00:00.000Z`);
 
-    const dayOfWeek = getDayOfWeek(now.getDay());
+    const dayOfWeek = getDayOfWeek(now.getDay() + 1);
+
+    console.log(data, dayOfWeek);
+    
 
     const products = await db.product.findMany({
       where: {
@@ -114,10 +117,10 @@ class ProductService {
                         name: dayOfWeek,
                       },
                       close_datetime: {
-                        lte: data,
+                        gte: data,
                       },
                       open_datetime: {
-                        gte: data,
+                        lte: data,
                       },
                     },
                   },

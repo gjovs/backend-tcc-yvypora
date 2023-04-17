@@ -15,7 +15,7 @@ class SearchController {
 
     const date = new Date();
 
-    const dayOfWeek = getDayOfWeek(date.getDay());
+    const dayOfWeek = getDayOfWeek(date.getDay() + 1);
     const hour = date.getHours();
 
     let hourStringify = hour.toString();
@@ -28,6 +28,7 @@ class SearchController {
       dayOfWeek,
       hour: hourStringify,
     });
+
     const marketers = await SearchService.searchForMarketers(q);
     const fairs = await SearchService.searchForFairs(q);
 

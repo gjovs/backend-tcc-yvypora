@@ -32,7 +32,10 @@ export class FairController {
       date.open = new Date(`1900-01-01T${date.open}.000Z`);
     });
 
-    const addressObject = OsmService.getGeocoding(address);
+    const addressObject = await OsmService.getGeocoding(address)
+    
+    console.log(addressObject);
+    
 
     if (!addressObject) {
       rep.code(400).send({

@@ -34,10 +34,10 @@ class SearchService {
                             name: date.dayOfWeek,
                           },
                           close_datetime: {
-                            lte: data,
+                            gte: data,
                           },
                           open_datetime: {
-                            gte: data,
+                            lte: data,
                           },
                         },
                       },

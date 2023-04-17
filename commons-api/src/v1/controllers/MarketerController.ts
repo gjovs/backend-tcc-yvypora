@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { hashPassword, isValidDate } from '../utils/utils';
-import { Marketer } from '../services';
+import { FastifyReply, FastifyRequest } from "fastify";
+import { hashPassword, isValidDate } from "../utils/utils";
+import { Marketer } from "../services";
 
 export class MarketerController {
   async create(
@@ -20,7 +20,7 @@ export class MarketerController {
         gender: string;
       };
     }>,
-    rep: FastifyReply,
+    rep: FastifyReply
   ) {
     const {
       cpf,
@@ -39,14 +39,14 @@ export class MarketerController {
         code: 400,
         error: true,
         message:
-          'Date format to attribute birthday is wrong, need to be yyyy-mm-dd',
+          "Date format to attribute birthday is wrong, need to be yyyy-mm-dd",
       });
     }
 
     if (!cnpj && !cpf) {
       return rep.status(401).send({
         error: true,
-        message: ['It is required one field of identification (CPF or CNPJ)'],
+        message: ["It is required one field of identification (CPF or CNPJ)"],
         code: 401,
       });
     }
@@ -57,7 +57,7 @@ export class MarketerController {
     let genderId = 1;
 
     // female id
-    if (gender.toUpperCase() === 'F') genderId = 2;
+    if (gender.toUpperCase() === "F") genderId = 2;
 
     const data = {
       location,
@@ -88,7 +88,7 @@ export class MarketerController {
         id: string;
       };
     }>,
-    rep: FastifyReply,
+    rep: FastifyReply
   ) {
     const { id } = req.params;
 
@@ -118,14 +118,14 @@ export class MarketerController {
         email: string;
         gender: string;
         birthday: string;
+        phone: string;
       };
     }>,
-    rep: FastifyReply,
+    rep: FastifyReply
   ) {
     const { id } = req.params;
-    const {
-      name, email, password, cpf, cnpj, gender, birthday,
-    } = req.body;
+    const { name, email, password, cpf, cnpj, gender, birthday, phone } =
+      req.body;
 
     if (birthday) {
       if (!isValidDate(birthday)) {
@@ -133,7 +133,7 @@ export class MarketerController {
           code: 400,
           error: true,
           message:
-            'Date format to attribute birthday is wrong, need to be yyyy-mm-dd',
+            "Date format to attribute birthday is wrong, need to be yyyy-mm-dd",
         });
       }
     }
@@ -149,12 +149,6 @@ export class MarketerController {
     if (cnpj) newCnpj = cnpj;
     if (cpf) newCpf = cpf;
 
-    // male Default
-    let genderId = 1;
-
-    // female id
-    if (gender.toUpperCase() === 'F') genderId = 2;
-
     const res = await Marketer.update({
       id: parseInt(id, 10),
       cnpj: newCnpj,
@@ -162,7 +156,7 @@ export class MarketerController {
       password_hash: newPassword,
       email,
       name,
-      genderId,
+      phone,
       birthday,
     });
 
