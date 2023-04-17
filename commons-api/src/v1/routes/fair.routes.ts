@@ -9,10 +9,10 @@ export default async function fairRoutes(server: FastifyInstance) {
     schema: {
       querystring: {
         type: 'object',
-        required: ['lat', 'long'],
+        required: ['latitude', 'longitude'],
         properties: {
-          lat: { type: 'string' },
-          long: { type: 'string' },
+          latitude: { type: 'string' },
+          longitude: { type: 'string' },
         },
       },
     },
