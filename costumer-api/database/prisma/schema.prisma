@@ -124,6 +124,7 @@ model product {
   id                        Int                         @id @unique @default(autoincrement())
   name                      String                      @db.VarChar(120)
   price                     Float
+  quantity                  Float?
   review                    Float                       @default(0)
   active_for_selling        Boolean                     @default(true)
   available_quantity        Int
@@ -164,6 +165,7 @@ model marketer {
   cnpj           String?          @unique @db.VarChar(18)
   cpf            String?          @unique @db.VarChar(13)
   phone          String           @db.VarChar(15)
+  tent_name      String           @db.VarChar(120)
   fair_marketers fair_marketers[]
   gender         gender           @relation(fields: [genderId], references: [id])
   location       location         @relation(fields: [locationId], references: [id])

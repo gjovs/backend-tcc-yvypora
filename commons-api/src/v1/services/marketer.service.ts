@@ -1,3 +1,4 @@
+import fastifyJwt from "@fastify/jwt";
 import db from "../libs/prisma";
 
 class MarketerService {
@@ -86,7 +87,6 @@ class MarketerService {
     password_hash: any;
     cpf: any;
     name: string;
-    genderId: number;
     cnpj: any;
     email: string;
     id: number;
@@ -117,8 +117,11 @@ class MarketerService {
           phone: data.phone,
         },
       });
+
       return { error: false, message: "Success updated marketer!" };
     } catch (error) {
+      console.log(error);
+      
       if (error instanceof Error) {
         return { error: true, message: "Failed to update marketer", code: 401 };
       }

@@ -101,9 +101,6 @@ class ProductService {
 
     const dayOfWeek = getDayOfWeek(now.getDay() + 1);
 
-    console.log(data, dayOfWeek);
-    
-
     const products = await db.product.findMany({
       where: {
         marketer: {
@@ -140,6 +137,7 @@ class ProductService {
       },
       include: {
         sale_off: true,
+        type_of_price: true,
         image_of_product: {
           include: {
             image: true,
@@ -189,9 +187,9 @@ class ProductService {
       data = new Date(`1900-01-01T0${now.getHours()}:00:00.000Z`);
     else data = new Date(`1900-01-01T${now.getHours()}:00:00.000Z`);
 
-    const dayOfWeek = getDayOfWeek(now.getDay());
+    const dayOfWeek = getDayOfWeek(now.getDay() + 1);
 
-    let productsWithLocations = await db.product.findMany({
+    const products = await db.product.findMany({
       where: {
         marketer: {
           fair_marketers: {
@@ -204,10 +202,10 @@ class ProductService {
                         name: dayOfWeek,
                       },
                       close_datetime: {
-                        lte: data,
+                        gte: data,
                       },
                       open_datetime: {
-                        gte: data,
+                        lte: data,
                       },
                     },
                   },
@@ -218,6 +216,11 @@ class ProductService {
         },
       },
       include: {
+        image_of_product: {
+          include: {
+            image: true,
+          },
+        },
         marketer: {
           include: {
             location: {
@@ -244,7 +247,7 @@ class ProductService {
       },
     });
 
-    productsWithLocations = productsWithLocations.map((product) => {
+    const productsWithLocations = products.map((product) => {
       // @ts-ignore
       product.latitude = product.marketer.location.latitude;
       // @ts-ignore

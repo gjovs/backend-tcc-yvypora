@@ -21,6 +21,9 @@ export class PictureController {
     // @ts-ignore
     const { picture } = req.body;
 
+    console.log(req.user);
+    
+
     // TODO convert base64 to png again
 
     await picture.toBuffer();
@@ -51,7 +54,7 @@ export class PictureController {
       }
 
       const picture_uri = await FirebaseService.uploadImage(picture);
-
+  
       status = await User.updatePhotoMarketer({ id, picture_uri });
     }
 

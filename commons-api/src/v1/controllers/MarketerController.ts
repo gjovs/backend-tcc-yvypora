@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { hashPassword, isValidDate } from "../utils/utils";
-import { Marketer } from "../services";
+import { Marketer, User } from "../services";
+import { genToken } from "../utils/token";
 
 export class MarketerController {
   async create(
@@ -128,7 +129,17 @@ export class MarketerController {
     rep: FastifyReply
   ) {
     const { id } = req.params;
-    const { name, email, password, cpf, cnpj, gender, birthday, tent_name, phone } = req.body;
+    const {
+      name,
+      email,
+      password,
+      cpf,
+      cnpj,
+      gender,
+      birthday,
+      tent_name,
+      phone,
+    } = req.body;
 
     if (birthday) {
       if (!isValidDate(birthday)) {
@@ -152,12 +163,6 @@ export class MarketerController {
     if (cnpj) newCnpj = cnpj;
     if (cpf) newCpf = cpf;
 
-    // male Default
-    let genderId = 1;
-
-    // female id
-    if (gender.toUpperCase() === "F") genderId = 2;
-
     const res = await Marketer.update({
       id: parseInt(id, 10),
       cnpj: newCnpj,
@@ -168,7 +173,6 @@ export class MarketerController {
       name,
       birthday,
       phone,
-      genderId
     });
 
     if (res?.error) {
@@ -179,7 +183,11 @@ export class MarketerController {
       });
     }
 
-    return rep.send(res?.message);
+    const newDetails = await User.findMarketerByEmail(email);
+
+    const newToken = genToken({ payload: {...newDetails, typeof: "MARKETER"} });
+
+    return rep.send({ message: res?.message, newToken });
   }
 }
 

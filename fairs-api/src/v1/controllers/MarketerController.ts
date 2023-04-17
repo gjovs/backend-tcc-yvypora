@@ -3,6 +3,7 @@ import { Marketer } from '../services';
 
 export class MarketerController {
   async details(req:FastifyRequest, rep: FastifyReply) {
+    // @ts-ignore
     return rep.send(req.user);
   }
 

@@ -65,9 +65,14 @@ export class ProductController {
   ) {
     const data = req.body;
 
+    console.log(data);
+    
+
     if (data.quantity) {
       // DIVIDE PRICE BY EACH QUILOGRAMS IN QUANTITY
       data.price = data.price / data.quantity   
+      
+      console.log(data.price, data.quantity);
     }
 
     // @ts-ignore

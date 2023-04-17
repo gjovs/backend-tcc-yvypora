@@ -31,6 +31,7 @@
     "fastify": "^4.13.0",
     "firebase-admin": "^11.5.0",
     "geolib": "^3.3.3",
+    "jsonwebtoken": "^9.0.0",
     "prisma": "^4.10.0",
     "tsx": "^3.12.3"
   },
