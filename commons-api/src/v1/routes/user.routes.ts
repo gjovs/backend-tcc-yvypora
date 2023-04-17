@@ -6,6 +6,7 @@ export default async function (server: FastifyInstance) {
     { onRequest: [server.auth] },
     (req: FastifyRequest, rep: FastifyReply) => {
       rep.send({
+        // @ts-ignore
         ...req.user,
         password_hash: null,
       });

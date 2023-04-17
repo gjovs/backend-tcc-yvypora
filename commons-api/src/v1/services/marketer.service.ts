@@ -10,10 +10,7 @@ class MarketerService {
     cnpj?: string;
     phone: string;
     birthday: string;
-<<<<<<< HEAD
-=======
     tent_name: string;
->>>>>>> e98b5d0db8f83f6c1be4f35a7d76b2312a7b1efe
     location: {
       latitude: number;
       longitude: number;
@@ -95,6 +92,7 @@ class MarketerService {
     id: number;
     tent_name: string;
     birthday: string;
+    phone: string;
   }) {
     try {
       if (data.password_hash) {
@@ -115,11 +113,8 @@ class MarketerService {
           cnpj: data.cnpj,
           cpf: data.cpf,
           birthday: data.birthday,
-<<<<<<< HEAD
-          phone: data.phone,
-=======
           tent_name: data.tent_name,
->>>>>>> e98b5d0db8f83f6c1be4f35a7d76b2312a7b1efe
+          phone: data.phone,
         },
       });
       return { error: false, message: "Success updated marketer!" };

@@ -128,7 +128,7 @@ export class MarketerController {
     rep: FastifyReply
   ) {
     const { id } = req.params;
-    const { name, email, password, cpf, cnpj, gender, birthday, tent_name } = req.body;
+    const { name, email, password, cpf, cnpj, gender, birthday, tent_name, phone } = req.body;
 
     if (birthday) {
       if (!isValidDate(birthday)) {
@@ -166,8 +166,9 @@ export class MarketerController {
       email,
       tent_name,
       name,
-      phone,
       birthday,
+      phone,
+      genderId
     });
 
     if (res?.error) {
