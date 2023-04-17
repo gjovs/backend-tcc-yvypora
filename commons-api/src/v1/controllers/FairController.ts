@@ -5,16 +5,16 @@ import { Fair } from '../services';
 export class FairController {
   async listByClose(req: FastifyRequest<{
     Querystring: {
-      lat: string,
-      long: string,
+      latitude: string,
+      longitude: string,
     }
   }>, rep: FastifyReply) {
     const fairs = await Fair.index();
 
-    const { lat, long } = req.query;
+    const { latitude, longitude } = req.query;
 
-    const originLat = parseFloat(lat);
-    const originLong = parseFloat(long);
+    const originLat = parseFloat(latitude);
+    const originLong = parseFloat(longitude);
 
     const nearPositions = orderByDistance({
       latitude: originLat,
