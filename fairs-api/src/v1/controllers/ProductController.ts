@@ -57,12 +57,18 @@ export class ProductController {
                 name: string;
                 id: number;
             };
+            quantity: number;
             available_quantity: number;
         };
     }>,
     rep: FastifyReply,
   ) {
     const data = req.body;
+
+    if (data.quantity) {
+      // DIVIDE PRICE BY EACH QUILOGRAMS IN QUANTITY
+      data.price = data.price / data.quantity   
+    }
 
     // @ts-ignore
     const res = await Product.create(data, req.user.id);
