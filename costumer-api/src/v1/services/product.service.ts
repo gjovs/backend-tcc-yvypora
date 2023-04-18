@@ -3,6 +3,10 @@ import { getDayOfWeek } from "../utils";
 import { orderByDistance } from "geolib";
 
 class ProductService {
+
+  public async index() {
+    return (await db.product.findMany())
+  }
   // filters
   private async byPrice(lte: number, gte: number, data: any) {
     const products = await data.findMany({

@@ -14,6 +14,7 @@ import {
   productRoutes,
   marketerRoutes,
   searchRoutes,
+  testRoutes,
 } from "./routes";
 import { auth } from "./decorators";
 import purchaseRoutes from "./routes/purchaseRoutes";
@@ -68,7 +69,12 @@ class Server {
     this.app.register(searchRoutes, {
       prefix: "/api/costumer/search/",
     });
+    this.app.register(testRoutes, {
+      prefix: "/api/costumer/test/",
+    });
   }
+
+
 
   private decorators() {
     this.app.decorate("auth", auth);
