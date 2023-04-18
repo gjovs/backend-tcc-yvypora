@@ -78,11 +78,15 @@ export class ProductController {
 
   async inSaleOff(_req: FastifyRequest, rep: FastifyReply) {
     const res = await ProductService.inSaleOff();
-
+    
+    const data = res.map(({ product }) => {
+        return { ...product, promo: true }
+    })
+    
     return rep.send({
       code: 200,
       error: false,
-      data: res,
+      data,
     });
   }
 

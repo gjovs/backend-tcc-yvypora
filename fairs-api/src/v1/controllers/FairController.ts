@@ -33,9 +33,6 @@ export class FairController {
     });
 
     const addressObject = await OsmService.getGeocoding(address)
-    
-    console.log(addressObject);
-    
 
     if (!addressObject) {
       rep.code(400).send({
