@@ -87,8 +87,8 @@ export class CostumerController {
         name: string;
         email: string;
         password: string;
-        gender: string;
         birthday: string;
+        cpf: string;
       };
       Params: {
         id: string;
@@ -115,18 +115,14 @@ export class CostumerController {
       }
     }
 
-    let genderId = 1;
-
-    // female id
-    if (body.gender.toUpperCase() === 'F') genderId = 2;
 
     const res = await Costumer.updateCostumer({
       name: body.name,
       password_hash,
       email: body.email,
       id: parseInt(id, 10),
-      genderId,
       birthday: body.birthday,
+      cpf: body.cpf
     });
 
     if (res?.error) {

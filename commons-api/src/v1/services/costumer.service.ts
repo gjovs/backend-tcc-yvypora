@@ -178,10 +178,10 @@ class CostumerService {
   async updateCostumer(data: {
     id: number;
     name: string;
-    genderId: number;
     email: string;
     password_hash: string | null;
     birthday: string;
+    cpf: string
   }) {
     try {
       if (data.password_hash) {
@@ -196,7 +196,7 @@ class CostumerService {
         data: {
           name: data.name,
           email: data.email,
-          genderId: data.genderId,
+          cpf: data.cpf,
           birthday: data.birthday,
         },
         select: {
