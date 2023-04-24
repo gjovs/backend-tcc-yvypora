@@ -32,7 +32,6 @@ class SocketConnector {
           function (err, _decoded) {
             if (err) {
               console.log(err);
-
               socket.disconnect();
               return false;
             }
@@ -43,21 +42,18 @@ class SocketConnector {
         socket.disconnect();
         return false;
       }
+      console.log(decoded.payload);
 
       if (decoded.payload.typeof === "COSTUMER") {
         socket.join(String("costumer_" + decoded.payload.id.toString()));
         console.log("new costumer is online");
-
-        return null;
       }
 
       if (decoded.payload.typeof === "MARKETER") {
         socket.join(String("marketer_" + decoded.payload.id.toString()));
         console.log("new marketer is online");
         await StatusService.marketer(true, decoded.payload.id);
-        return null;
       }
-
       console.log("new deliveryman is online");
 
       const deliveryId: number = decoded.payload.id;
@@ -72,7 +68,8 @@ class SocketConnector {
       });
 
       socket.on("intent_of_travel", async (data: IntentOfTravel) => {
-        conole.log(decoded.payload.id);s
+        console.log(decoded.payload.id);
+
         const { accepted, order, routes } = data;
 
         if (accepted) {
@@ -148,13 +145,13 @@ class SocketConnector {
 
       socket.on("confirm_order_arrived", async (args: IOrderArrived) => {
         const { order } = args;
-        
-        await OrderService.acceptOrder(order.id)
+
+        await OrderService.acceptOrder(order.id);
 
         this.sendMessage(order.deliverymanId.toString(), "accept_order", {
           accepted: true,
-          value_received: order.shopping_list.freight
-        })
+          value_received: order.shopping_list.freight,
+        });
       });
 
       socket.on("send_message", async (args: IMessage) => {

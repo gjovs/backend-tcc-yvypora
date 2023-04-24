@@ -91,7 +91,7 @@ export default async function registerRoutes(server: FastifyInstance) {
             password: {
               type: 'string',
             },
-            gender: {
+            cpf: {
               type: 'string',
             },
             birthday: {

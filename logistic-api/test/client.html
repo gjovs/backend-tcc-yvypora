@@ -15,7 +15,7 @@
 <script>
     window.onload = function() {
         var socket = io.connect("ws://localhost:3337", {
-            query: { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImlkIjoxLCJuYW1lIjoiR3VpbGhlcm1lIEpvdmluaWFubyBkZSBTb3VzYSIsImVtYWlsIjoiMDBkcnBpeGVsc3NAZ21haWwuY29tIiwicGFzc3dvcmRfaGFzaCI6IiQyYSQwNSRzVmliQ3RKdldWS3FOUExwMy5iLmFlMTQvSFBqRmZsU2xERWhjTjV4M2NxTmUzUlhER0ZEUyIsInBpY3R1cmVfdXJpIjpudWxsLCJjcmVhdGVkX2F0IjoiMjAyMy0wNC0wMlQxMTo0Mzo0OS41MDZaIiwidXBkYXRlZF9hdCI6IjIwMjMtMDQtMDJUMTE6NDM6NDkuNTA2WiIsImdlbmRlcklkIjoxLCJiaXJ0aGRheSI6IjIwMDYtMDQtMDQiLCJjcGYiOiI0OTYyMDk2ODg1OSIsInR5cGVvZiI6IkNPU1RVTUVSIn0sImlhdCI6MTY4MDYxMzI0MiwiZXhwIjoxNjgxMjE4MDQyfQ.J5w-WZj6TXhusIpAO8ne8wifb-kVoTB4Y6gYJkuzdu0"}
+            query: { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImlkIjoxLCJuYW1lIjoiQmFyYmllIiwiZW1haWwiOiJ0ZXN0ZUBnbWFpbC5jb20iLCJwYXNzd29yZF9oYXNoIjoiJDJhJDA2JE1SZXZzUjRzQ1hsajNqTkZwYTh2U2VmMWhKRllPWUxuNjZrQnY5UUVEdkhaWVhZVEIzQnZTIiwicGljdHVyZV91cmkiOiJodHRwczovL3N0b3JhZ2UuZ29vZ2xlYXBpcy5jb20vdGNjLXl2eXBvcmEuYXBwc3BvdC5jb20vMTY4MTkwMzI4OTkzOC53ZWJwIiwiY3JlYXRlZF9hdCI6IjIwMjMtMDQtMTdUMTM6NTk6MjguMTA1WiIsInVwZGF0ZWRfYXQiOiIyMDIzLTA0LTE5VDExOjIxOjQ3LjU3MFoiLCJnZW5kZXJJZCI6MSwiYmlydGhkYXkiOiIyMDA2LTA0LTA0IiwiY3BmIjpudWxsLCJ0eXBlb2YiOiJDT1NUVU1FUiJ9LCJpYXQiOjE2ODE5MTE1MzIsImV4cCI6MTY4MjUxNjMzMn0.f_CKKsm63JoHOCk4R__6MZdnRxcyfHd4Lrrc8GP8BQ8"}
         });
 
         socket.on("travel_accepted", (data) => { console.log(data);})

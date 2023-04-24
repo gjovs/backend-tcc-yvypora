@@ -30,6 +30,9 @@ export class PictureController {
 
     let status;
 
+    console.log("myuser", req.user);
+    
+
     if (userType === TypeOfUser.COSTUMER) {
       const user = await User.findCostumerById(id);
 
