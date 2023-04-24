@@ -1,4 +1,4 @@
-import db from '../libs/prisma';
+import db from "../libs/prisma";
 
 class OrderService {
   async get(intent_payment_id: string) {
@@ -22,7 +22,7 @@ class OrderService {
               products_in_shopping_list: {
                 include: {
                   product: {
-                    include: {  
+                    include: {
                       marketer: {
                         include: {
                           location: true,
@@ -44,14 +44,14 @@ class OrderService {
   }
 
   async createIntent(data: {
-    total: number,
-    freight: number,
+    total: number;
+    freight: number;
     costumer: {
-      id: number,
-      address_id: number
-    },
-    products: { id: number, amount: number }[],
-    intent_payment_id: string,
+      id: number;
+      address_id: number;
+    };
+    products: { id: number; amount: number }[];
+    intent_payment_id: string;
   }) {
     try {
       const order = await db.order.create({
@@ -87,7 +87,11 @@ class OrderService {
     }
   }
 
-  async updatePaymentStatus(status: boolean, payment_details: string, intent_payment_id: string) {
+  async updatePaymentStatus(
+    status: boolean,
+    payment_details: string,
+    intent_payment_id: string
+  ) {
     try {
       await db.order.update({
         where: { intent_payment_id },
@@ -110,6 +114,19 @@ class OrderService {
     } catch (e) {
       return false;
     }
+  }
+
+  async getLast() {
+    const lastOrder = await db.order.groupBy({
+      orderBy: {
+        created_at: "desc",
+      },
+      take: 1,
+      by: ["created_at", "id", "intent_payment_id"],
+    });
+    
+
+    return lastOrder[0];
   }
 }
 

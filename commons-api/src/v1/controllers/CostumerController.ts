@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { hashPassword, isValidDate } from "../utils/utils";
 import { Costumer, OsmService, User } from "../services";
 import { genToken } from "../utils/token";
+import costumerService from "../services/costumer.service";
 
 export class CostumerController {
   async create(
@@ -131,19 +132,13 @@ export class CostumerController {
       });
     }
 
-    const newDetails = await User.findCostumerByEmail(
-      res?.data?.email as string
-    );
-
-    console.log("detalhes", newDetails);
-    
-    
+    const newDetails = await User.findCostumerById(parseInt(id, 10));
 
     const newToken = genToken({
       payload: { ...newDetails, typeof: "COSTUMER" },
     });
 
-    return rep.send({ data: res?.data, newToken });
+    return rep.send({ data: { ...res?.data, newToken } });
   }
 
   async delete(
@@ -176,6 +171,16 @@ export class CostumerController {
       });
     }
     return rep.send(res?.data);
+  }
+
+  async listAddress(req: FastifyRequest, rep: FastifyReply) {
+    // @ts-ignore
+    const { id } = req.user;
+    
+    const addresses = await Costumer.listAddress(id)
+
+
+    return addresses
   }
 }
 

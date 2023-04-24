@@ -21,7 +21,7 @@ export default async function productRoutes(server: FastifyInstance) {
     },
     ProductController.index
   );
-
+    
   server.get("/:id", ProductController.get);
 
   server.get("/inSaleOff", ProductController.inSaleOff);

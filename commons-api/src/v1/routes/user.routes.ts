@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { TypeOfUser } from "../services/utils/enums";
 import { User } from "../services";
+import { CostumerController } from "../controllers";
 
 export default async function (server: FastifyInstance) {
   server.get(
@@ -55,4 +56,5 @@ export default async function (server: FastifyInstance) {
       });
     }
   );
+  server.get('/address', { onRequest: [server.auth] }, CostumerController.listAddress)
 }

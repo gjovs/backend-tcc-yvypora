@@ -33,6 +33,19 @@ class UserService {
         where: { id },
         include: {
           gender: true,
+          costumer_addresses: {
+            include: {
+              address: {
+                include: {
+                  city: true,
+                  location: true,
+                  type: true,
+                  uf: true,
+                  neighborhood: true
+                },
+              },
+            },
+          },
         },
       });
       return res;

@@ -75,6 +75,9 @@ export class ProductController {
       console.log(data.price, data.quantity);
     }
 
+    console.log(req.user.id);
+    
+
     // @ts-ignore
     const res = await Product.create(data, req.user.id);
 

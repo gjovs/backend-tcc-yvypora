@@ -68,8 +68,12 @@ class FormFieldService {
         id: true,
         name: true,
       },
+      where: {
+        name: {
+          not: "Feira"
+        }
+      }
     });
-
     return res;
   }
 

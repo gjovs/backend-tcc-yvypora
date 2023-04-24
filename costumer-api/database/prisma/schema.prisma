@@ -131,7 +131,7 @@ model product {
   marketerId                Int
   created_at                DateTime                    @default(now())
   updated_at                DateTime                    @updatedAt
-  description               String
+  description               String                      @db.VarChar(512)
   category_of_productId     Int
   type_of_productId         Int
   image_of_product          image_of_product[]
@@ -144,9 +144,9 @@ model product {
   @@index([marketerId], map: "product_marketerId_fkey")
   @@index([category_of_productId], map: "product_category_of_productId_fkey")
   @@index([type_of_productId], map: "product_type_of_productId_fkey")
-  @@fulltext([description])
-  @@fulltext([name, description])
-  @@fulltext([name])
+  @@index([description])
+  @@index([name, description])
+  @@index([name])
 }
 
 model marketer {
@@ -172,7 +172,7 @@ model marketer {
   products       product[]
 
   @@index([genderId], map: "marketer_genderId_fkey")
-  @@fulltext([name])
+  @@index([name])
 }
 
 model fair {
@@ -190,7 +190,7 @@ model fair {
   image                  image[]
 
   @@index([locationId], map: "fair_locationId_fkey")
-  @@fulltext([name])
+  @@index([name])
 }
 
 model fair_marketers {
@@ -236,6 +236,7 @@ model location {
 model address {
   id                 Int                  @id @unique @default(autoincrement())
   cep                String
+  logradouro         String
   number             Int
   created_at         DateTime             @default(now())
   updated_at         DateTime             @updatedAt

@@ -35,6 +35,8 @@ class PurchaseController {
       }));
 
       const session = await createSession(data_products);
+      console.log(session);
+      
 
       await OrderService.createIntent({
         total: session.amount_total as number,
@@ -43,7 +45,8 @@ class PurchaseController {
         products,
         intent_payment_id: session.id,
       });
-
+      
+      
       return rep.send({ code: 200, data: session.url });
     } catch (e) {
       if (e instanceof Error) {

@@ -47,12 +47,14 @@ class SocketConnector {
       if (decoded.payload.typeof === "COSTUMER") {
         socket.join(String("costumer_" + decoded.payload.id.toString()));
         console.log("new costumer is online");
+        return;
       }
 
       if (decoded.payload.typeof === "MARKETER") {
         socket.join(String("marketer_" + decoded.payload.id.toString()));
         console.log("new marketer is online");
         await StatusService.marketer(true, decoded.payload.id);
+        return;
       }
       console.log("new deliveryman is online");
 

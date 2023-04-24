@@ -6,6 +6,7 @@ export interface IAddressOSM {
   neighborhood: string;
   complemento: string;
   number: number;
+  addressTypeId: number;
   latitude: number;
   longitude: number;
 }

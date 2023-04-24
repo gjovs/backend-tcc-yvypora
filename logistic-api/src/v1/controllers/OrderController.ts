@@ -8,9 +8,17 @@ import { wss } from "../WebSocket";
 class OrderController {
   async toQueue(args: { intent_payment_id: string }) {
     const { intent_payment_id } = args;
+    
+    console.log("Initing Search...", intent_payment_id);
+
+    if (!intent_payment_id) return;
+
     const order = await OrderService.get(intent_payment_id);
 
+    console.log(order);
+
     if (!order) {
+      console.log("false");
       return false;
     }
 
@@ -74,7 +82,7 @@ class OrderController {
 
     const roomId = approachablesDeliverys[0].id.toString();
     const data = { route: googleRoute.data, order };
-    
+
     // send to best deliveryman
     wss.sendMessage(roomId, "intent_of_travel", data);
 
