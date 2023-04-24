@@ -26,6 +26,7 @@ class Fair {
           },
           address: {
             create: {
+              logradouro: '',
               location: {
                 create: {
                   latitude: data.address.latitude,
@@ -65,7 +66,8 @@ class Fair {
               },
               complemento: data.address.complemento,
               type: {
-                connect: { id: 3 },
+                connect: { id: 
+                  5 },
               },
               number: data.address.number,
             },

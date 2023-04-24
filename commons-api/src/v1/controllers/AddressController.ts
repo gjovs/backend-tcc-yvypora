@@ -36,7 +36,7 @@ export class AddressController {
       });
     }
 
-    const osmAddressRes = OsmService.getGeocoding(address);
+    const osmAddressRes = await OsmService.getGeocoding(address);
 
     if (!osmAddressRes) {
       rep.code(400).send({
@@ -47,7 +47,7 @@ export class AddressController {
 
     const res = await Costumer.addNewCostumerAddress({
       // @ts-ignore
-      osmAddressRes,
+      address: osmAddressRes,
       id: parseInt(id, 10),
     });
 

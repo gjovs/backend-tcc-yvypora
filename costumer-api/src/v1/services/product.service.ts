@@ -3,9 +3,8 @@ import { getDayOfWeek } from "../utils";
 import { orderByDistance } from "geolib";
 
 class ProductService {
-
   public async index() {
-    return (await db.product.findMany())
+    return await db.product.findMany();
   }
   // filters
   private async byPrice(lte: number, gte: number, data: any) {
@@ -172,13 +171,31 @@ class ProductService {
       where: { id },
       include: {
         sale_off: true,
+        marketer: true,
         image_of_product: {
           include: {
             image: true,
           },
         },
+        type_of_price: true,
+        category_of_product: true,
       },
     });
+
+    const count_in_orders = await db.order.count({
+      where: {
+        shopping_list: {
+          products_in_shopping_list: {
+            some: {
+              productId: id,
+            },
+          },
+        },
+      },
+    });
+
+    // @ts-ignore
+    product.order_count = count_in_orders
 
     return product;
   }

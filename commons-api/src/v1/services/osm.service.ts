@@ -16,6 +16,7 @@ class OSMService {
       logradouro: address.logradouro,
       latitude: 0,
       longitude: 0,
+      addressTypeId: address.addressTypeId,
     };
 
     try {

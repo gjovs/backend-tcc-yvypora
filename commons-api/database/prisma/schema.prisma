@@ -235,6 +235,7 @@ model location {
 model address {
   id                 Int                  @id @unique @default(autoincrement())
   cep                String
+  logradouro         String
   number             Int
   created_at         DateTime             @default(now())
   updated_at         DateTime             @updatedAt

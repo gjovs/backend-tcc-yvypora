@@ -1,6 +1,8 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { hashPassword, isValidDate } from '../utils/utils';
-import { Costumer, OsmService } from '../services';
+import { FastifyReply, FastifyRequest } from "fastify";
+import { hashPassword, isValidDate } from "../utils/utils";
+import { Costumer, OsmService, User } from "../services";
+import { genToken } from "../utils/token";
+import costumerService from "../services/costumer.service";
 
 export class CostumerController {
   async create(
@@ -23,20 +25,18 @@ export class CostumerController {
         };
       };
     }>,
-    rep: FastifyReply,
+    rep: FastifyReply
   ) {
     const { body } = req;
 
-    const {
-      name, email, password, address, gender, birthday,
-    } = body;
+    const { name, email, password, address, gender, birthday } = body;
 
     if (!isValidDate(birthday)) {
       return rep.status(400).send({
         code: 400,
         error: true,
         message:
-          'Date format to attribute birthday is wrong, need to be yyyy-mm-dd',
+          "Date format to attribute birthday is wrong, need to be yyyy-mm-dd",
       });
     }
 
@@ -44,28 +44,27 @@ export class CostumerController {
     let genderId = 1;
 
     // female id
-    if (gender.toUpperCase() === 'F') genderId = 2;
+    if (gender.toUpperCase() === "F") genderId = 2;
 
     const password_hash = await hashPassword(password);
 
-    const addressWithLocation = await OsmService.getGeocoding(address)
+    const addressWithLocation = await OsmService.getGeocoding(address);
 
     console.log(addressWithLocation);
 
-    if(!addressWithLocation) {
+    if (!addressWithLocation) {
       return rep.status(400).send({
         code: 400,
         error: true,
-        message: "This address is not valid to be saveable"
-      })
+        message: "This address is not valid to be saveable",
+      });
     }
-    
 
     const res = await Costumer.createCostumer({
       name,
       email,
       password: password_hash,
-      address: {...addressWithLocation, addressTypeId:  1 },
+      address: { ...addressWithLocation, addressTypeId: 1 },
       gender: genderId,
       birthday,
     });
@@ -94,7 +93,7 @@ export class CostumerController {
         id: string;
       };
     }>,
-    rep: FastifyReply,
+    rep: FastifyReply
   ) {
     const { id } = req.params;
     const { body } = req;
@@ -110,11 +109,10 @@ export class CostumerController {
           code: 400,
           error: true,
           message:
-            'Date format to attribute birthday is wrong, need to be yyyy-mm-dd',
+            "Date format to attribute birthday is wrong, need to be yyyy-mm-dd",
         });
       }
     }
-
 
     const res = await Costumer.updateCostumer({
       name: body.name,
@@ -122,7 +120,7 @@ export class CostumerController {
       email: body.email,
       id: parseInt(id, 10),
       birthday: body.birthday,
-      cpf: body.cpf
+      cpf: body.cpf,
     });
 
     if (res?.error) {
@@ -133,7 +131,13 @@ export class CostumerController {
       });
     }
 
-    return rep.send(res?.data);
+    const newDetails = await User.findCostumerById(parseInt(id, 10));
+
+    const newToken = genToken({
+      payload: { ...newDetails, typeof: "COSTUMER" },
+    });
+
+    return rep.send({ data: { ...res?.data, newToken } });
   }
 
   async delete(
@@ -142,7 +146,7 @@ export class CostumerController {
         id: string;
       };
     }>,
-    rep: FastifyReply,
+    rep: FastifyReply
   ) {
     const { id } = req.params;
 
@@ -152,7 +156,7 @@ export class CostumerController {
     if (!exists.data) {
       return rep.status(404).send({
         error: true,
-        message: 'This costumer do not exist',
+        message: "This costumer do not exist",
       });
     }
 
@@ -166,6 +170,16 @@ export class CostumerController {
       });
     }
     return rep.send(res?.data);
+  }
+
+  async listAddress(req: FastifyRequest, rep: FastifyReply) {
+    // @ts-ignore
+    const { id } = req.user;
+    
+    const addresses = await Costumer.listAddress(id)
+
+
+    return addresses
   }
 }
 

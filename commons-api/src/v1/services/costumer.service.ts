@@ -1,3 +1,4 @@
+import { log } from "console";
 import db from "../libs/prisma";
 
 import { IAddressOSM } from "../utils/interfaces";
@@ -49,6 +50,7 @@ class CostumerService {
     try {
       const address = await db.address.create({
         data: {
+          logradouro: data.address.logradouro,
           number: data.address.number,
           complemento: data.address.complemento,
           cep: data.address.cep,
@@ -109,7 +111,7 @@ class CostumerService {
           email: data.email,
           costumer_addresses: {
             create: {
-              addressId: address.id
+              addressId: address.id,
             },
           },
         },
@@ -181,7 +183,7 @@ class CostumerService {
     email: string;
     password_hash: string | null;
     birthday: string;
-    cpf: string
+    cpf: string;
   }) {
     try {
       if (data.password_hash) {
@@ -232,6 +234,8 @@ class CostumerService {
 
   async addNewCostumerAddress(data: { address: IAddress; id: number }) {
     try {
+      console.log(data.address);
+
       await db.costumer.update({
         where: { id: data.id },
         data: {
@@ -239,6 +243,7 @@ class CostumerService {
             create: {
               address: {
                 create: {
+                  logradouro: data.address.logradouro,
                   location: {
                     create: {
                       latitude: data.address.latitude,
@@ -296,6 +301,7 @@ class CostumerService {
       };
     } catch (error) {
       if (error instanceof Error) {
+        console.log(error);
         return {
           error: true,
           message: "Failed to append new address in this costumer",
@@ -315,6 +321,30 @@ class CostumerService {
     } catch (error) {
       if (error instanceof Error) {
         return { error: true, message: "Failed to delete this address" };
+      }
+    }
+  }
+
+  async listAddress(id: number) {
+    try {
+      const addresses = await db.costumer_addresses.findMany({
+        where: { costumerId: id },
+        include: {
+          _count: true,
+          address: {
+            include: {
+              city: true,
+              uf: true,
+              neighborhood: true,
+              type: true,
+            },
+          },
+        },
+      });
+      return addresses;
+    } catch (error) {
+      if (error instanceof Error) {
+        return { error: true, message: "Failed to list addresses" };
       }
     }
   }
