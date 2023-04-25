@@ -30,6 +30,7 @@
     }
     function acceptedTravel(data, socket) {
         socket.emit("intent_of_travel", { order: data.order, accepted: true })
+        localStorage.setItem('travel', JSON.stringify({ order: data.order, accepted: true }))
     }
     function loadNotification(data, socket) {
         const swalWithBootstrapButtons = Swal.mixin({

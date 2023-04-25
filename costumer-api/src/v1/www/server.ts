@@ -7,7 +7,7 @@ async function run() {
     port: 3334,
   });
 
-  await KafkaProducer.run()
+  // await KafkaProducer.run()
 }
 
 run();

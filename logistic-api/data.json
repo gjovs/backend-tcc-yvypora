@@ -1,0 +1,97 @@
+  {
+    "geocoded_waypoints": [
+      {
+        "geocoder_status": "OK",
+        "place_id": "ChIJszdTUEUBz5QRSaNirI-8zQw",
+        "types": [
+          "establishment",
+          "food",
+          "grocery_or_supermarket",
+          "point_of_interest",
+          "store"
+        ]
+      },
+      {
+        "geocoder_status": "OK",
+        "place_id": "ChIJszdTUEUBz5QRSaNirI-8zQw",
+        "types": [
+          "establishment",
+          "food",
+          "grocery_or_supermarket",
+          "point_of_interest",
+          "store"
+        ]
+      }
+    ],
+    "routes": [
+      {
+        "bounds": {
+          "northeast": {
+            "lat": -23.531963,
+            "lng": -46.8928214
+          },
+          "southwest": {
+            "lat": -23.531963,
+            "lng": -46.8928214
+          }
+        },
+        "copyrights": "Map data ©2023",
+        "legs": [
+          {
+            "distance": {
+              "text": "1 m",
+              "value": 0
+            },
+            "duration": {
+              "text": "1 min",
+              "value": 0
+            },
+            "end_address": "Av. João Vicente do Nascimento, 700 - Nucleo Micro Industrial Pres. Wilson, Jandira - SP, 06602-220, Brazil",
+            "end_location": {
+              "lat": -23.531963,
+              "lng": -46.8928214
+            },
+            "start_address": "Av. João Vicente do Nascimento, 700 - Nucleo Micro Industrial Pres. Wilson, Jandira - SP, 06602-220, Brazil",
+            "start_location": {
+              "lat": -23.531963,
+              "lng": -46.8928214
+            },
+            "steps": [
+              {
+                "distance": {
+                  "text": "1 m",
+                  "value": 0
+                },
+                "duration": {
+                  "text": "1 min",
+                  "value": 0
+                },
+                "end_location": {
+                  "lat": -23.531963,
+                  "lng": -46.8928214
+                },
+                "html_instructions": "Head",
+                "polyline": {
+                  "points": "vasnCbwe}G"
+                },
+                "start_location": {
+                  "lat": -23.531963,
+                  "lng": -46.8928214
+                },
+                "travel_mode": "DRIVING"
+              }
+            ],
+            "traffic_speed_entry": [],
+            "via_waypoint": []
+          }
+        ],
+        "overview_polyline": {
+          "points": "vasnCbwe}G"
+        },
+        "summary": "",
+        "warnings": [],
+        "waypoint_order": []
+      }
+    ],
+    "status": "OK"
+  }

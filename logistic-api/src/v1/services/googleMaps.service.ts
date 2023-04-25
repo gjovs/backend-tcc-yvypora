@@ -25,6 +25,7 @@ class Maps {
             key: process.env.GOOGLE_MAPS_API_KEY as string,
             destination: locations.arrived,
             origin: locations.origin,
+            mode: 'DRIVING'
           },
         });
         console.log("WITHOUT WAYPOINTS");
@@ -40,6 +41,7 @@ class Maps {
           destination: locations.arrived,
           waypoints: locations.waypoints,
           origin: locations.origin,
+          
         },
       });
 

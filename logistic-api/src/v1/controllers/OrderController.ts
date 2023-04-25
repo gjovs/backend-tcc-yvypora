@@ -4,6 +4,7 @@ import DeliverymanService from "../services/deliveryman.service";
 import { LatLng } from "@googlemaps/google-maps-services-js";
 import { getMoreDistanceLocal, getMoreNeareastDeliverys } from "../utils/utils";
 import { wss } from "../WebSocket";
+import * as fs from 'fs';
 
 class OrderController {
   async toQueue(args: { intent_payment_id: string }) {
@@ -48,6 +49,9 @@ class OrderController {
       })
     );
 
+    console.log(costumerLatLng, waypoints);
+    
+
     const listOfAvailableDeliverys = await DeliverymanService.listByOnline();
 
     const approachablesDeliverys = getMoreNeareastDeliverys(
@@ -75,7 +79,8 @@ class OrderController {
       return false;
     }
 
-    console.info(googleRoute);
+    console.info(googleRoute.data);
+    fs.writeFileSync('./data.json', JSON.stringify(googleRoute.data, null, 2) , 'utf-8');
     console.info("lista de deliverys", listOfAvailableDeliverys);
     console.info("start point", startPoint);
     console.info("list de deliverys acesseveis", approachablesDeliverys);

@@ -42,7 +42,6 @@ class SocketConnector {
         socket.disconnect();
         return false;
       }
-      console.log(decoded.payload);
 
       if (decoded.payload.typeof === "COSTUMER") {
         socket.join(String("costumer_" + decoded.payload.id.toString()));
