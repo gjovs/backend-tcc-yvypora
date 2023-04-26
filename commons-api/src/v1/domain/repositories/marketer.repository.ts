@@ -1,5 +1,5 @@
-import { IMarketer } from "../dao/models/marketer";
-import db from "../libs/prisma";
+import { IMarketer } from "../models/marketer";
+import db from "../../libs/prisma";
 
 class MarketerRepository {
   async createMarketer(data: IMarketer) {

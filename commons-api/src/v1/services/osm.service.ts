@@ -1,6 +1,6 @@
 import axios from "axios";
-import { IAddressOSM } from "../dao/dto/OSMAddress";
-import IAddress from "../dao/models/address";
+import { IAddressOSM } from "../domain/dto/OSMAddress";
+import IAddress from "../domain/models/address";
 
 class OSMService {
   private BASE_OSM_URL =

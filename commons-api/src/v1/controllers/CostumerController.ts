@@ -1,11 +1,11 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { getGender, hashPassword, isValidDate } from "../utils/utils";
 import { OsmService } from "../services";
-import { CostumerRepository, UserRepository } from "../repositories";
+import { CostumerRepository, UserRepository } from "../domain/repositories";
 import { genToken } from "../utils/utils";
-import ICostumer from "../dao/models/costumer";
-import IAddress from "../dao/models/address";
-import DecodedToken from "../dao/dto/DecodedToken";
+import ICostumer from "../domain/models/costumer";
+import IAddress from "../domain/models/address";
+import DecodedToken from "../domain/dto/DecodedToken";
 
 export class CostumerController {
   async create(

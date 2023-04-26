@@ -1,6 +1,6 @@
-import db from "../libs/prisma";
-import ICostumer from "../dao/models/costumer";
-import { IAddressOSM } from "../dao/dto/OSMAddress";
+import db from "../../libs/prisma";
+import ICostumer from "../models/costumer";
+import { IAddressOSM } from "../dto/OSMAddress";
 
 class CostumerRepository {
   async getCostumer(id: number) {
@@ -126,7 +126,7 @@ class CostumerRepository {
       return { data: res, error: false };
     } catch (error) {
       if (error instanceof Error) {
-        console.log(error)
+        console.log(error);
         return {
           error: true,
           message: "Failed to save a new CostumerService in Database",
@@ -219,8 +219,6 @@ class CostumerRepository {
 
   async addNewCostumerAddress(data: { address: IAddressOSM; id: number }) {
     try {
-      
-
       await db.costumer.update({
         where: { id: data.id },
         data: {

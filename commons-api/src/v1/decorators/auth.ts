@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import DecodedToken from "../dao/dto/DecodedToken";
+import DecodedToken from "../domain/dto/DecodedToken";
 
 export default async (req: FastifyRequest, rep: FastifyReply) => {
   try {

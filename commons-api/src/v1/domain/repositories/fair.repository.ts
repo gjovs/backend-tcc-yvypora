@@ -1,4 +1,4 @@
-import db from '../libs/prisma';
+import db from "../../libs/prisma";
 
 class FairRepository {
   async index() {
@@ -7,13 +7,17 @@ class FairRepository {
         location: true,
       },
     });
-    await Promise.all(res.map(async (idx, data) => {
-      // @ts-ignore
-      const counter = await db.fair_marketers.count({ where: { fairId: data.id } });
+    await Promise.all(
+      res.map(async (idx, data) => {
+        // @ts-ignore
+        const counter = await db.fair_marketers.count({
+          where: { fairId: data.id },
+        });
 
-      // @ts-ignore
-      // res[idx].marketer_count = counter;
-    }));
+        // @ts-ignore
+        // res[idx].marketer_count = counter;
+      })
+    );
 
     res.forEach((fair: any) => {
       const { latitude, longitude } = fair.location;

@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { TypeOfUser } from "../services/utils/enums";
-import { UserRepository } from "../repositories";
+import { UserRepository } from "../domain/repositories";
 import FirebaseService from "../services/firebase.service";
-import DecodedToken from "../dao/dto/DecodedToken";
+import DecodedToken from "../domain/dto/DecodedToken";
 
 export class PictureController {
   async appendToUser(

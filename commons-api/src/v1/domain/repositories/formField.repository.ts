@@ -1,4 +1,4 @@
-import db from "../libs/prisma";
+import db from "../../libs/prisma";
 
 class FormFieldRepository {
   async indexGender() {
@@ -70,9 +70,9 @@ class FormFieldRepository {
       },
       where: {
         name: {
-          not: "Feira"
-        }
-      }
+          not: "Feira",
+        },
+      },
     });
     return res;
   }

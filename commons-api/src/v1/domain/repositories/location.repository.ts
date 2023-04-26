@@ -1,7 +1,7 @@
-import db from '../libs/prisma';
+import db from "../../libs/prisma";
 
 class LocationRepository {
-  async updateLocation(data: { lat: number, long: number, id: number}) {
+  async updateLocation(data: { lat: number; long: number; id: number }) {
     await db.location.update({
       where: {
         id: data.id,

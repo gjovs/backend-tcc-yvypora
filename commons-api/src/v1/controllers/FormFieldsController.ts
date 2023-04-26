@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { orderByDistance } from "geolib";
-import { FairRepository, FormFieldRepository } from "../repositories";
-import { ILocation } from "../dao/dto/Location";
+import { FairRepository, FormFieldRepository } from "../domain/repositories";
+import { ILocation } from "../domain/dto/Location";
 
 export class FormFieldsController {
   async listCategories(_req: FastifyRequest, rep: FastifyReply) {

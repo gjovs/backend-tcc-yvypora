@@ -1,13 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { OsmService } from "../services";
-import { CostumerRepository } from "../repositories";
-import IAddress from "../dao/models/address";
+import { CostumerRepository } from "../domain/repositories";
+import IAddress from "../domain/models/address";
 
 export class AddressController {
   async addToCostumer(
     req: FastifyRequest<{
       Body: {
-        address: IAddress
+        address: IAddress;
       };
       Params: {
         id: string;
@@ -63,7 +63,9 @@ export class AddressController {
   ) {
     const { id } = req.params;
 
-    const res = await CostumerRepository.deleteCostumerAddress(parseInt(id, 10));
+    const res = await CostumerRepository.deleteCostumerAddress(
+      parseInt(id, 10)
+    );
 
     if (res?.error) {
       // @ts-ignore

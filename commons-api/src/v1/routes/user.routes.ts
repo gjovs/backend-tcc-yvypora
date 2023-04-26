@@ -2,7 +2,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { TypeOfUser } from "../services/utils/enums";
 import { User } from "../services";
 import { CostumerController } from "../controllers";
-import DecodedToken from "../dao/dto/DecodedToken";
+import DecodedToken from "../domain/dto/DecodedToken";
 
 export default async function (server: FastifyInstance) {
   server.get(
