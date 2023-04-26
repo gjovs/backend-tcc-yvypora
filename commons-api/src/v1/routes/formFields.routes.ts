@@ -1,5 +1,6 @@
-import { FastifyInstance, FastifyRequest } from "fastify";
+import { FastifyInstance } from "fastify";
 import { FormFieldsController } from "../controllers";
+import { locationSchema } from "../schemas/location.schema";
 
 export default async function formFieldsRoutes(server: FastifyInstance) {
   server.get("/categories", FormFieldsController.listCategories);
@@ -9,16 +10,7 @@ export default async function formFieldsRoutes(server: FastifyInstance) {
   server.get(
     "/marketer",
     {
-      schema: {
-        querystring: {
-          type: "object",
-          required: ["lat", "long"],
-          properties: {
-            lat: { type: "number" },
-            long: { type: "number" },
-          },
-        },
-      },
+      schema: locationSchema
     },
     FormFieldsController.forMarketer
   );
@@ -28,16 +20,7 @@ export default async function formFieldsRoutes(server: FastifyInstance) {
   server.get(
     "/fairs",
     {
-      schema: {
-        querystring: {
-          type: "object",
-          required: ["lat", "long"],
-          properties: {
-            lat: { type: "number" },
-            long: { type: "number" },
-          },
-        },
-      },
+      schema: locationSchema
     },
     FormFieldsController.listCloseFairs
   );

@@ -1,21 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { Costumer, OsmService } from "../services";
-import { IAddressOSM } from "../utils/interfaces";
+import IAddress from "../dao/models/address";
 
 export class AddressController {
   async addToCostumer(
     req: FastifyRequest<{
       Body: {
-        address: {
-          cep: string;
-          complemento: string;
-          addressTypeId: number;
-          number: number;
-          city: string;
-          uf: string;
-          neighborhood: string;
-          logradouro: string;
-        };
+        address: IAddress
       };
       Params: {
         id: string;

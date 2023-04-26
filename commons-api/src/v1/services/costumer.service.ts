@@ -1,11 +1,6 @@
-import { log } from "console";
 import db from "../libs/prisma";
-
-import { IAddressOSM } from "../utils/interfaces";
-
-interface IAddress extends IAddressOSM {
-  addressTypeId: number;
-}
+import ICostumer from "../dao/models/costumer";
+import { IAddressOSM } from "../dao/dto/OSMAddress";
 
 class CostumerService {
   async getCostumer(id: number) {
@@ -39,14 +34,7 @@ class CostumerService {
     }
   }
 
-  async createCostumer(data: {
-    password: string;
-    name: string;
-    email: string;
-    gender: number;
-    birthday: string;
-    address: IAddress;
-  }) {
+  async createCostumer(data: ICostumer<IAddressOSM>) {
     try {
       const address = await db.address.create({
         data: {
@@ -102,7 +90,7 @@ class CostumerService {
         data: {
           gender: {
             connect: {
-              id: data.gender,
+              id: data.gender as number,
             },
           },
           name: data.name,
@@ -138,7 +126,7 @@ class CostumerService {
       return { data: res, error: false };
     } catch (error) {
       if (error instanceof Error) {
-        console.log(error);
+        console.log(error)
         return {
           error: true,
           message: "Failed to save a new CostumerService in Database",
@@ -148,7 +136,6 @@ class CostumerService {
     }
   }
 
-  // TODO create a sql script to delete in cascade to save process in DB
   async deleteCostumer(id: number) {
     try {
       const addresses = await db.costumer_addresses.findMany({
@@ -160,10 +147,8 @@ class CostumerService {
         },
       });
 
-      // @ts-ignore
       await Promise.all(
         addresses.map(async ({ addressId }) => {
-          // @ts-ignore
           await db.address.delete({ where: { id: addressId as number } });
         })
       );
@@ -232,9 +217,9 @@ class CostumerService {
     }
   }
 
-  async addNewCostumerAddress(data: { address: IAddress; id: number }) {
+  async addNewCostumerAddress(data: { address: IAddressOSM; id: number }) {
     try {
-      console.log(data.address);
+      
 
       await db.costumer.update({
         where: { id: data.id },

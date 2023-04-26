@@ -1,39 +1,25 @@
-import fastifyJwt from "@fastify/jwt";
+import { IMarketer } from "../dao/models/marketer";
 import db from "../libs/prisma";
 
 class MarketerService {
-  async createMarketer(data: {
-    email: string;
-    genderId: number;
-    name: string;
-    password_hash: string;
-    cpf?: string;
-    cnpj?: string;
-    phone: string;
-    birthday: string;
-    tent_name: string;
-    location: {
-      latitude: number;
-      longitude: number;
-    };
-  }) {
+  async createMarketer(data: IMarketer) {
     try {
       const res = await db.marketer.create({
         data: {
-          tent_name: data.tent_name,
+          tent_name: data.tent_name as string,
           gender: {
             connect: {
-              id: data.genderId,
+              id: data.gender as number,
             },
           },
           birthday: data.birthday,
           name: data.name,
           email: data.email,
-          password_hash: data.password_hash,
+          password_hash: data.password as string,
           location: {
             create: {
-              latitude: data.location.latitude,
-              longitude: data.location.longitude,
+              latitude: data.location?.latitude as number,
+              longitude: data.location?.longitude as number,
             },
           },
           cpf: data?.cpf,
@@ -73,7 +59,7 @@ class MarketerService {
 
   async delete(id: number) {
     try {
-      const res = await db.marketer.delete({ where: { id } });
+      await db.marketer.delete({ where: { id } });
       return { error: false, message: "Success deleted marketer!" };
     } catch (error) {
       console.log(error);
@@ -83,25 +69,15 @@ class MarketerService {
     }
   }
 
-  async update(data: {
-    password_hash: any;
-    cpf: any;
-    name: string;
-    cnpj: any;
-    email: string;
-    id: number;
-    tent_name: string;
-    birthday: string;
-    phone: string;
-  }) {
+  async update(data: IMarketer) {
     try {
-      if (data.password_hash) {
+      if (data.password) {
         await db.marketer.update({
           where: {
             id: data.id,
           },
           data: {
-            password_hash: data.password_hash,
+            password_hash: data.password,
           },
         });
       }
@@ -121,7 +97,7 @@ class MarketerService {
       return { error: false, message: "Success updated marketer!" };
     } catch (error) {
       console.log(error);
-      
+
       if (error instanceof Error) {
         return { error: true, message: "Failed to update marketer", code: 401 };
       }

@@ -92,7 +92,7 @@ export class ProductController {
 
   async nearToClient(req: FastifyRequest, rep: FastifyReply) {
     // @ts-ignore
-    const { id } = req.user;
+    const { id } = req.user as DecodedToken;
 
     const res = await ProductService.findNearest(id);
 

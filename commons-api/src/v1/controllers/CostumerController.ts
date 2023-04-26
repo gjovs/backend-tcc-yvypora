@@ -1,29 +1,15 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { hashPassword, isValidDate } from "../utils/utils";
+import { getGender, hashPassword, isValidDate } from "../utils/utils";
 import { Costumer, OsmService, User } from "../services";
-import { genToken } from "../utils/token";
-import costumerService from "../services/costumer.service";
+import { genToken } from "../utils/utils";
+import ICostumer from "../dao/models/costumer";
+import IAddress from "../dao/models/address";
+import DecodedToken from "../dao/dto/DecodedToken";
 
 export class CostumerController {
   async create(
     req: FastifyRequest<{
-      Body: {
-        password: string;
-        name: string;
-        email: string;
-        gender: string;
-        birthday: string;
-        address: {
-          cep: string;
-          complemento: string;
-          addressTypeId: number;
-          number: number;
-          city: string;
-          uf: string;
-          neighborhood: string;
-          logradouro: string;
-        };
-      };
+      Body: ICostumer<IAddress>;
     }>,
     rep: FastifyReply
   ) {
@@ -40,17 +26,11 @@ export class CostumerController {
       });
     }
 
-    // male Default
-    let genderId = 1;
-
-    // female id
-    if (gender.toUpperCase() === "F") genderId = 2;
+    const genderId = getGender(gender as string);
 
     const password_hash = await hashPassword(password);
 
     const addressWithLocation = await OsmService.getGeocoding(address);
-
-    console.log(addressWithLocation);
 
     if (!addressWithLocation) {
       return rep.status(400).send({
@@ -67,11 +47,11 @@ export class CostumerController {
       address: { ...addressWithLocation, addressTypeId: 1 },
       gender: genderId,
       birthday,
+      cpf: "",
     });
 
     if (res?.error) {
-      // @ts-ignore
-      return rep.status(res?.code).send({
+      return rep.status(res?.code ? res.code : 400).send({
         error: true,
         cause: res.message,
       });
@@ -82,13 +62,7 @@ export class CostumerController {
 
   async update(
     req: FastifyRequest<{
-      Body: {
-        name: string;
-        email: string;
-        password: string;
-        birthday: string;
-        cpf: string;
-      };
+      Body: ICostumer<IAddress>;
       Params: {
         id: string;
       };
@@ -97,7 +71,7 @@ export class CostumerController {
   ) {
     const { id } = req.params;
     const { body } = req;
-    
+
     let password_hash = null;
 
     if (body.password) {
@@ -174,13 +148,9 @@ export class CostumerController {
   }
 
   async listAddress(req: FastifyRequest, rep: FastifyReply) {
-    // @ts-ignore
-    const { id } = req.user;
-    
-    const addresses = await Costumer.listAddress(id)
-
-
-    return addresses
+    const { id } = req.user as DecodedToken;
+    const addresses = await Costumer.listAddress(id);
+    return addresses;
   }
 }
 

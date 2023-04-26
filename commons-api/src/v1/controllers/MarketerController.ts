@@ -1,26 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { hashPassword, isValidDate } from "../utils/utils";
+import { getGender, hashPassword, isValidDate } from "../utils/utils";
 import { Marketer, User } from "../services";
-import { genToken } from "../utils/token";
+import { genToken } from "../utils/utils";
+import { IMarketer } from "../dao/models/marketer";
 
 export class MarketerController {
   async create(
     req: FastifyRequest<{
-      Body: {
-        name: string;
-        cnpj: string;
-        cpf: string;
-        email: string;
-        password: string;
-        phone: string;
-        birthday: string;
-        location: {
-          longitude: number;
-          latitude: number;
-        };
-        gender: string;
-        tent_name: string;
-      };
+      Body: IMarketer;
     }>,
     rep: FastifyReply
   ) {
@@ -54,21 +41,17 @@ export class MarketerController {
       });
     }
 
-    const password_hash = await hashPassword(password);
+    const password_hash = await hashPassword(password as string);
 
-    // male Default
-    let genderId = 1;
-
-    // female id
-    if (gender.toUpperCase() === "F") genderId = 2;
+    const genderId = getGender(gender as string);
 
     const data = {
       location,
       email,
       name,
-      password_hash,
+      password: password_hash,
       phone,
-      genderId,
+      gender: genderId,
       birthday,
       tent_name,
     };
@@ -114,17 +97,7 @@ export class MarketerController {
       Params: {
         id: string;
       };
-      Body: {
-        name: string;
-        password: string | null;
-        cpf: string | null;
-        cnpj: string | null;
-        email: string;
-        gender: string;
-        tent_name: string;
-        birthday: string;
-        phone: string;
-      };
+      Body: IMarketer;
     }>,
     rep: FastifyReply
   ) {
@@ -167,7 +140,7 @@ export class MarketerController {
       id: parseInt(id, 10),
       cnpj: newCnpj,
       cpf: newCpf,
-      password_hash: newPassword,
+      password: newPassword,
       email,
       tent_name,
       name,
@@ -185,7 +158,9 @@ export class MarketerController {
 
     const newDetails = await User.findMarketerByEmail(email);
 
-    const newToken = genToken({ payload: {...newDetails, typeof: "MARKETER"} });
+    const newToken = genToken({
+      payload: { ...newDetails, typeof: "MARKETER" },
+    });
 
     return rep.send({ message: res?.message, newToken });
   }

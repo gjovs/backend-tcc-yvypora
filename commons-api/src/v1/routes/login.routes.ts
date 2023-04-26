@@ -1,22 +1,14 @@
-import { FastifyInstance, FastifyRequest } from 'fastify';
-import { User } from '../services';
-import { checkPassword } from '../utils/utils';
-import { TypeOfUser } from '../services/utils/enums';
+import { FastifyInstance, FastifyRequest } from "fastify";
+import { User } from "../services";
+import { checkPassword } from "../utils/utils";
+import { TypeOfUser } from "../services/utils/enums";
+import { loginSchema } from "../schemas/login.schema";
 
 export default async function loginRoutes(server: FastifyInstance) {
   server.post(
-    '/',
+    "/",
     {
-      schema: {
-        body: {
-          type: 'object',
-          required: ['email', 'password'],
-          properties: {
-            email: { type: 'string' },
-            password: { type: 'string' },
-          },
-        },
-      },
+      schema: loginSchema,
     },
     async (
       req: FastifyRequest<{
@@ -25,7 +17,7 @@ export default async function loginRoutes(server: FastifyInstance) {
           password: string;
         };
       }>,
-      rep,
+      rep
     ) => {
       const { email, password } = req.body;
 
@@ -47,7 +39,7 @@ export default async function loginRoutes(server: FastifyInstance) {
       if (!user) {
         return rep.status(404).send({
           error: true,
-          message: 'The user if this email doesnt exist!',
+          message: "The user if this email doesnt exist!",
         });
       }
 
@@ -56,7 +48,7 @@ export default async function loginRoutes(server: FastifyInstance) {
       if (!isValid) {
         return rep
           .status(401)
-          .send({ error: true, message: 'The password is wrong' });
+          .send({ error: true, message: "The password is wrong" });
       }
 
       // @ts-ignore
@@ -67,6 +59,6 @@ export default async function loginRoutes(server: FastifyInstance) {
       const token = server.jwt.sign(data);
 
       return rep.send({ token, error: false });
-    },
+    }
   );
 }

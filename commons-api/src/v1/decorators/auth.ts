@@ -1,10 +1,12 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyReply, FastifyRequest } from "fastify";
+import DecodedToken from "../dao/dto/DecodedToken";
 
 export default async (req: FastifyRequest, rep: FastifyReply) => {
   try {
-    const data: { payload: object } = await req.jwtVerify();
-    // @ts-ignore
-    req.user = data.payload;  
+    const { payload } = (await req.jwtVerify()) as {
+      payload: { user: DecodedToken };
+    };
+    req.user = payload.user;
   } catch (e) {
     return rep.send(e);
   }

@@ -2,14 +2,14 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { TypeOfUser } from "../services/utils/enums";
 import { User } from "../services";
 import { CostumerController } from "../controllers";
+import DecodedToken from "../dao/dto/DecodedToken";
 
 export default async function (server: FastifyInstance) {
   server.get(
     "/details",
     { onRequest: [server.auth] },
     async (req: FastifyRequest, rep: FastifyReply) => {
-      // @ts-ignore
-      const { typeof: userType, id } = req.user;
+      const { typeof: userType, id } = req.user as DecodedToken;
 
       if (userType === TypeOfUser.COSTUMER) {
         const user = await User.findCostumerById(id);
@@ -56,5 +56,9 @@ export default async function (server: FastifyInstance) {
       });
     }
   );
-  server.get('/address', { onRequest: [server.auth] }, CostumerController.listAddress)
+  server.get(
+    "/address",
+    { onRequest: [server.auth] },
+    CostumerController.listAddress
+  );
 }

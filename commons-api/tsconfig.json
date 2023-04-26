@@ -11,6 +11,7 @@
     "noEmitOnError": true,
     "strict": true,
     "esModuleInterop": true,
+    "typeRoots": ["./src/v1/@types"], 
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true

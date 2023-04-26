@@ -1,22 +1,13 @@
-import { FastifyInstance, FastifyRequest } from 'fastify';
+import { FastifyInstance } from 'fastify';
 import { PictureController } from '../controllers';
+import { uploadPictureSchema } from '../schemas/picture.schema';
 
 export default async function pictureRoutes(server: FastifyInstance) {
   server.put(
     '/',
     {
       onRequest: [server.auth],
-      schema: {
-        body: {
-          type: 'object',
-          required: ['picture'],
-          properties: {
-            picture: {
-              type: 'object',
-            },
-          },
-        },
-      },
+      schema: uploadPictureSchema
     },
     PictureController.appendToUser,
   );

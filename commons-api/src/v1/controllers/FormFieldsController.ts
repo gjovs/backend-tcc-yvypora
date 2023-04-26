@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { orderByDistance } from "geolib";
 import { Fair, FormFields } from "../services";
+import { ILocation } from "../dao/dto/Location";
 
 export class FormFieldsController {
   async listCategories(_req: FastifyRequest, rep: FastifyReply) {
@@ -33,31 +34,20 @@ export class FormFieldsController {
 
   async forMarketer(
     req: FastifyRequest<{
-      Querystring: {
-        lat: number;
-        long: number;
-      };
+      Querystring: ILocation;
     }>,
     rep: FastifyReply
   ) {
-    const { lat, long } = req.query;
+    const { latitude, longitude } = req.query;
 
     const genders = await FormFields.indexGender();
     const fairs = await Fair.index();
 
-    const orderedFairs = orderByDistance(
-      { latitude: lat, longitude: long },
-      fairs as any
-    );
+    const orderedFairs = orderByDistance({ latitude, longitude }, fairs as any);
 
     return rep.send({
       code: 200,
-      payload: [
-        {
-          genders,
-          closeFairs: orderedFairs.slice(0, 5),
-        },
-      ],
+      payload: [{ genders, closeFairs: orderedFairs.slice(0, 5) }],
       error: false,
     });
   }
@@ -80,23 +70,17 @@ export class FormFieldsController {
 
   async listCloseFairs(
     req: FastifyRequest<{
-      Querystring: {
-        lat: number;
-        long: number;
-      };
+      Querystring: ILocation;
     }>,
     rep: FastifyReply
   ) {
-    const { lat, long } = req.query;
+    const { latitude, longitude } = req.query;
 
     const fairs = await Fair.index();
 
     const daysOfWeeks = await FormFields.indexDaysOfWeek();
 
-    const orderedFairs = orderByDistance(
-      { latitude: lat, longitude: long },
-      fairs as any
-    );
+    const orderedFairs = orderByDistance({ latitude, longitude }, fairs as any);
 
     return rep.send({
       code: 200,
