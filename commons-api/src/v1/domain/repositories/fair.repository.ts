@@ -8,14 +8,14 @@ class FairRepository {
       },
     });
     await Promise.all(
-      res.map(async (idx, data) => {
+      res.map(async (data, idx) => {
         // @ts-ignore
         const counter = await db.fair_marketers.count({
           where: { fairId: data.id },
         });
 
         // @ts-ignore
-        // res[idx].marketer_count = counter;
+        res[idx].marketer_count = counter;
       })
     );
 
