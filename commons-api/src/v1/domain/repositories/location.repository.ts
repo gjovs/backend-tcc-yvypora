@@ -1,4 +1,4 @@
-import db from "../../libs/prisma";
+import db from "../../infrastructure/libs/prisma";
 
 class LocationRepository {
   async updateLocation(data: { lat: number; long: number; id: number }) {

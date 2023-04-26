@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getGender, hashPassword, isValidDate } from "../utils/utils";
-import { MarketerRepository, UserRepository } from "../domain/repositories";
-import { genToken } from "../utils/utils";
-import { IMarketer } from "../domain/models/marketer";
+import { getGender, hashPassword, isValidDate } from "../../utils/utils";
+import { MarketerRepository, UserRepository } from "../../domain/repositories";
+import { genToken } from "../../utils/utils";
+import { IMarketer } from "../../domain/models/marketer";
 
 export class MarketerController {
   async create(

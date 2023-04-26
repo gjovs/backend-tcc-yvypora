@@ -1,4 +1,4 @@
-import db from "../../libs/prisma";
+import db from "../../infrastructure/libs/prisma";
 import ICostumer from "../models/costumer";
 import { IAddressOSM } from "../dto/OSMAddress";
 

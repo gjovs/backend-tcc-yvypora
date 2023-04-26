@@ -1,8 +1,8 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { TypeOfUser } from "../services/utils/enums";
-import { User } from "../services";
+import { TypeOfUser } from "../../domain/dto/TypeOfUser";
+import { UserRepository } from "../../domain/repositories";
 import { CostumerController } from "../controllers";
-import DecodedToken from "../domain/dto/DecodedToken";
+import DecodedToken from "../../domain/dto/DecodedToken";
 
 export default async function (server: FastifyInstance) {
   server.get(
@@ -12,7 +12,7 @@ export default async function (server: FastifyInstance) {
       const { typeof: userType, id } = req.user as DecodedToken;
 
       if (userType === TypeOfUser.COSTUMER) {
-        const user = await User.findCostumerById(id);
+        const user = await UserRepository.findCostumerById(id);
 
         if (!user) {
           return rep
@@ -20,12 +20,12 @@ export default async function (server: FastifyInstance) {
             .send({ error: true, message: ["id is wrong user not founded"] });
         }
 
-        const res = await User.findCostumerById(id);
+        const res = await UserRepository.findCostumerById(id);
         return { ...res, typeof: "COSTUMER" };
       }
 
       if (userType === TypeOfUser.MARKETER) {
-        const user = await User.findMarketerById(id);
+        const user = await UserRepository.findMarketerById(id);
 
         if (!user) {
           return rep
@@ -33,12 +33,12 @@ export default async function (server: FastifyInstance) {
             .send({ error: true, message: ["id is wrong user not founded"] });
         }
 
-        const res = await User.findMarketerById(id);
+        const res = await UserRepository.findMarketerById(id);
         return { ...res, typeof: "MARKETER" };
       }
 
       if (userType === TypeOfUser.DELIVERYMAN) {
-        const user = await User.findDeliverymanById(id);
+        const user = await UserRepository.findDeliverymanById(id);
 
         if (!user) {
           return rep
@@ -46,7 +46,7 @@ export default async function (server: FastifyInstance) {
             .send({ error: true, message: ["id is wrong user not founded"] });
         }
 
-        const res = await User.findDeliverymanById(id);
+        const res = await UserRepository.findDeliverymanById(id);
         return { ...res, typeof: "DELIVERYMAN" };
       }
 

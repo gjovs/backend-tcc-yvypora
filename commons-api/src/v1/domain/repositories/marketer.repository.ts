@@ -1,5 +1,5 @@
 import { IMarketer } from "../models/marketer";
-import db from "../../libs/prisma";
+import db from "../../infrastructure/libs/prisma";
 
 class MarketerRepository {
   async createMarketer(data: IMarketer) {

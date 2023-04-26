@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { orderByDistance } from "geolib";
-import { FairRepository } from "../domain/repositories";
-import { ILocation } from "../domain/dto/Location";
+import { FairRepository } from "../../domain/repositories";
+import { ILocation } from "../../domain/dto/Location";
 
 export class FairController {
   async listByClose(

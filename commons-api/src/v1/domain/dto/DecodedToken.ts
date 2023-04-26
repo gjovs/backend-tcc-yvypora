@@ -1,4 +1,4 @@
-import { TypeOfUser } from "../../services/utils/enums";
+import { TypeOfUser } from "../dto/TypeOfUser";
 
 export default interface DecodedToken {
   id: number;

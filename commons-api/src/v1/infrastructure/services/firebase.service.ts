@@ -1,6 +1,6 @@
 // @ts-ignore
 import admin from 'firebase-admin';
-import options from '../configs/firebase-key.json';
+import options from '../../configs/firebase-key.json';
 
 interface IFile {
   filename: string,

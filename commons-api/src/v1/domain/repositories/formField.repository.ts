@@ -1,4 +1,4 @@
-import db from "../../libs/prisma";
+import db from "../../infrastructure/libs/prisma";
 
 class FormFieldRepository {
   async indexGender() {

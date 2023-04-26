@@ -1,13 +1,18 @@
-import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import cors from '@fastify/cors';
-import multipart from '@fastify/multipart';
-import jwt from '@fastify/jwt';
+import Fastify, { FastifyInstance } from "fastify";
+import cors from "@fastify/cors";
+import multipart from "@fastify/multipart";
+import jwt from "@fastify/jwt";
 
 import {
   fairRoutes,
-  formFieldsRoutes, loginRoutes, pictureRoutes, registerRoutes, userRoutes,
-} from './routes';
-import { auth } from './decorators';
+  formFieldsRoutes,
+  loginRoutes,
+  pictureRoutes,
+  registerRoutes,
+  userRoutes,
+} from "./application/routes";
+
+import { auth } from "./infrastructure/decorators";
 
 class Server {
   declare app: FastifyInstance;
@@ -15,7 +20,6 @@ class Server {
   constructor() {
     this.app = Fastify({
       logger: true,
-
     });
 
     this.middleware();
@@ -25,9 +29,9 @@ class Server {
 
   private async middleware() {
     this.app.register(jwt, {
-      secret: '12313123123',
+      secret: "12313123123",
       sign: {
-        expiresIn: '7d',
+        expiresIn: "7d",
       },
     });
     this.app.register(multipart, {
@@ -41,27 +45,27 @@ class Server {
 
   private routes() {
     this.app.register(registerRoutes, {
-      prefix: '/register/',
+      prefix: "/register/",
     });
     this.app.register(loginRoutes, {
-      prefix: '/login/',
+      prefix: "/login/",
     });
     this.app.register(pictureRoutes, {
-      prefix: '/picture/',
+      prefix: "/picture/",
     });
     this.app.register(formFieldsRoutes, {
-      prefix: '/forms/',
+      prefix: "/forms/",
     });
     this.app.register(fairRoutes, {
-      prefix: '/fair/',
+      prefix: "/fair/",
     });
     this.app.register(userRoutes, {
-      prefix: '/user/',
+      prefix: "/user/",
     });
   }
 
   private decorators() {
-    this.app.decorate('auth', auth);
+    this.app.decorate("auth", auth);
   }
 }
 

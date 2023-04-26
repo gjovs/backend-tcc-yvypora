@@ -1,8 +1,8 @@
 import { FastifyInstance, FastifyRequest } from "fastify";
-import { User } from "../services";
-import { checkPassword } from "../utils/utils";
-import { TypeOfUser } from "../services/utils/enums";
-import { loginSchema } from "../schemas/login.schema";
+import { UserRepository } from "../../domain/repositories";
+import { checkPassword } from "../../utils/utils";
+import { TypeOfUser } from "../../domain/dto/TypeOfUser";
+import { loginSchema } from "../../infrastructure/http/schemas/login.schema";
 
 export default async function loginRoutes(server: FastifyInstance) {
   server.post(
@@ -25,13 +25,13 @@ export default async function loginRoutes(server: FastifyInstance) {
 
       let typeofUser: TypeOfUser;
 
-      user = await User.findCostumerByEmail(email);
+      user = await UserRepository.findCostumerByEmail(email);
       typeofUser = TypeOfUser.COSTUMER;
       if (!user) {
-        user = await User.findDeliverymanByEmail(email);
+        user = await UserRepository.findDeliverymanByEmail(email);
         typeofUser = TypeOfUser.DELIVERYMAN;
         if (!user) {
-          user = await User.findMarketerByEmail(email);
+          user = await UserRepository.findMarketerByEmail(email);
           typeofUser = TypeOfUser.MARKETER;
         }
       }

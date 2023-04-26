@@ -7,12 +7,12 @@ import {
 import {
   createMarketerSchema,
   updateMarketerSchema,
-} from "../schemas/marketer.schema";
-import { createAddressSchema } from "../schemas/address.schema";
+} from "../../infrastructure/http/schemas/marketer.schema";
+import { createAddressSchema } from "../../infrastructure/http/schemas/address.schema";
 import {
   createCostumerSchema,
   updateCostumerSchema,
-} from "../schemas/costumer.schema";
+} from "../../infrastructure/http/schemas/costumer.schema";
 
 export default async function registerRoutes(server: FastifyInstance) {
   server.post(
