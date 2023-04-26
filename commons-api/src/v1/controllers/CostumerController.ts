@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { getGender, hashPassword, isValidDate } from "../utils/utils";
-import { Costumer, OsmService, User } from "../services";
+import { OsmService } from "../services";
+import { CostumerRepository, UserRepository } from "../repositories";
 import { genToken } from "../utils/utils";
 import ICostumer from "../dao/models/costumer";
 import IAddress from "../dao/models/address";
@@ -40,7 +41,7 @@ export class CostumerController {
       });
     }
 
-    const res = await Costumer.createCostumer({
+    const res = await CostumerRepository.createCostumer({
       name,
       email,
       password: password_hash,
@@ -89,7 +90,7 @@ export class CostumerController {
       }
     }
 
-    const res = await Costumer.updateCostumer({
+    const res = await CostumerRepository.updateCostumer({
       name: body.name,
       password_hash,
       email: body.email,
@@ -106,7 +107,7 @@ export class CostumerController {
       });
     }
 
-    const newDetails = await User.findCostumerById(parseInt(id, 10));
+    const newDetails = await UserRepository.findCostumerById(parseInt(id, 10));
 
     const newToken = genToken({
       payload: { ...newDetails, typeof: "COSTUMER" },
@@ -125,7 +126,7 @@ export class CostumerController {
   ) {
     const { id } = req.params;
 
-    const exists = await Costumer.getCostumer(parseInt(id, 10));
+    const exists = await CostumerRepository.getCostumer(parseInt(id, 10));
 
     // @ts-ignore
     if (!exists.data) {
@@ -135,7 +136,7 @@ export class CostumerController {
       });
     }
 
-    const res = await Costumer.deleteCostumer(parseInt(id, 10));
+    const res = await CostumerRepository.deleteCostumer(parseInt(id, 10));
 
     if (res?.error) {
       // @ts-ignore
@@ -149,7 +150,7 @@ export class CostumerController {
 
   async listAddress(req: FastifyRequest, rep: FastifyReply) {
     const { id } = req.user as DecodedToken;
-    const addresses = await Costumer.listAddress(id);
+    const addresses = await CostumerRepository.listAddress(id);
     return addresses;
   }
 }

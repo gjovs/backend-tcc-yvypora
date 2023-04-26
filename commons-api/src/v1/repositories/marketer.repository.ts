@@ -1,7 +1,7 @@
 import { IMarketer } from "../dao/models/marketer";
 import db from "../libs/prisma";
 
-class MarketerService {
+class MarketerRepository {
   async createMarketer(data: IMarketer) {
     try {
       const res = await db.marketer.create({
@@ -105,4 +105,4 @@ class MarketerService {
   }
 }
 
-export default new MarketerService();
+export default new MarketerRepository();

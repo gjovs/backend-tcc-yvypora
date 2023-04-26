@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { orderByDistance } from "geolib";
-import { Fair } from "../services";
+import { FairRepository } from "../repositories";
 import { ILocation } from "../dao/dto/Location";
 
 export class FairController {
@@ -10,7 +10,7 @@ export class FairController {
     }>,
     rep: FastifyReply
   ) {
-    const fairs = await Fair.index();
+    const fairs = await FairRepository.index();
 
     const { latitude, longitude } = req.query;
 

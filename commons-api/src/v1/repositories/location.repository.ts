@@ -1,6 +1,6 @@
 import db from '../libs/prisma';
 
-class LocationService {
+class LocationRepository {
   async updateLocation(data: { lat: number, long: number, id: number}) {
     await db.location.update({
       where: {
@@ -14,4 +14,4 @@ class LocationService {
   }
 }
 
-export default new LocationService();
+export default new LocationRepository();

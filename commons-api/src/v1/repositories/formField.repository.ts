@@ -1,6 +1,6 @@
 import db from "../libs/prisma";
 
-class FormFieldService {
+class FormFieldRepository {
   async indexGender() {
     const res = await db.gender.findMany({
       select: {
@@ -88,4 +88,4 @@ class FormFieldService {
   }
 }
 
-export default new FormFieldService();
+export default new FormFieldRepository();

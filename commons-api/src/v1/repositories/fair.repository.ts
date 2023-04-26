@@ -1,6 +1,6 @@
 import db from '../libs/prisma';
 
-class FairService {
+class FairRepository {
   async index() {
     const res = await db.fair.findMany({
       include: {
@@ -35,4 +35,4 @@ class FairService {
   }
 }
 
-export default new FairService();
+export default new FairRepository();

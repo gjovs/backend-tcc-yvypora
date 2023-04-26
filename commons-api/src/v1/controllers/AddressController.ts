@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { Costumer, OsmService } from "../services";
+import { OsmService } from "../services";
+import { CostumerRepository } from "../repositories";
 import IAddress from "../dao/models/address";
 
 export class AddressController {
@@ -17,7 +18,7 @@ export class AddressController {
     const { id } = req.params;
     const { address } = req.body;
 
-    const exists = await Costumer.getCostumer(parseInt(id, 10));
+    const exists = await CostumerRepository.getCostumer(parseInt(id, 10));
 
     // @ts-ignore
     if (!exists.data) {
@@ -36,7 +37,7 @@ export class AddressController {
       });
     }
 
-    const res = await Costumer.addNewCostumerAddress({
+    const res = await CostumerRepository.addNewCostumerAddress({
       // @ts-ignore
       address: osmAddressRes,
       id: parseInt(id, 10),
@@ -62,7 +63,7 @@ export class AddressController {
   ) {
     const { id } = req.params;
 
-    const res = await Costumer.deleteCostumerAddress(parseInt(id, 10));
+    const res = await CostumerRepository.deleteCostumerAddress(parseInt(id, 10));
 
     if (res?.error) {
       // @ts-ignore

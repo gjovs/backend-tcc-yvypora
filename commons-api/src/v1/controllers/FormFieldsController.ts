@@ -1,11 +1,11 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { orderByDistance } from "geolib";
-import { Fair, FormFields } from "../services";
+import { FairRepository, FormFieldRepository } from "../repositories";
 import { ILocation } from "../dao/dto/Location";
 
 export class FormFieldsController {
   async listCategories(_req: FastifyRequest, rep: FastifyReply) {
-    const categories = await FormFields.indexCategories();
+    const categories = await FormFieldRepository.indexCategories();
 
     return rep.send({
       code: 200,
@@ -15,9 +15,9 @@ export class FormFieldsController {
   }
 
   async forCostumer(_req: FastifyRequest, rep: FastifyReply) {
-    const genders = await FormFields.indexGender();
-    const paymentMethods = await FormFields.indexPaymentMethods();
-    const typesOfAddress = await FormFields.indexTypeOfAddress();
+    const genders = await FormFieldRepository.indexGender();
+    const paymentMethods = await FormFieldRepository.indexPaymentMethods();
+    const typesOfAddress = await FormFieldRepository.indexTypeOfAddress();
 
     return rep.send({
       code: 200,
@@ -40,8 +40,8 @@ export class FormFieldsController {
   ) {
     const { latitude, longitude } = req.query;
 
-    const genders = await FormFields.indexGender();
-    const fairs = await Fair.index();
+    const genders = await FormFieldRepository.indexGender();
+    const fairs = await FairRepository.index();
 
     const orderedFairs = orderByDistance({ latitude, longitude }, fairs as any);
 
@@ -53,8 +53,8 @@ export class FormFieldsController {
   }
 
   async forDeliveryman(_req: FastifyRequest, rep: FastifyReply) {
-    const genders = await FormFields.indexGender();
-    const veicules = await FormFields.indexTypeOfVeicules();
+    const genders = await FormFieldRepository.indexGender();
+    const veicules = await FormFieldRepository.indexTypeOfVeicules();
 
     return rep.send({
       code: 200,
@@ -76,9 +76,9 @@ export class FormFieldsController {
   ) {
     const { latitude, longitude } = req.query;
 
-    const fairs = await Fair.index();
+    const fairs = await FairRepository.index();
 
-    const daysOfWeeks = await FormFields.indexDaysOfWeek();
+    const daysOfWeeks = await FormFieldRepository.indexDaysOfWeek();
 
     const orderedFairs = orderByDistance({ latitude, longitude }, fairs as any);
 

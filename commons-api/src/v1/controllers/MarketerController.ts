@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { getGender, hashPassword, isValidDate } from "../utils/utils";
-import { Marketer, User } from "../services";
+import { MarketerRepository, UserRepository } from "../repositories";
 import { genToken } from "../utils/utils";
 import { IMarketer } from "../dao/models/marketer";
 
@@ -56,7 +56,7 @@ export class MarketerController {
       tent_name,
     };
 
-    const res = await Marketer.createMarketer(data);
+    const res = await MarketerRepository.createMarketer(data);
 
     if (res?.error) {
       // @ts-ignore
@@ -79,7 +79,7 @@ export class MarketerController {
   ) {
     const { id } = req.params;
 
-    const res = await Marketer.delete(parseInt(id, 10));
+    const res = await MarketerRepository.delete(parseInt(id, 10));
 
     if (res?.error) {
       // @ts-ignore
@@ -136,7 +136,7 @@ export class MarketerController {
     if (cnpj) newCnpj = cnpj;
     if (cpf) newCpf = cpf;
 
-    const res = await Marketer.update({
+    const res = await MarketerRepository.update({
       id: parseInt(id, 10),
       cnpj: newCnpj,
       cpf: newCpf,
@@ -156,7 +156,7 @@ export class MarketerController {
       });
     }
 
-    const newDetails = await User.findMarketerByEmail(email);
+    const newDetails = await UserRepository.findMarketerByEmail(email);
 
     const newToken = genToken({
       payload: { ...newDetails, typeof: "MARKETER" },

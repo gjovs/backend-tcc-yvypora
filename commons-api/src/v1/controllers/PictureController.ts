@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { TypeOfUser } from "../services/utils/enums";
-import { User } from "../services";
+import { UserRepository } from "../repositories";
 import FirebaseService from "../services/firebase.service";
 import DecodedToken from "../dao/dto/DecodedToken";
 
@@ -44,8 +44,8 @@ export class PictureController {
       if (userType === TypeOfUser.COSTUMER) {
         return rep.send(
           await updateUserPhoto(
-            User.findCostumerById,
-            User.updatePhotoCostumer,
+            UserRepository.findCostumerById,
+            UserRepository.updatePhotoCostumer,
             id
           )
         );
@@ -54,8 +54,8 @@ export class PictureController {
       if (userType === TypeOfUser.MARKETER) {
         return rep.send(
           await updateUserPhoto(
-            User.findMarketerById,
-            User.updatePhotoMarketer,
+            UserRepository.findMarketerById,
+            UserRepository.updatePhotoMarketer,
             id
           )
         );
@@ -64,8 +64,8 @@ export class PictureController {
       if (userType === TypeOfUser.DELIVERYMAN) {
         return rep.send(
           await updateUserPhoto(
-            User.findDeliverymanById,
-            User.updatePhotoDeliveryman,
+            UserRepository.findDeliverymanById,
+            UserRepository.updatePhotoDeliveryman,
             id
           )
         );

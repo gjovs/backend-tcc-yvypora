@@ -2,7 +2,7 @@ import db from "../libs/prisma";
 import ICostumer from "../dao/models/costumer";
 import { IAddressOSM } from "../dao/dto/OSMAddress";
 
-class CostumerService {
+class CostumerRepository {
   async getCostumer(id: number) {
     try {
       const res = await db.costumer.findUnique({
@@ -335,4 +335,4 @@ class CostumerService {
   }
 }
 
-export default new CostumerService();
+export default new CostumerRepository();
