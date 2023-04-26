@@ -6,8 +6,9 @@ import { genToken } from "../../utils/utils";
 import ICostumer from "../../domain/models/costumer";
 import IAddress from "../../domain/models/address";
 import DecodedToken from "../../domain/dto/DecodedToken";
+import { ICostumerController } from "../../interfaces/controllers.interface";
 
-export class CostumerController {
+export class CostumerController implements ICostumerController {
   async create(
     req: FastifyRequest<{
       Body: ICostumer<IAddress>;

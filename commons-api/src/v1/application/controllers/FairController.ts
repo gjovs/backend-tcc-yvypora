@@ -2,8 +2,9 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { orderByDistance } from "geolib";
 import { FairRepository } from "../../domain/repositories";
 import { ILocation } from "../../domain/dto/Location";
+import { IFairController } from "../../interfaces/controllers.interface";
 
-export class FairController {
+export class FairController implements IFairController {
   async listByClose(
     req: FastifyRequest<{
       Querystring: ILocation;

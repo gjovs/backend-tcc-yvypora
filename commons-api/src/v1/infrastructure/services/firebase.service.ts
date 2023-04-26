@@ -1,21 +1,16 @@
 // @ts-ignore
-import admin from 'firebase-admin';
-import options from '../../configs/firebase-key.json';
+import admin from "firebase-admin";
+import options from "../../configs/firebase-key.json";
+import { IFile, IFirebaseService } from "../../interfaces/services.interface";
 
-interface IFile {
-  filename: string,
-  mimetype: string,
-  _buf: Buffer
-}
-
-export class FirebaseService {
+export class FirebaseService implements IFirebaseService {
   // eslint-disable-next-line no-useless-constructor
   constructor(
     private app = admin.initializeApp({
       // @ts-ignore
       credential: admin.credential.cert(options),
-      storageBucket: 'tcc-yvypora.appspot.com',
-    }),
+      storageBucket: "tcc-yvypora.appspot.com",
+    })
   ) {}
 
   async uploadImage(fileParameter: IFile): Promise<string> {
@@ -23,7 +18,7 @@ export class FirebaseService {
 
     const bucket = admin.storage().bucket();
 
-    const fileName = `${Date.now()}.${image.filename.split('.').pop()}`;
+    const fileName = `${Date.now()}.${image.filename.split(".").pop()}`;
 
     const file = bucket.file(fileName);
 
@@ -33,9 +28,9 @@ export class FirebaseService {
       },
     });
 
-    stream.on('error', (err: Error) => console.log(err));
+    stream.on("error", (err: Error) => console.log(err));
 
-    stream.on('finish', async () => {
+    stream.on("finish", async () => {
       await file.makePublic();
     });
 

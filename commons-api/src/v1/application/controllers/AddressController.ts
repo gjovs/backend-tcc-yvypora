@@ -2,8 +2,9 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { OsmService } from "../../infrastructure/services";
 import { CostumerRepository } from "../../domain/repositories";
 import IAddress from "../../domain/models/address";
+import { IAddressController } from "../../interfaces/controllers.interface";
 
-export class AddressController {
+export class AddressController implements IAddressController {
   async addToCostumer(
     req: FastifyRequest<{
       Body: {

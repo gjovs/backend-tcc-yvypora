@@ -2,8 +2,9 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { orderByDistance } from "geolib";
 import { FairRepository, FormFieldRepository } from "../../domain/repositories";
 import { ILocation } from "../../domain/dto/Location";
+import { IFormFieldsController } from "../../interfaces/controllers.interface";
 
-export class FormFieldsController {
+export class FormFieldsController implements IFormFieldsController {
   async listCategories(_req: FastifyRequest, rep: FastifyReply) {
     const categories = await FormFieldRepository.indexCategories();
 

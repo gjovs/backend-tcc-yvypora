@@ -3,8 +3,9 @@ import { getGender, hashPassword, isValidDate } from "../../utils/utils";
 import { MarketerRepository, UserRepository } from "../../domain/repositories";
 import { genToken } from "../../utils/utils";
 import { IMarketer } from "../../domain/models/marketer";
+import { IMarketerController } from "../../interfaces/controllers.interface";
 
-export class MarketerController {
+export class MarketerController implements IMarketerController {
   async create(
     req: FastifyRequest<{
       Body: IMarketer;

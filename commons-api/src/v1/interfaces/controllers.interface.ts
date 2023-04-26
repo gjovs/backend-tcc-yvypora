@@ -1,6 +1,6 @@
 export interface IAddressController {
   addToCostumer(req: unknown, rep: unknown): Promise<unknown>;
-  rmeoveToCostumer(req: unknown, rep: unknown): Promise<unknown>;
+  removeToCostumer(req: unknown, rep: unknown): Promise<unknown>;
 }
 
 export interface ICostumerController {

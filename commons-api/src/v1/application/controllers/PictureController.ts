@@ -3,8 +3,9 @@ import { TypeOfUser } from "../../domain/dto/TypeOfUser";
 import { UserRepository } from "../../domain/repositories";
 import { FirebaseService } from "../../infrastructure/services";
 import DecodedToken from "../../domain/dto/DecodedToken";
+import { IPictureController } from "../../interfaces/controllers.interface";
 
-export class PictureController {
+export class PictureController implements IPictureController {
   async appendToUser(
     req: FastifyRequest<{ Body: { picture: any } }>,
     rep: FastifyReply

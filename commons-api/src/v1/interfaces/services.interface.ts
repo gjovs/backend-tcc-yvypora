@@ -1,8 +1,14 @@
 import { IAddressOSM } from "../domain/dto/OSMAddress";
 import IAddress from "../domain/models/address";
 
+export interface IFile {
+  filename: string;
+  mimetype: string;
+  _buf: Buffer;
+}
+
 export interface IFirebaseService {
-  uploadImage(fileParameter: string): Promise<string>;
+  uploadImage(fileParameter: IFile): Promise<string>;
 }
 
 export interface IOSMService {
