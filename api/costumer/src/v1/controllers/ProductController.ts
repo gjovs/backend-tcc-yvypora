@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-import ProductService from "../services/product.service";
-import { getDayOfWeek } from "../utils";
+import { FastifyReply, FastifyRequest } from 'fastify';
+import ProductService from '../services/product.service';
+import { getDayOfWeek } from '../utils';
 
 export class ProductController {
   async index(
@@ -31,7 +31,7 @@ export class ProductController {
         code: 400,
         error: true,
         message:
-          "Bad request, the lower price value is higher than the higher price value",
+          'Bad request, the lower price value is higher than the higher price value',
       });
     }
 
@@ -65,7 +65,7 @@ export class ProductController {
       return rep.status(404).send({
         code: 404,
         erro: true,
-        message: "Content not found, check the id",
+        message: 'Content not found, check the id',
       });
     }
 
@@ -78,11 +78,9 @@ export class ProductController {
 
   async inSaleOff(_req: FastifyRequest, rep: FastifyReply) {
     const res = await ProductService.inSaleOff();
-    
-    const data = res.map(({ product }) => {
-        return { ...product, promo: true }
-    })
-    
+
+    const data = res.map(({ product }) => ({ ...product, promo: true }));
+
     return rep.send({
       code: 200,
       error: false,

@@ -1,4 +1,4 @@
-import { TypeOfUser } from "./TypeOfUser";
+import { TypeOfUser } from './TypeOfUser';
 
 export default interface DecodedToken {
   id: number;

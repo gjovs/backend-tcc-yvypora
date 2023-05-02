@@ -1,11 +1,12 @@
-import db from "../libs/prisma";
-import { getDayOfWeek } from "../utils";
-import { orderByDistance } from "geolib";
+import { orderByDistance } from 'geolib';
+import db from '../libs/prisma';
+import { getDayOfWeek } from '../utils';
 
 class ProductService {
   public async index() {
     return await db.product.findMany();
   }
+
   // filters
   private async byPrice(lte: number, gte: number, data: any) {
     const products = await data.findMany({
@@ -98,29 +99,30 @@ class ProductService {
     let data;
     const now = new Date();
 
-    if (now.getHours().toString().length == 1)
+    if (now.getHours().toString().length == 1) {
       data = new Date(`1900-01-01T0${now.getHours()}:00:00.000Z`);
-    else data = new Date(`1900-01-01T${now.getHours()}:00:00.000Z`);
+    } else data = new Date(`1900-01-01T${now.getHours()}:00:00.000Z`);
 
     const dayOfWeek = getDayOfWeek(now.getDay() + 1);
     try {
-    const products = await db.product.findMany({
-      where: {
-        marketer: {
-          fair_marketers: {
-            some: {
-              fair: {
-                fair_date_hour_of_work: {
-                  some: {
-                    dates: {
-                      day_of_week: {
-                        name: dayOfWeek,
-                      },
-                      close_datetime: {
-                        gte: data,
-                      },
-                      open_datetime: {
-                        lte: data,
+      const products = await db.product.findMany({
+        where: {
+          marketer: {
+            fair_marketers: {
+              some: {
+                fair: {
+                  fair_date_hour_of_work: {
+                    some: {
+                      dates: {
+                        day_of_week: {
+                          name: dayOfWeek,
+                        },
+                        close_datetime: {
+                          gte: data,
+                        },
+                        open_datetime: {
+                          lte: data,
+                        },
                       },
                     },
                   },
@@ -128,30 +130,34 @@ class ProductService {
               },
             },
           },
-        },
-        review: {
-          gte: score,
-        },
-        category_of_productId: category,
-        price: {
-          gte: lte,
-          lte: gte,
-        },
-      },
-      include: {
-        sale_off: true,
-        type_of_price: true,
-        image_of_product: {
-          include: {
-            image: true,
+          review: {
+            gte: score,
+          },
+          category_of_productId: category,
+          price: {
+            gte: lte,
+            lte: gte,
           },
         },
-      },
-    });
+        include: {
+          sale_off: true,
+          type_of_price: true,
+          image_of_product: {
+            include: {
+              image: true,
+            },
+          },
+          marketer: true,
+        },
+        orderBy: {
+          marketer: {
+            id: 'asc',
+          },
+        },
+      });
 
-    return products;
-  }
-    catch(err) {
+      return products;
+    } catch (err) {
       console.log(err);
       return false;
     }
@@ -160,9 +166,9 @@ class ProductService {
   // list
   async moreSales(listSize: number) {
     const sales = await db.products_in_shopping_list.groupBy({
-      by: ["productId"],
+      by: ['productId'],
       orderBy: {
-        productId: "asc",
+        productId: 'asc',
       },
       _count: { productId: true },
       take: listSize,
@@ -200,7 +206,7 @@ class ProductService {
     });
 
     // @ts-ignore
-    product.order_count = count_in_orders
+    product.order_count = count_in_orders;
 
     return product;
   }
@@ -209,9 +215,9 @@ class ProductService {
     let data;
     const now = new Date();
 
-    if (now.getHours().toString().length == 1)
+    if (now.getHours().toString().length == 1) {
       data = new Date(`1900-01-01T0${now.getHours()}:00:00.000Z`);
-    else data = new Date(`1900-01-01T${now.getHours()}:00:00.000Z`);
+    } else data = new Date(`1900-01-01T${now.getHours()}:00:00.000Z`);
 
     const dayOfWeek = getDayOfWeek(now.getDay() + 1);
 
