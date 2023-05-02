@@ -17,19 +17,26 @@
     <h1>Testing client websocket for logistic web api (DELIVERYMAN)</h1>
 </body>
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-    window.onload = function () {
-        var socket = io.connect("ws://localhost:3337", {
-            query: { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImlkIjoxLCJuYW1lIjoiZW50cmVnYWRvciBkZSB0ZXN0ZSIsImVtYWlsIjoiZW50cmVnYWRvckBnbWFpbC5jb20iLCJwYXNzd29yZF9oYXNoIjoiJDJhJDA1JDJSUDcvd2ttZXVuL3JUbWI4QXZkZE9qTkN1aVdPQm4zOGtrMFowdWgvQ2EwZEdiVlFpak4uIiwicGljdHVyZV91cmkiOiJodHRwczovL3d3dy5jbHViZWluZHJpdmVyLmNvbS5ici93cC1jb250ZW50L3VwbG9hZHMvMjAyMS8wOS9pbmRyaXZlci1lbnRyZWdhZG9yLnBuZyIsImxvY2F0aW9uSWQiOjQsIm9ubGluZSI6dHJ1ZSwiY3JlYXRlZF9hdCI6IjIwMjMtMDQtMjNUMjI6NTU6MDUuNDQwWiIsInVwZGF0ZWRfYXQiOiIyMDIzLTA0LTI0VDEwOjQyOjIwLjYxN1oiLCJnZW5kZXJJZCI6MSwiYmlydGhkYXkiOiIyMDA1LTExLTA0IiwidHlwZW9mIjoiREVMSVZFUllNQU4ifSwiaWF0IjoxNjgyMzM3NTkyLCJleHAiOjE2ODI5NDIzOTJ9.kLKDyVNAkNZKdpborbsm2jGyu1Ai3D5-5OjTS3fEpsc" }
+    window.onload = async function () {
+        const { data } = await axios.post('http://localhost:3333/commons/login/', {
+            email: "entregador@gmail.com", 
+            password: "12345678"
         });
-        
+
+        const { token } = data
+
+        var socket = io.connect("ws://localhost:3337", {
+            query: { token }
+        });
+
         socket.on("intent_of_travel", (data) => {
             loadNotification(data, socket)
         })
     }
     function acceptedTravel(data, socket) {
-        socket.emit("intent_of_travel", { order: data.order, accepted: true })
+        socket.emit("intent_of_travel", { order: data.order, accepted: true, route: data.route })
         localStorage.setItem('travel', JSON.stringify({ order: data.order, accepted: true }))
     }
     function loadNotification(data, socket) {

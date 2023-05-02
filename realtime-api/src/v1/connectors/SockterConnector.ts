@@ -82,7 +82,10 @@ class SocketConnector {
       socket.on("intent_of_travel", async (data: IntentOfTravel) => {
         console.log(decoded?.payload.id);
 
-        const { accepted, order, routes } = data;
+        console.log(data);
+        
+
+        const { accepted, order, route } = data;
 
         if (accepted) {
           console.log(`ORDEM ${order.id} ACEITA POR ${decoded?.payload.name}`);
@@ -100,7 +103,7 @@ class SocketConnector {
             {
               accepted: true,
               order: newOrder,
-              routes,
+              route,
             }
           );
 

@@ -103,7 +103,7 @@ class ProductService {
     else data = new Date(`1900-01-01T${now.getHours()}:00:00.000Z`);
 
     const dayOfWeek = getDayOfWeek(now.getDay() + 1);
-
+    try {
     const products = await db.product.findMany({
       where: {
         marketer: {
@@ -150,6 +150,11 @@ class ProductService {
     });
 
     return products;
+  }
+    catch(err) {
+      console.log(err);
+      return false;
+    }
   }
 
   // list

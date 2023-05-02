@@ -69,28 +69,27 @@ class OrderController {
       return false;
     }
 
-    const googleRoute = await GoogleMapsService.findRoutes({
+    const googleRoute = {
       arrived: costumerLatLng,
       origin: waypoints[0], // deliveryman
-      waypoints: waypoints,
-    });
+      waypoints: waypoints.legth === 1 ? null : waypoints,
+    };
 
-    if (!googleRoute) {
-      return false;
-    }
-
-    console.info(googleRoute.data);
-    fs.writeFileSync('./data.json', JSON.stringify(googleRoute.data, null, 2) , 'utf-8');
+    
     console.info("lista de deliverys", listOfAvailableDeliverys);
     console.info("start point", startPoint);
     console.info("list de deliverys acesseveis", approachablesDeliverys);
 
     const roomId = approachablesDeliverys[0].id.toString();
-    const data = { route: googleRoute.data, order };
+    const costumerRoomId =  `costumer_${order.costumer_addresses.costumerId.toString()}`
+    const data = { route: googleRoute, order };
+
+    console.log(data);
+    
 
     // send to best deliveryman
-    wss.sendMessage(roomId, "intent_of_travel", data);
-
+    await wss.sendMessage(roomId, "intent_of_travel", data);
+    
     return null;
   }
 }

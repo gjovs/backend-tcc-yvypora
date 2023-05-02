@@ -9,6 +9,8 @@ export default async function (server: FastifyInstance) {
     "/details",
     { onRequest: [server.auth] },
     async (req: FastifyRequest, rep: FastifyReply) => {
+      console.log(req.user);
+      
       const { typeof: userType, id } = req.user as DecodedToken;
 
       if (userType === TypeOfUser.COSTUMER) {
