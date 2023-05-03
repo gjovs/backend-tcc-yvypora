@@ -1,12 +1,16 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-import { getGender, hashPassword, isValidDate } from "../../utils/utils";
-import { OsmService } from "../../infrastructure/services";
-import { CostumerRepository, UserRepository } from "../../domain/repositories";
-import { genToken } from "../../utils/utils";
-import ICostumer from "../../domain/models/costumer";
-import IAddress from "../../domain/models/address";
-import DecodedToken from "../../domain/dto/DecodedToken";
-import { ICostumerController } from "../../interfaces/controllers.interface";
+import { FastifyReply, FastifyRequest } from 'fastify';
+import {
+  getGender,
+  hashPassword,
+  isValidDate,
+  genToken,
+} from '../../utils/utils';
+import { OsmService } from '../../infrastructure/services';
+import { CostumerRepository, UserRepository } from '../../domain/repositories';
+import ICostumer from '../../domain/models/costumer';
+import IAddress from '../../domain/models/address';
+import DecodedToken from '../../domain/dto/DecodedToken';
+import { ICostumerController } from '../../interfaces/controllers.interface';
 
 export class CostumerController implements ICostumerController {
   async create(
@@ -17,6 +21,8 @@ export class CostumerController implements ICostumerController {
   ) {
     const { body } = req;
 
+    console.log(body);
+
     const { name, email, password, address, gender, birthday } = body;
 
     if (!isValidDate(birthday)) {
@@ -24,7 +30,7 @@ export class CostumerController implements ICostumerController {
         code: 400,
         error: true,
         message:
-          "Date format to attribute birthday is wrong, need to be yyyy-mm-dd",
+          'Date format to attribute birthday is wrong, need to be yyyy-mm-dd',
       });
     }
 
@@ -38,7 +44,7 @@ export class CostumerController implements ICostumerController {
       return rep.status(400).send({
         code: 400,
         error: true,
-        message: "This address is not valid to be saveable",
+        message: 'This address is not valid to be saveable',
       });
     }
 
@@ -46,10 +52,10 @@ export class CostumerController implements ICostumerController {
       name,
       email,
       password: password_hash,
-      address: { ...addressWithLocation, addressTypeId: 1 },
+      address: { ...addressWithLocation, addressTypeId: 2 },
       gender: genderId,
       birthday,
-      cpf: "",
+      cpf: '',
     });
 
     if (res?.error) {
@@ -86,7 +92,7 @@ export class CostumerController implements ICostumerController {
           code: 400,
           error: true,
           message:
-            "Date format to attribute birthday is wrong, need to be yyyy-mm-dd",
+            'Date format to attribute birthday is wrong, need to be yyyy-mm-dd',
         });
       }
     }
@@ -111,7 +117,7 @@ export class CostumerController implements ICostumerController {
     const newDetails = await UserRepository.findCostumerById(parseInt(id, 10));
 
     const newToken = genToken({
-      payload: { ...newDetails, typeof: "COSTUMER" },
+      payload: { ...newDetails, typeof: 'COSTUMER' },
     });
 
     return rep.send({ data: { ...res?.data, newToken } });
@@ -133,7 +139,7 @@ export class CostumerController implements ICostumerController {
     if (!exists.data) {
       return rep.status(404).send({
         error: true,
-        message: "This costumer do not exist",
+        message: 'This costumer do not exist',
       });
     }
 
