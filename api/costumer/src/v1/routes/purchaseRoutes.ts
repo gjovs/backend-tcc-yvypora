@@ -3,6 +3,7 @@ import { CompressionTypes } from 'kafkajs';
 import { PurchaseController } from '../controllers';
 import OrderService from '../services/order.service';
 import KafkaProducer from '../Kafka';
+import ReviewController from '../controllers/ReviewController';
 
 interface IStripePurchaseEvent {
   id: string;
@@ -140,10 +141,16 @@ export default async function purchaseRoutes(server: FastifyInstance) {
       return rep.send({ received: true });
     }
   );
-  
+
   server.get(
     '/historic',
     { onRequest: [server.auth] },
     PurchaseController.historic
+  );
+
+  server.post(
+    '/review',
+    { onRequest: [server.auth] },
+    ReviewController.reviewPurchase
   );
 }

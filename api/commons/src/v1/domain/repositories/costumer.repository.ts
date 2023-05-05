@@ -1,6 +1,6 @@
-import db from "../../infrastructure/libs/prisma";
-import ICostumer from "../models/costumer";
-import { IAddressOSM } from "../dto/OSMAddress";
+import db from '../../infrastructure/libs/prisma';
+import ICostumer from '../models/costumer';
+import { IAddressOSM } from '../dto/OSMAddress';
 
 class CostumerRepository {
   async getCostumer(id: number) {
@@ -29,7 +29,7 @@ class CostumerRepository {
       return { data: res, error: false };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, message: "Failed to delete this costumer" };
+        return { error: true, message: 'Failed to delete this costumer' };
       }
     }
   }
@@ -42,6 +42,7 @@ class CostumerRepository {
           number: data.address.number,
           complemento: data.address.complemento,
           cep: data.address.cep,
+          default: true,
           location: {
             create: {
               latitude: data.address.latitude,
@@ -129,7 +130,7 @@ class CostumerRepository {
         console.log(error);
         return {
           error: true,
-          message: "Failed to save a new CostumerService in Database",
+          message: 'Failed to save a new CostumerService in Database',
           code: 401,
         };
       }
@@ -154,10 +155,10 @@ class CostumerRepository {
       );
 
       await db.costumer.delete({ where: { id } });
-      return { error: false, data: "Success Deleted" };
+      return { error: false, data: 'Success Deleted' };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, message: "Failed to delete this costumer" };
+        return { error: true, message: 'Failed to delete this costumer' };
       }
     }
   }
@@ -210,7 +211,7 @@ class CostumerRepository {
       if (error instanceof Error) {
         return {
           error: true,
-          message: "Failed to update this costumer",
+          message: 'Failed to update this costumer',
           code: 401,
         };
       }
@@ -279,7 +280,7 @@ class CostumerRepository {
       });
       return {
         error: false,
-        message: "Success appended new address to costumer",
+        message: 'Success appended new address to costumer',
         code: 401,
       };
     } catch (error) {
@@ -287,7 +288,7 @@ class CostumerRepository {
         console.log(error);
         return {
           error: true,
-          message: "Failed to append new address in this costumer",
+          message: 'Failed to append new address in this costumer',
           code: 401,
         };
       }
@@ -299,11 +300,11 @@ class CostumerRepository {
       await db.address.delete({ where: { id: addressId } });
       return {
         error: false,
-        message: "Deleted address associated with this user",
+        message: 'Deleted address associated with this user',
       };
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, message: "Failed to delete this address" };
+        return { error: true, message: 'Failed to delete this address' };
       }
     }
   }
@@ -327,7 +328,7 @@ class CostumerRepository {
       return addresses;
     } catch (error) {
       if (error instanceof Error) {
-        return { error: true, message: "Failed to list addresses" };
+        return { error: true, message: 'Failed to list addresses' };
       }
     }
   }

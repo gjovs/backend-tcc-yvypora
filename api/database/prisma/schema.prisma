@@ -126,6 +126,7 @@ model product {
   price                     Float
   quantity                  Float?
   review                    Float                       @default(0)
+  avaliations               Float                       @default(0)
   active_for_selling        Boolean                     @default(true)
   available_quantity        Int
   marketerId                Int
@@ -137,7 +138,7 @@ model product {
   image_of_product          image_of_product[]
   category_of_product       category_of_product         @relation(fields: [category_of_productId], references: [id])
   marketer                  marketer                    @relation(fields: [marketerId], references: [id], onDelete: Cascade)
-  type_of_price     type_of_price               @relation(fields: [type_of_productId], references: [id])
+  type_of_price             type_of_price               @relation(fields: [type_of_productId], references: [id])
   products_in_shopping_list products_in_shopping_list[]
   sale_off                  sale_off[]
 
@@ -151,12 +152,14 @@ model product {
 }
 
 model marketer {
-  id             Int              @id @unique @default(autoincrement())
-  name           String           @db.VarChar(45)
-  email          String           @unique @db.VarChar(255)
-  password_hash  String           @db.VarChar(255)
-  picture_uri    String?
-  review         Float            @default(0)
+  id            Int     @id @unique @default(autoincrement())
+  name          String  @db.VarChar(45)
+  email         String  @unique @db.VarChar(255)
+  password_hash String  @db.VarChar(255)
+  picture_uri   String?
+  review        Float   @default(0)
+  avaliations   Float   @default(0)
+
   online         Boolean          @default(false)
   locationId     Int              @unique
   created_at     DateTime         @default(now())
@@ -177,9 +180,11 @@ model marketer {
 }
 
 model fair {
-  name                   String
-  id                     Int                      @id @unique @default(autoincrement())
-  review                 Float                    @default(0)
+  name        String
+  id          Int    @id @unique @default(autoincrement())
+  review      Float  @default(0)
+  avaliations Float  @default(0)
+
   addressId              Int                      @unique
   created_at             DateTime                 @default(now())
   updated_at             DateTime                 @updatedAt
@@ -239,6 +244,7 @@ model address {
   cep                String
   logradouro         String
   number             Int
+  default            Boolean              @default(false)
   created_at         DateTime             @default(now())
   updated_at         DateTime             @updatedAt
   address_typeId     Int
