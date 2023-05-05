@@ -28,4 +28,6 @@ export default async function productRoutes(server: FastifyInstance) {
 
 
   server.get("/findNearest", {onRequest: [server.auth]},ProductController.nearToClient)
+
+  
 }
