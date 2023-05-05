@@ -1,3 +1,3 @@
-import db from "./prisma";
+import { db w} from './prisma';
 
 export { db };

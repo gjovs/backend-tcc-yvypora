@@ -85,7 +85,7 @@ export default async function purchaseRoutes(server: FastifyInstance) {
 
     console.log('teste', order);
 
-    rep.redirect(`${process.env.SITE_URL as string}/?order=success`);
+    rep.redirect(`${process.env.SITE_URL as string}/order/track`);
   });
 
   // WEB HOOK

@@ -42,7 +42,6 @@ class PurchaseController {
       );
 
       const session = await createSession(data_products);
-      console.log(session);
 
       await OrderService.createIntent({
         total: session.amount_total as number,
