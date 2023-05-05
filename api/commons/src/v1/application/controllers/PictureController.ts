@@ -1,9 +1,10 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-import { TypeOfUser } from "../../domain/dto/TypeOfUser";
-import { UserRepository } from "../../domain/repositories";
-import { FirebaseService } from "../../infrastructure/services";
-import DecodedToken from "../../domain/dto/DecodedToken";
-import { IPictureController } from "../../interfaces/controllers.interface";
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { Method } from 'axios';
+import { TypeOfUser } from '../../domain/dto/TypeOfUser';
+import { UserRepository } from '../../domain/repositories';
+import { FirebaseService } from '../../infrastructure/services';
+import DecodedToken from '../../domain/dto/DecodedToken';
+import { IPictureController } from '../../interfaces/controllers.interface';
 
 export class PictureController implements IPictureController {
   async appendToUser(
@@ -13,31 +14,31 @@ export class PictureController implements IPictureController {
     const decodedToken = req.user as DecodedToken;
     const { id, typeof: userType } = decodedToken;
     const { picture } = req.body;
-
     try {
       await picture.toBuffer();
 
-      const updateUserPhoto = async (
-        findFn: Function,
-        updateFn: Function,
-        userId: number
-      ) => {
+      const updateUserPhoto = async (findFn, updateFn, userId: number) => {
         const user = await findFn(userId);
+
         if (!user) {
-          throw new Error("User not found");
+          throw new Error('User not found');
         }
 
         const picture_uri = await FirebaseService.uploadImage(picture);
 
-        const status = await updateFn(picture_uri);
+        console.log(picture_uri);
+
+        const status = await updateFn({ id, picture_uri });
 
         if (!status) {
           throw new Error("Unable to update the user's photo");
         }
 
+        console.log(user, picture_uri, status);
+
         return {
           error: false,
-          message: "Updated image of the user",
+          message: 'Updated image of the user',
           code: 200,
         };
       };
@@ -72,10 +73,11 @@ export class PictureController implements IPictureController {
         );
       }
 
-      throw new Error("Invalid user type");
+      throw new Error('Invalid user type');
     } catch (error) {
-      if (error instanceof Error)
+      if (error instanceof Error) {
         rep.status(400).send({ error: true, message: error.message });
+      }
     }
   }
 }

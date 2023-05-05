@@ -98,9 +98,11 @@ class UserRepository {
       return true;
     } catch (error) {
       if (error instanceof Error) {
+        console.log(error);
+        
         return {
           error: true,
-          message: "Failed to update image of Marketer in Database",
+          message: "Failed to update image of Costumer in Database",
           code: 401,
         };
       }
