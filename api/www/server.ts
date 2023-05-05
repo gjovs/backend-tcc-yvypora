@@ -1,9 +1,9 @@
 import server from '../Server';
-import Kafka from '../costumer/src/v1'
+import Kafka from '../costumer/src/v1/Kafka';
 
 async function run() {
   await server.listen({
-    port: process.env.PORT ? Number(process.env.PORT) : 3333,
+    port: process.env.PORT ? Number(process.env.PORT) : 8080,
     host: '0.0.0.0',
   });
 
