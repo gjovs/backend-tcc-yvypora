@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { z, ZodError } from 'zod';
+import { log } from 'console';
 import { Product } from '../services';
 
 export class ProductController {
@@ -66,17 +67,15 @@ export class ProductController {
     const data = req.body;
 
     console.log(data);
-    
 
     if (data.quantity) {
       // DIVIDE PRICE BY EACH QUILOGRAMS IN QUANTITY
-      data.price = data.price / data.quantity   
-      
+      data.price /= data.quantity;
+
       console.log(data.price, data.quantity);
     }
 
     console.log(req.user.id);
-    
 
     // @ts-ignore
     const res = await Product.create(data, req.user.id);
@@ -124,6 +123,7 @@ export class ProductController {
     });
 
     try {
+      console.log("teste", req.body);
       const data = updateProductSchema.parse(req.body);
       const res = await Product.update(data, parseInt(req.params.id, 10));
 

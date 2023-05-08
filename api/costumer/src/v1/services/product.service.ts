@@ -4,7 +4,7 @@ import { getDayOfWeek } from '../utils';
 
 class ProductService {
   public async index() {
-    return await db.product.findMany();
+    return db.product.findMany();
   }
 
   // filters
@@ -138,6 +138,7 @@ class ProductService {
             gte: lte,
             lte: gte,
           },
+          active_for_selling: true,
         },
         include: {
           sale_off: true,
@@ -246,6 +247,7 @@ class ProductService {
             },
           },
         },
+        active_for_selling: true,
       },
       include: {
         image_of_product: {

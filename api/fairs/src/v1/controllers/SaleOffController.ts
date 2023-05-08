@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { Product } from '../services';
 
-export class SaleOfController {
+export class SaleOffController {
   async create(
     req: FastifyRequest<{
                  Params: {
@@ -45,4 +45,4 @@ export class SaleOfController {
   }
 }
 
-export default new SaleOfController();
+export default new SaleOffController();
