@@ -17,3 +17,11 @@ export function getDayOfWeek(day: number): string {
   }
 }
 
+export const getDateFromCurrentHour = (): Date => {
+  const now = new Date();
+  const hour = now.getHours().toString().padStart(2, '0');
+  const dateString = `1900-01-01T${hour}:00:00.000Z`;
+  return new Date(dateString);
+}
+
+

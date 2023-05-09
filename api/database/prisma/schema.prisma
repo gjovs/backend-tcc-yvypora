@@ -347,6 +347,7 @@ model date_and_hour_of_work {
 model day_of_week {
   id                    Int                     @id @unique @default(autoincrement())
   name                  String                  @unique @db.VarChar(20)
+  abbr String?  
   created_at            DateTime                @default(now())
   updated_at            DateTime                @updatedAt
   date_and_hour_of_work date_and_hour_of_work[]

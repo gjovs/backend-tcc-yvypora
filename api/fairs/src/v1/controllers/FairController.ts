@@ -17,7 +17,7 @@ export class FairController {
 
     if (check.length > 0) {
       return rep.status(401).send({
-        code: 401,
+        code: 400,
         error: true,
         message: "We already have this fair in this CEP value",
       });

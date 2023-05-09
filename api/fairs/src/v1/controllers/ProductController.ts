@@ -71,11 +71,7 @@ export class ProductController {
     if (data.quantity) {
       // DIVIDE PRICE BY EACH QUILOGRAMS IN QUANTITY
       data.price /= data.quantity;
-
-      console.log(data.price, data.quantity);
     }
-
-    console.log(req.user.id);
 
     // @ts-ignore
     const res = await Product.create(data, req.user.id);

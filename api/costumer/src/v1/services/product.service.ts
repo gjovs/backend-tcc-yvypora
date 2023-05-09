@@ -1,6 +1,6 @@
 import { orderByDistance } from 'geolib';
 import db from '../libs/prisma';
-import { getDayOfWeek } from '../utils';
+import { getDayOfWeek, getDateFromCurrentHour  } from '../utils';
 
 class ProductService {
   public async index() {
@@ -96,12 +96,7 @@ class ProductService {
     lte: number,
     gte: number
   ) {
-    let data;
-    const now = new Date();
-
-    if (now.getHours().toString().length == 1) {
-      data = new Date(`1900-01-01T0${now.getHours()}:00:00.000Z`);
-    } else data = new Date(`1900-01-01T${now.getHours()}:00:00.000Z`);
+    const data = getDateFromCurrentHour()
 
     const dayOfWeek = getDayOfWeek(now.getDay() + 1);
     try {
@@ -213,12 +208,7 @@ class ProductService {
   }
 
   async findNearest(id: number) {
-    let data;
-    const now = new Date();
-
-    if (now.getHours().toString().length == 1) {
-      data = new Date(`1900-01-01T0${now.getHours()}:00:00.000Z`);
-    } else data = new Date(`1900-01-01T${now.getHours()}:00:00.000Z`);
+    const data = getDateFromCurrentHour()
 
     const dayOfWeek = getDayOfWeek(now.getDay() + 1);
 
