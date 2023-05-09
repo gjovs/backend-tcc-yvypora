@@ -27,6 +27,26 @@ export default async function productRoutes(server: FastifyInstance) {
     ProductController.get,
   );
 
+  server.put(
+    'quantity/:id/:quantity',
+    { // @ts-ignore
+      onRequest: [server.auth, server.checkOwner],
+      schema: {
+        params: {
+          type: 'object',
+          required: ['id', 'quantity'],
+          properties: {
+            id: { type: 'number' },
+            quantity: { type: 'number' },
+          },
+        },
+      },
+    },
+    ProductController.updateAvailableQuantity,
+  );
+
+
+
   server.post(
     '/',
     { // @ts-ignore

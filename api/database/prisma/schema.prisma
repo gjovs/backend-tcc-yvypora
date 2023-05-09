@@ -124,6 +124,7 @@ model product {
   id                        Int                         @id @unique @default(autoincrement())
   name                      String                      @db.VarChar(120)
   price                     Float
+  discount Float?
   quantity                  Float?
   review                    Float                       @default(0)
   avaliations               Float                       @default(0)

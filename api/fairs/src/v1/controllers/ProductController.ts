@@ -3,6 +3,12 @@ import { z, ZodError } from 'zod';
 import { log } from 'console';
 import { Product } from '../services';
 
+
+interface Params {
+  [key: string]: string | number;
+}
+
+
 export class ProductController {
   async get(
     req: FastifyRequest<{
@@ -65,8 +71,6 @@ export class ProductController {
     rep: FastifyReply,
   ) {
     const data = req.body;
-
-    console.log(data);
 
     if (data.quantity) {
       // DIVIDE PRICE BY EACH QUILOGRAMS IN QUANTITY
@@ -198,6 +202,41 @@ export class ProductController {
       error: false,
       message: res?.message,
     });
+  }
+
+  async updateAvailableQuantity(req: FastifyRequest<{
+    Params: {
+      id: string,
+      quantity: string,
+    }
+  }>, rep: FastifyReply) {
+    const params: Params = req.params;
+
+    for (const key in params) {
+      if (typeof params[key] === 'string') {
+        params[key] = Number(params[key]);
+      }
+    }
+
+    const { id, quantity } = params;
+    
+    if (quantity <= 0) {
+      return rep.status(400).send({
+        code: 400,
+        error: true,
+        message: 'The new value setted is wrong, for update the value need to be greather than 0'
+      })
+    }
+
+    try {
+      await Product.updateAvailableQuantity(params)
+      return rep.status(202).send()
+    } catch (err) {
+      if (err instanceof Error) {
+        console.log(err);
+        return rep.status(500).send({...err})
+      } 
+    }
   }
 }
 

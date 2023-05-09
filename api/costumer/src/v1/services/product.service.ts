@@ -35,6 +35,8 @@ class ProductService {
         product: {
           include: {
             sale_off: true,
+            type_of_price: true,
+            category_of_product: true,
             image_of_product: {
               include: {
                 image: true,
@@ -245,6 +247,8 @@ class ProductService {
             image: true,
           },
         },
+        type_of_price: true,
+        category_of_product: true,
         marketer: {
           include: {
             location: {
@@ -270,6 +274,9 @@ class ProductService {
         location: true,
       },
     });
+
+    console.log("dados teste", id, userLocation);
+    
 
     const productsWithLocations = products.map((product) => {
       // @ts-ignore

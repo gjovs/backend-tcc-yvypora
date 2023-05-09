@@ -251,7 +251,7 @@ class Product {
         },
       });
 
-      console.log(res);
+      console.log("teste", res);
 
       if (res.length === 0) return false;
 
@@ -276,6 +276,7 @@ class Product {
           marketerId: ownerId,
         },
       });
+
       const { id } = product[0];
 
       await db.sale_off.create({
@@ -284,6 +285,15 @@ class Product {
           value,
         },
       });
+      
+      await db.product.update({
+        where: {
+          id: productId,
+        },
+        data: {
+          discount: value, 
+        }
+      })
 
       return {
         error: false,
@@ -292,6 +302,8 @@ class Product {
       };
     } catch (error) {
       if (error instanceof Error) {
+        console.log(error);
+        
         return {
           error: true,
           code: 401,
@@ -314,6 +326,9 @@ class Product {
           id: productId,
           marketerId: ownerId,
         },
+        include: {
+          sale_off: true
+        }
       });
       const { id } = product[0];
 
@@ -322,6 +337,15 @@ class Product {
           productId: id,
         },
       });
+
+      await db.product.update({
+        where: {
+          id: productId, 
+        },
+        data: {
+          discount: null, 
+        }
+      })
 
       return {
         error: false,
@@ -342,6 +366,13 @@ class Product {
       code: 401,
       message: 'Bad id or bad value parsed to sale off appended',
     };
+  }
+
+  async updateAvailableQuantity(data: { quantity: number, id: number }) {
+    return db.product.update({
+      where: { id: data.id },
+      data: { available_quantity: data.quantity }
+    })
   }
 }
 
