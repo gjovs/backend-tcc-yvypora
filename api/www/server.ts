@@ -7,7 +7,7 @@ async function run() {
     host: '0.0.0.0',
   });
 
-  await Kafka.run();
+  // await Kafka.run();
 }
 
 run().then(() => {

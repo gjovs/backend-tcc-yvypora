@@ -7,8 +7,8 @@ async function run() {
     port: 3336,
   });
 
-  await KafkaConsumer.start();
-  await KafkaConsumer.runConsumer();
+  // await KafkaConsumer.start();
+  // await KafkaConsumer.runConsumer();
 }
 
 async function runSocket() {

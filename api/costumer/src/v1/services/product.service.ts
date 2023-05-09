@@ -97,7 +97,7 @@ class ProductService {
     gte: number
   ) {
     const data = getDateFromCurrentHour()
-
+    const now = new Date()
     const dayOfWeek = getDayOfWeek(now.getDay() + 1);
     try {
       const products = await db.product.findMany({
@@ -209,7 +209,7 @@ class ProductService {
 
   async findNearest(id: number) {
     const data = getDateFromCurrentHour()
-
+    const now = new Date()
     const dayOfWeek = getDayOfWeek(now.getDay() + 1);
 
     const products = await db.product.findMany({
