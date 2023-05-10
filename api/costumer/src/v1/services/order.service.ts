@@ -1,4 +1,5 @@
-import db from "../libs/prisma";
+import { log } from 'console';
+import db from '../libs/prisma';
 
 class OrderService {
   async get(intent_payment_id: string) {
@@ -72,10 +73,13 @@ class OrderService {
         },
       });
 
+      log(data.products);
+
       await db.products_in_shopping_list.createMany({
         data: data.products.map((item) => ({
           productId: item.id,
           shopping_listId: order.shopping_listId,
+          amount: item.amount,
         })),
       });
 
@@ -119,12 +123,11 @@ class OrderService {
   async getLast() {
     const lastOrder = await db.order.groupBy({
       orderBy: {
-        created_at: "desc",
+        created_at: 'desc',
       },
       take: 1,
-      by: ["created_at", "id", "intent_payment_id"],
+      by: ['created_at', 'id', 'intent_payment_id'],
     });
-    
 
     return lastOrder[0];
   }

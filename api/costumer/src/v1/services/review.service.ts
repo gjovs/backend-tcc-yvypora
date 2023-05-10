@@ -1,17 +1,21 @@
-import IPurchaseReview from '../domaim/dto/ReviewPurchases';
+import { log } from 'console';
+import { IDeliverymanReview, IPurchaseReview } from '../domain/dto/Reviews';
 import db from '../libs/prisma';
 
 class ReviewService {
   async reviewPurchase(args: IPurchaseReview) {
     const { reviews } = args;
+
     let status = true;
+
     await Promise.all(
       reviews.map(async ({ avaliation, productId }) => {
         try {
-          const previews = await db.product.findUnique({
+          const { review: lastReviews } = await db.product.findUniqueOrThrow({
             where: { id: productId },
             select: {
               avaliations: true,
+              review: true,
             },
           });
 
@@ -21,7 +25,7 @@ class ReviewService {
               avaliations: {
                 increment: 1,
               },
-              review: { increment: avaliation, divide: previews?.avaliations },
+              review: avaliation + lastReviews,
             },
           });
           return true;
@@ -34,6 +38,36 @@ class ReviewService {
     );
 
     return status;
+  }
+
+  async reviewDeliveryman(args: IDeliverymanReview) {
+    try {
+      const { review } = args;
+
+      const { avaliations: lastAvaliations, review: lastReviews } =
+        await db.deliveryman.findUniqueOrThrow({
+          where: { id: review.deliverymanId },
+          select: { avaliations: true, review: true },
+        });
+
+      const newReviewValue = review.avaliation + lastReviews;
+
+      await db.deliveryman.update({
+        where: { id: review.deliverymanId },
+        data: {
+          avaliations: { increment: 1 },
+          review: newReviewValue,
+        },
+      });
+      return true;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error);
+        return false;
+      }
+    }
+
+    return false;
   }
 }
 

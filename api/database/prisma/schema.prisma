@@ -27,16 +27,19 @@ model costumer {
 }
 
 model deliveryman {
-  id                  Int                   @id @unique @default(autoincrement())
-  name                String                @db.VarChar(45)
-  email               String                @unique @db.VarChar(255)
-  password_hash       String                @db.VarChar(255)
-  picture_uri         String                @db.VarChar(255)
-  locationId          Int                   @unique
-  online              Boolean               @default(false)
-  created_at          DateTime              @default(now())
-  updated_at          DateTime              @updatedAt
-  genderId            Int
+  id            Int      @id @unique @default(autoincrement())
+  name          String   @db.VarChar(45)
+  email         String   @unique @db.VarChar(255)
+  password_hash String   @db.VarChar(255)
+  picture_uri   String   @db.VarChar(255)
+  locationId    Int      @unique
+  online        Boolean  @default(false)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  genderId      Int
+  review        Float    @default(0)
+  avaliations   Float    @default(0)
+
   birthday            String
   gender              gender                @relation(fields: [genderId], references: [id])
   location            location              @relation(fields: [locationId], references: [id])
@@ -111,6 +114,7 @@ model products_in_shopping_list {
   id              Int           @id @unique @default(autoincrement())
   shopping_listId Int
   productId       Int
+  amount          Int?
   created_at      DateTime      @default(now())
   updated_at      DateTime      @updatedAt
   product         product       @relation(fields: [productId], references: [id])
@@ -124,7 +128,7 @@ model product {
   id                        Int                         @id @unique @default(autoincrement())
   name                      String                      @db.VarChar(120)
   price                     Float
-  discount Float?
+  discount                  Float?
   quantity                  Float?
   review                    Float                       @default(0)
   avaliations               Float                       @default(0)
@@ -348,7 +352,7 @@ model date_and_hour_of_work {
 model day_of_week {
   id                    Int                     @id @unique @default(autoincrement())
   name                  String                  @unique @db.VarChar(20)
-  abbr String?  
+  abbr                  String?
   created_at            DateTime                @default(now())
   updated_at            DateTime                @updatedAt
   date_and_hour_of_work date_and_hour_of_work[]

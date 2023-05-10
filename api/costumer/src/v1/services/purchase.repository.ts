@@ -1,4 +1,5 @@
 import {
+  deliveryman,
   order,
   product,
   products_in_shopping_list,
@@ -14,6 +15,15 @@ type IHistoricResponse = (order & {
     })[];
   };
 })[];
+
+type IGetResponse =
+  | (order & {
+      deliveryman: deliveryman | null;
+      shopping_list: shopping_list & {
+        products_in_shopping_list: (products_in_shopping_list & {})[];
+      };
+    })
+  | null;
 
 class PurchaseRepository {
   async getHistoric(id: number): Promise<IHistoricResponse | false> {
@@ -58,6 +68,34 @@ class PurchaseRepository {
       console.log(err);
       return false;
     }
+  }
+
+  async get(id: number): Promise<IGetResponse> {
+    const res = db.order.findUnique({
+      where: { id },
+      include: {
+        deliveryman: true,
+        shopping_list: {
+          include: {
+            products_in_shopping_list: {
+              include: {
+                product: {
+                  include: {
+                    marketer: true,
+                    image_of_product: {
+                      include: {
+                        image: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    return res;
   }
 }
 

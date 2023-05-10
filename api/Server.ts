@@ -20,6 +20,7 @@ import {
   marketerRoutes,
   searchRoutes,
   testRoutes,
+  reviewRoutes,
 } from './costumer/src/v1/routes';
 
 import {
@@ -101,6 +102,9 @@ class Server {
     });
     this.app.register(testRoutes, {
       prefix: 'costumer/test/',
+    });
+    this.app.register(reviewRoutes, {
+      prefix: 'costumer/review/',
     });
 
     this.app.register(userRoutesFair, {

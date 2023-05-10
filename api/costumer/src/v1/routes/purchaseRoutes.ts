@@ -148,9 +148,21 @@ export default async function purchaseRoutes(server: FastifyInstance) {
     PurchaseController.historic
   );
 
-  server.post(
-    '/review',
-    { onRequest: [server.auth] },
-    ReviewController.reviewPurchase
+
+  server.get(
+    '/:id',
+    {
+      onRequest: [server.auth],
+      schema: {
+        params: {
+          type: 'object',
+          required: ['id'],
+          properties: {
+            id: { type: 'number' },
+          },
+        },
+      },
+    },
+    PurchaseController.get
   );
 }
