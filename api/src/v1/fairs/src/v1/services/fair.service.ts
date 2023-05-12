@@ -1,5 +1,5 @@
-import db from "../libs/prisma";
-import address from "../utils/interfaces/address.interface";
+import db from '../libs/prisma';
+import address from '../utils/interfaces/address.interface';
 
 class Fair {
   async create(data: {
@@ -66,8 +66,9 @@ class Fair {
               },
               complemento: data.address.complemento,
               type: {
-                connect: { id: 
-                  5 },
+                connect: {
+                  id: 5,
+                },
               },
               number: data.address.number,
             },
@@ -101,7 +102,7 @@ class Fair {
 
       return {
         error: false,
-        message: "Successfully saved a new fair",
+        message: 'Successfully saved a new fair',
         payload: res,
       };
     } catch (error) {
@@ -129,9 +130,10 @@ class Fair {
       await db.image.create({ data: { uri, fairId: id } });
       return {
         error: false,
-        message: "Successfully appended image to product",
+        message: 'Successfully appended image to fair',
       };
     } catch (error) {
+      console.log(error);
       if (error instanceof Error) {
         return { error: true, code: 401, message: error.message };
       }

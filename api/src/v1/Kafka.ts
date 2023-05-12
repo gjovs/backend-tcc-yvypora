@@ -20,6 +20,7 @@ class KafkaProducer {
   private initProducer() {
     this.producer = this.kafka.producer();
   }
+
   public async run() {
     await this.producer?.connect();
   }

@@ -94,7 +94,7 @@ class OrderService {
   async updatePaymentStatus(
     status: boolean,
     payment_details: string,
-    intent_payment_id: string
+    intent_payment_id: string,
   ) {
     try {
       await db.order.update({
@@ -116,6 +116,7 @@ class OrderService {
 
       return true;
     } catch (e) {
+      console.log(e);
       return false;
     }
   }

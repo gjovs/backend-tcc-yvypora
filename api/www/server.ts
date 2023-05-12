@@ -1,5 +1,5 @@
-import server from '../Server';
-import Kafka from '../costumer/src/v1/Kafka';
+import server from '../src/v1/Server';
+import Kafka from '../src/v1/Kafka';
 
 async function run() {
   await server.listen({

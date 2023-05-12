@@ -1,8 +1,8 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-import { OsmService } from "../../infrastructure/services";
-import { CostumerRepository } from "../../domain/repositories";
-import IAddress from "../../domain/models/address";
-import { IAddressController } from "../../interfaces/controllers.interface";
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { OsmService } from '../../infrastructure/services';
+import { CostumerRepository } from '../../domain/repositories';
+import IAddress from '../../domain/models/address';
+import { IAddressController } from '../../interfaces/controllers.interface';
 
 export class AddressController implements IAddressController {
   async addToCostumer(
@@ -25,7 +25,7 @@ export class AddressController implements IAddressController {
     if (!exists.data) {
       return rep.status(404).send({
         error: true,
-        message: "This costumer do not exist",
+        message: 'This costumer do not exist',
       });
     }
 
@@ -34,7 +34,7 @@ export class AddressController implements IAddressController {
     if (!osmAddressRes) {
       rep.code(400).send({
         error: true,
-        message: "This CEP value cant be search, probably is wrong!",
+        message: 'This CEP value cant be search, probably is wrong!',
       });
     }
 

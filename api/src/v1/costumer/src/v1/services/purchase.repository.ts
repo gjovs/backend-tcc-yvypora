@@ -30,13 +30,18 @@ class PurchaseRepository {
     try {
       const res = await db.order.findMany({
         where: {
-          payment: {
-            status: true,
-          },
-          delivered_status_for_client: true,
-          costumer_addresses: {
-            costumerId: id,
-          },
+          AND: [
+            {
+              payment: {
+                status: true,
+              },
+            },
+            {
+              costumer_addresses: {
+                costumerId: id,
+              },
+            },
+          ],
         },
         include: {
           shopping_list: {
@@ -52,8 +57,22 @@ class PurchaseRepository {
                         },
                       },
                       category_of_product: true,
-                      type_of_price_product: true,
+                      type_of_price: true,
                       sale_off: true,
+                      marketer: {
+                        include: {
+                          fair_marketers: {
+                            include: {
+                              fair: {
+                                select: {
+                                  name: true,
+                                  image: true,
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
                     },
                   },
                 },

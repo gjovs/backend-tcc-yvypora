@@ -18,7 +18,7 @@ class PurchaseController {
     req: FastifyRequest<{
       Body: IPurchase;
     }>,
-    rep: FastifyReply,
+    rep: FastifyReply
   ) {
     const { costumer_address_id, freight, products } = req.body;
 
@@ -40,7 +40,7 @@ class PurchaseController {
           }
 
           return new Error('Invalid Product Id');
-        }),
+        })
       );
 
       const session = await createSession(data_products);
@@ -58,13 +58,17 @@ class PurchaseController {
       return rep.send({ code: 200, data: session.url });
     } catch (e) {
       if (e instanceof Error) {
-        return rep.status(401).send({ message: e.message, error: true });
+        return rep.status(400).send({ message: e.message, error: true });
       }
     }
+    return rep
+      .status(400)
+      .send({ message: 'occurred an error in the server', error: true });
   }
 
   async historic(req: FastifyRequest, rep: FastifyReply) {
     const { id } = req.user as DecodedToken;
+
     const res = await PurchaseRepository.getHistoric(id);
 
     if (!res) {
@@ -86,7 +90,7 @@ class PurchaseController {
         id: string;
       };
     }>,
-    rep: FastifyReply,
+    rep: FastifyReply
   ) {
     const { id } = req.params;
 

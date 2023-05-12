@@ -2,7 +2,7 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import { CompressionTypes } from 'kafkajs';
 import { PurchaseController } from '../controllers';
 import OrderService from '../services/order.service';
-import KafkaProducer from '../Kafka';
+import KafkaProducer from '../../../../Kafka';
 import ReviewController from '../controllers/ReviewController';
 
 interface IStripePurchaseEvent {
@@ -65,7 +65,7 @@ export default async function purchaseRoutes(server: FastifyInstance) {
   server.get('success', async (_req, rep) => {
     const order = await OrderService.getLast();
 
-    await OrderService.updatePaymentStatus(
+    const res = await OrderService.updatePaymentStatus(
       true,
       'paid',
       order.intent_payment_id
@@ -147,7 +147,6 @@ export default async function purchaseRoutes(server: FastifyInstance) {
     { onRequest: [server.auth] },
     PurchaseController.historic
   );
-
 
   server.get(
     '/:id',
