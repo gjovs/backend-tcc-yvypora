@@ -129,5 +129,5 @@ class Server {
     this.app.decorate('checkOwner', checkOwner);
   }
 }
-
+ 
 export default new Server().app;
