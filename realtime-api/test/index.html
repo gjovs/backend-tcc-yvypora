@@ -20,14 +20,14 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     window.onload = async function () {
-        const { data } = await axios.post('http://localhost:8080/commons/login/', {
+        const { data } = await axios.post('http://costumer-api.westus3.cloudapp.azure.com/api/commons/login/', {
             email: "entregador@gmail.com", 
             password: "12345678"
         });
 
         const { token } = data
 
-        var socket = io.connect("ws://localhost:3337", {
+        var socket = io.connect("http://costumer-api.westus3.cloudapp.azure.com", {
             query: { token }
         });
 

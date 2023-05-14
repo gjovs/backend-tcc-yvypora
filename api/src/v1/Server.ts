@@ -64,63 +64,63 @@ class Server {
 
   private routes() {
     this.app.register(registerRoutes, {
-      prefix: 'commons/register/',
+      prefix: 'api/commons/register/',
     });
     this.app.register(loginRoutes, {
-      prefix: 'commons/login/',
+      prefix: 'api/commons/login/',
     });
     this.app.register(pictureRoutes, {
-      prefix: 'commons/picture/',
+      prefix: 'api/commons/picture/',
     });
     this.app.register(formFieldsRoutes, {
-      prefix: 'commons/forms/',
+      prefix: 'api/commons/forms/',
     });
     this.app.register(fairRoutes, {
-      prefix: 'commons/fair/',
+      prefix: 'api/commons/fair/',
     });
     this.app.register(userRoutes, {
-      prefix: 'commons/user/',
+      prefix: 'api/commons/user/',
     });
 
     this.app.register(userRoutesCostumer, {
-      prefix: 'costumer/user/',
+      prefix: 'api/costumer/user/',
     });
     this.app.register(fairRoutesCostumer, {
-      prefix: 'costumer/fair/',
+      prefix: 'api/costumer/fair/',
     });
     this.app.register(productRoutes, {
-      prefix: 'costumer/product/',
+      prefix: 'api/costumer/product/',
     });
     this.app.register(marketerRoutes, {
-      prefix: 'costumer/marketer/',
+      prefix: 'api/costumer/marketer/',
     });
     this.app.register(purchaseRoutes, {
-      prefix: 'costumer/purchases/',
+      prefix: 'api/costumer/purchases/',
     });
     this.app.register(searchRoutes, {
-      prefix: 'costumer/search/',
+      prefix: 'api/costumer/search/',
     });
     this.app.register(testRoutes, {
-      prefix: 'costumer/test/',
+      prefix: 'api/costumer/test/',
     });
     this.app.register(reviewRoutes, {
-      prefix: 'costumer/review/',
+      prefix: 'api/costumer/review/',
     });
 
     this.app.register(userRoutesFair, {
-      prefix: 'fair/user/',
+      prefix: 'api/fair/user/',
     });
 
     this.app.register(fairRoutesFair, {
-      prefix: 'fair/fair/',
+      prefix: 'api/fair/fair/',
     });
 
     this.app.register(productRoutesFair, {
-      prefix: 'fair/product/',
+      prefix: 'api/fair/product/',
     });
 
     this.app.register(reportsRoutesFair, {
-      prefix: 'fair/reports/',
+      prefix: 'api/fair/reports/',
     });
   }
 
