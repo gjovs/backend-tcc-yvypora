@@ -57,6 +57,9 @@ class SearchService {
               image: true,
             },
           },
+          type_of_price: true,
+          category_of_product: true,
+          sale_off: true,
         },
       });
 
