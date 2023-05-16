@@ -4,7 +4,7 @@ module.exports = {
       name: 'yvypora-api',
       script: 'npm run dev',
       instances: '1',
-      autorestart: true,
+      autorestart: false,
       watch: false,
       max_memory_restart: '1G',
       env: {
