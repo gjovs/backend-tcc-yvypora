@@ -18,9 +18,11 @@ app.get("/api/logistic", (req, res) => {
 });
 
 const wss = new SocketConnector(server, {
+  allowEIO3: true,
   cors: {
-    origin: "*",
-  },
+        origin: true,
+        credentials: true
+   },
 });
 
 export { wss }
