@@ -8,7 +8,7 @@ class KafkaProducer {
   constructor(args: { clientId: string, brokers: string[]}) {
     this.kafka = new Kafka({
       ...args,
-      logLevel: logLevel.NOTHING,
+      logLevel: logLevel.ERROR,
       retry: {
         initialRetryTime: 300,
         retries: 10,
@@ -22,7 +22,11 @@ class KafkaProducer {
   }
 
   public async run() {
-    await this.producer?.connect();
+    try {
+      await this.producer.connect();
+    } catch (e: Error) {
+      console.log(e);
+    }
   }
 }
 

@@ -8,7 +8,7 @@ class KafkaConsumer {
   public consumer: Consumer | undefined;
 
   constructor(args: { clientId: string; brokers: string[] }) {
-    this.kafka = new Kafka({ ...args, logLevel: logLevel.NOTHING });
+    this.kafka = new Kafka({ ...args, logLevel: logLevel.ERROR });
     this.initConsumer();
   }
 
