@@ -80,8 +80,8 @@ const regularDirname = hasDirname && fs.existsSync(path.join(__dirname, 'schema.
 
 // if the client has been bundled, we need to look for the folders
 const foundDirname = !regularDirname && findSync(process.cwd(), [
-    "database\\prisma\\generated\\mongo",
-    "prisma\\generated\\mongo",
+    "database/prisma/generated/mongo",
+    "prisma/generated/mongo",
 ], ['d'], ['d'], 1)[0]
 
 const dirname = regularDirname || foundDirname || __dirname
@@ -146,7 +146,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\22102359\\Documents\\backend-tcc-yvypora\\realtime-api\\database\\prisma\\generated\\mongo",
+      "value": "/Users/22102359/backend-tcc-yvypora/realtime-api/database/prisma/generated/mongo",
       "fromEnvVar": null
     },
     "config": {
@@ -157,10 +157,10 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "..\\..\\..\\..\\.env",
-    "schemaEnvPath": "..\\..\\..\\..\\.env"
+    "rootEnvPath": "../../../../.env",
+    "schemaEnvPath": "../../../../.env"
   },
-  "relativePath": "..\\..",
+  "relativePath": "../..",
   "clientVersion": "4.12.0",
   "engineVersion": "659ef412370fa3b41cd7bf6e94587c1dfb7f67e7",
   "datasourceNames": [
@@ -187,7 +187,7 @@ const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
-path.join(__dirname, "query_engine-windows.dll.node");
-path.join(process.cwd(), "database\\prisma\\generated\\mongo\\query_engine-windows.dll.node")
+path.join(__dirname, "libquery_engine-darwin.dylib.node");
+path.join(process.cwd(), "database/prisma/generated/mongo/libquery_engine-darwin.dylib.node")
 path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "database\\prisma\\generated\\mongo\\schema.prisma")
+path.join(process.cwd(), "database/prisma/generated/mongo/schema.prisma")

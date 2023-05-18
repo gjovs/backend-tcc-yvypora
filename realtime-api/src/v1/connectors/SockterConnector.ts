@@ -21,26 +21,28 @@ class SocketConnector {
     Promise.resolve(this.socketConnection(server, props));
   }
 
-  async validateToken(token: string): Promise<DecodedToken> {}
+  async validateToken(token: string): Promise<{ payload: DecodedToken } | undefined> {
+    try {
+      const decoded: { payload: DecodedToken } = (await jwt.verify(
+        token,
+        '12313123123'
+      )) as {
+        payload: DecodedToken;
+      }
+      return decoded
+    } catch (error) {
+      if (error instanceof Error) {
+        return undefined;
+      }
+    }
+  }
   async socketConnection(server, props) {
     this.io = require('socket.io')(server, props);
 
     this.io.on('connection', async (socket) => {
       const { token } = socket.handshake.query;
 
-      let decoded: { payload: DecodedToken } | undefined;
-
-      try {
-        decoded = token
-          ? ((await jwt.verify(token, '12313123123')) as {
-              payload: DecodedToken;
-            })
-          : undefined;
-      } catch (error) {
-        console.error(error);
-        socket.disconnect();
-        return;
-      }
+      const decoded = await this.validateToken(token as string);
 
       if (!decoded) {
         socket.disconnect();
@@ -80,8 +82,7 @@ class SocketConnector {
       socket.on('intent_of_travel', async (data: IntentOfTravel) => {
         console.log(decoded?.payload.id);
 
-
-        const { accepted, order, route } = data;
+        const { accepted, order, routes } = data;
 
         if (accepted) {
           console.log(`ORDEM ${order.id} ACEITA POR ${decoded?.payload.name}`);
@@ -95,9 +96,7 @@ class SocketConnector {
 
           console.log(order.costumer_addresses);
 
-          console.log(
-            'costumer_' + order.shopping_list.costumerId.toString()
-          );
+          console.log('costumer_' + order.shopping_list.costumerId.toString());
 
           this.sendMessage(
             'costumer_' + order.shopping_list.costumerId.toString(),
@@ -105,7 +104,7 @@ class SocketConnector {
             {
               accepted: true,
               order: newOrder,
-              route,
+              routes,
             }
           );
 
@@ -154,7 +153,7 @@ class SocketConnector {
       socket.on('order_arrived', async (args: IOrderArrived) => {
         const { order } = args;
         const costumerID = order.costumer_addresses.costumerId.toString();
-        this.sendMessage(costumerID, 'order_arrived', {
+        this.sendMessage(`costumer_${costumerID}`, 'order_arrived', {
           ...order,
           delivered_status_for_client: true,
         });
