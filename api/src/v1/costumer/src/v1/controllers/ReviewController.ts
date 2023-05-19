@@ -22,7 +22,7 @@ class ReviewController {
     return rep.status(201).send();
   }
 
-  async \(
+  async reviewDeliveryman(
     req: FastifyRequest<{
       Body: IDeliverymanReview;
     }>,
