@@ -412,7 +412,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/22102359/backend-tcc-yvypora/realtime-api/database/prisma/generated/mysql",
+      "value": "/home/guilherme/backend-tcc-yvypora/realtime-api/database/prisma/generated/mysql",
       "fromEnvVar": null
     },
     "config": {
@@ -453,7 +453,7 @@ const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
-path.join(__dirname, "libquery_engine-darwin.dylib.node");
-path.join(process.cwd(), "database/prisma/generated/mysql/libquery_engine-darwin.dylib.node")
+path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
+path.join(process.cwd(), "database/prisma/generated/mysql/libquery_engine-debian-openssl-3.0.x.so.node")
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "database/prisma/generated/mysql/schema.prisma")

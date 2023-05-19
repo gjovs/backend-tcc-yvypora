@@ -19,6 +19,9 @@ class ReviewService {
             },
           });
 
+          console.log(lastReviews);
+          
+
           await db.product.update({
             where: { id: productId },
             data: {
@@ -51,6 +54,8 @@ class ReviewService {
         });
 
       const newReviewValue = review.avaliation + lastReviews;
+      console.log(newReviewValue,lastReviews, review.avaliation);
+      
 
       await db.deliveryman.update({
         where: { id: review.deliverymanId },

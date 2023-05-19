@@ -15,10 +15,14 @@
 
 <body>
     <h1>Testing client websocket for logistic web api (DELIVERYMAN)</h1>
+    <button>Produtos Retirados</button>
+    <button>Corrida Finalizada</button>
 </body>
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
+    let socket;
+    let order;
     window.onload = async function () {
         const { data } = await axios.post('http://costumer-api.westus3.cloudapp.azure.com/api/commons/login/', {
             email: "entregador@gmail.com", 
@@ -27,16 +31,21 @@
 
         const { token } = data
 
-        var socket = io.connect("http://costumer-api.westus3.cloudapp.azure.com", {
+        
+        socket = io.connect("http://costumer-api.westus3.cloudapp.azure.com", {
             query: { token }
         });
 
         socket.on("intent_of_travel", (data) => {
             loadNotification(data, socket)
         })
+        socket.on("accept_order", async (data) => {
+            loadNotification(data, socket)
+        })
     }
     function acceptedTravel(data, socket) {
-        socket.emit("intent_of_travel", { order: data.order, accepted: true, route: data.route })
+        order = data.order
+        socket.emit("intent_of_travel", { order: data.order, accepted: true, routes: data.route })
         localStorage.setItem('travel', JSON.stringify({ order: data.order, accepted: true }))
     }
     function loadNotification(data, socket) {
@@ -77,6 +86,15 @@
             }
         })
     }
+    
+    document.querySelectorAll("button")[0].addEventListener("click", async () => {
+        await socket.emit("retreat_product_finished", { order });
+    })
+
+    document.querySelectorAll("button")[1].addEventListener("click", async () => {
+        await socket.emit("order_arrived", { order });
+    })
+
 </script>
 
 </html>
