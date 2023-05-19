@@ -27,7 +27,7 @@
   "dependencies": {
     "@fastify/cors": "^8.2.0",
     "@fastify/jwt": "^6.5.0",
-    "@fastify/multipart": "^7.4.1",
+    "@fastify/multipart": "^7.6.0",
     "@fastify/websocket": "^7.2.0",
     "@googlemaps/google-maps-services-js": "^3.3.27",
     "@prisma/client": "^4.10.0",
