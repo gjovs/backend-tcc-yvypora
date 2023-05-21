@@ -47,7 +47,7 @@ class ReviewService {
     try {
       const { review } = args;
 
-      const { avaliations: lastAvaliations, review: lastReviews } =
+      const {review: lastReviews } =
         await db.deliveryman.findUniqueOrThrow({
           where: { id: review.deliverymanId },
           select: { avaliations: true, review: true },
