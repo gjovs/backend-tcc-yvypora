@@ -18,7 +18,7 @@ class ReportsService {
 
       let report = await db.shopping_list.findMany({
         orderBy: {
-          total: 'asc',
+          updated_at: 'asc',
         },
         where: {
           order: {
@@ -81,7 +81,7 @@ class ReportsService {
 
       let report = await db.shopping_list.findMany({
         orderBy: {
-          total: 'asc',
+          updated_at: 'asc',
         },
         where: {
           order: {
@@ -144,7 +144,7 @@ class ReportsService {
 
       let report = await db.shopping_list.findMany({
         orderBy: {
-          total: 'asc',
+          updated_at: 'asc',
         },
         where: {
           order: {
@@ -169,6 +169,7 @@ class ReportsService {
       let total: number = 0;
 
       report.forEach((data) => {
+        console.log(data.total / 100);
         total += data.total / 100;
       });
 
