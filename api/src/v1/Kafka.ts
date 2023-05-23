@@ -24,7 +24,6 @@ class KafkaProducer {
   public async run() {
     try {
       await this.producer.connect();
-      console.log("rodei");
     } catch (e: Error) {
       console.log(e);
     }
