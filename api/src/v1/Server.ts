@@ -58,7 +58,7 @@ class Server {
       attachFieldsToBody: true,
     });
 
-    this.app.setErrorHandler(errorHandler);
+    // this.app.setErrorHandler(errorHandler);
 
     await this.app.register(cors, {
       origin: true,
