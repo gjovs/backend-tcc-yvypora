@@ -362,7 +362,7 @@ model gender {
   id          Int           @id @unique @default(autoincrement())
   name        String        @db.VarChar(40)
   created_at  DateTime      @default(now())
-  updated_at  DateTime
+  updated_at  DateTime    @updatedAt
   costumer    costumer[]
   deliveryman deliveryman[]
   marketer    marketer[]

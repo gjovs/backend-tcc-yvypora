@@ -9,6 +9,7 @@
     "generate": "npx prisma generate --schema=./database/prisma/schema.prisma",
     "pull": "npx prisma db pull --schema=./database/prisma/schema.prisma",
     "push": "npx prisma db push --schema=./database/prisma/schema.prisma",
+    "seed": "tsx ./database/prisma/seed.mts",
     "studio": "npx prisma studio --schema=./database/prisma/schema.prisma"
   },
 
