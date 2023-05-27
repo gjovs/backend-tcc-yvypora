@@ -7,12 +7,10 @@ import {
 } from '../controllers';
 
 export default async function productRoutes(server: FastifyInstance) {
-  // @ts-ignore
-  server.get('/', { onRequest: [server.auth] }, ProductController.index);
-
-  server.get(
+  server.delete(
     '/:id',
-    { // @ts-ignore
+    {
+      // @ts-ignore
       onRequest: [server.auth, server.checkOwner],
       schema: {
         params: {
@@ -24,12 +22,34 @@ export default async function productRoutes(server: FastifyInstance) {
         },
       },
     },
-    ProductController.get,
+    ProductController.delete
+  );
+
+  // @ts-ignore
+  server.get('/', { onRequest: [server.auth] }, ProductController.index);
+
+  server.get(
+    '/:id',
+    {
+      // @ts-ignore
+      onRequest: [server.auth, server.checkOwner],
+      schema: {
+        params: {
+          type: 'object',
+          required: ['id'],
+          properties: {
+            id: { type: 'number' },
+          },
+        },
+      },
+    },
+    ProductController.get
   );
 
   server.put(
     'quantity/:id/:quantity',
-    { // @ts-ignore
+    {
+      // @ts-ignore
       onRequest: [server.auth, server.checkOwner],
       schema: {
         params: {
@@ -42,14 +62,13 @@ export default async function productRoutes(server: FastifyInstance) {
         },
       },
     },
-    ProductController.updateAvailableQuantity,
+    ProductController.updateAvailableQuantity
   );
-
-
 
   server.post(
     '/',
-    { // @ts-ignore
+    {
+      // @ts-ignore
       onRequest: [server.auth],
       schema: {
         body: {
@@ -91,7 +110,7 @@ export default async function productRoutes(server: FastifyInstance) {
         },
       },
     },
-    ProductController.create,
+    ProductController.create
   );
 
   // add picture to product
@@ -121,7 +140,7 @@ export default async function productRoutes(server: FastifyInstance) {
         },
       },
     },
-    PictureController.addInProduct,
+    PictureController.addInProduct
   );
 
   server.delete(
@@ -144,7 +163,7 @@ export default async function productRoutes(server: FastifyInstance) {
         },
       },
     },
-    PictureController.delete,
+    PictureController.delete
   );
 
   server.put(
@@ -164,7 +183,7 @@ export default async function productRoutes(server: FastifyInstance) {
         },
       },
     },
-    ProductController.update,
+    ProductController.update
   );
 
   server.delete(
@@ -184,7 +203,7 @@ export default async function productRoutes(server: FastifyInstance) {
         },
       },
     },
-    ProductController.disable,
+    ProductController.disable
   );
 
   server.put(
@@ -204,7 +223,7 @@ export default async function productRoutes(server: FastifyInstance) {
         },
       },
     },
-    ProductController.enable,
+    ProductController.enable
   );
 
   server.put(
@@ -231,7 +250,7 @@ export default async function productRoutes(server: FastifyInstance) {
         },
       },
     },
-    SaleOffController.create,
+    SaleOffController.create
   );
 
   server.delete(
@@ -249,6 +268,6 @@ export default async function productRoutes(server: FastifyInstance) {
         },
       },
     },
-    SaleOffController.delete,
+    SaleOffController.delete
   );
 }
