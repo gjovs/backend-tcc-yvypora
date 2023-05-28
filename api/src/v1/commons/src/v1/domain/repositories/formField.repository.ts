@@ -1,3 +1,4 @@
+import { log } from 'console';
 import db from "../../infrastructure/libs/prisma";
 
 class FormFieldRepository {
@@ -8,6 +9,10 @@ class FormFieldRepository {
         name: true,
       },
     });
+
+    log(await db.gender.count())
+
+    log(res)
 
     return res;
   }
@@ -37,6 +42,7 @@ class FormFieldRepository {
       select: {
         id: true,
         name: true,
+        abbr: true,
       },
     });
     return res;

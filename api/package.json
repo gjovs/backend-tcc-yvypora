@@ -10,7 +10,9 @@
     "pull": "npx prisma db pull --schema=./database/prisma/schema.prisma",
     "push": "npx prisma db push --schema=./database/prisma/schema.prisma",
     "seed": "tsx ./database/prisma/seed.mts",
-    "studio": "npx prisma studio --schema=./database/prisma/schema.prisma"
+    "studio": "npx prisma studio --schema=./database/prisma/schema.prisma",
+    "migrate": "npx prisma migrate dev --schema=./database/prisma/schema.prisma"
+
   },
 
   "devDependencies": {
