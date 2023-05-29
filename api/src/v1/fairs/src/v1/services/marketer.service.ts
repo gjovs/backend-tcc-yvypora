@@ -17,6 +17,7 @@ class Marketer {
         include: {
           fair: {
             include: {
+              image: true,
               location: true,
               fair_date_hour_of_work: {
                 include: {

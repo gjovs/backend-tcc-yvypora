@@ -4,6 +4,7 @@ class FairRepository {
   async index() {
     const res = await db.fair.findMany({
       include: {
+        image: true,
         location: true,
         fair_date_hour_of_work: {
           include: {
