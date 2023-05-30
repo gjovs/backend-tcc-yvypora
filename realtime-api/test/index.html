@@ -103,6 +103,8 @@
         const timestamp = new Date().toISOString()
         await socket.emit('send_message', {
             from: 1,
+            fromName: "develivery",
+            toName: order.shopping_list.costumer.name,
             to: order.costumer_addresses.costumerId,
             content: document.querySelector('#message').value,
             timestamp
