@@ -11,6 +11,8 @@ class ChatRepository {
   }): Promise<Message[] | false> {
     try {
       const { senderId, receiverId } = args;
+      console.log(senderId, receiverId);
+      
       return await mongoDB.message.findMany({
         where: {
           senderId,
