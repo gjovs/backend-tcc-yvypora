@@ -1,8 +1,8 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-import axios from "axios";
-import Fair from "../services/fair.service";
-import { IAddress, IFair } from "../utils/interfaces";
-import { OsmService } from "../services";
+import { FastifyReply, FastifyRequest } from 'fastify';
+import axios from 'axios';
+import Fair from '../services/fair.service';
+import { IAddress, IFair } from '../utils/interfaces';
+import { OsmService } from '../services';
 
 export class FairController {
   async create(
@@ -19,7 +19,7 @@ export class FairController {
       return rep.status(401).send({
         code: 400,
         error: true,
-        message: "We already have this fair in this CEP value",
+        message: 'We already have this fair in this CEP value',
       });
     }
 
@@ -32,12 +32,12 @@ export class FairController {
       date.open = new Date(`1900-01-01T${date.open}.000Z`);
     });
 
-    const addressObject = await OsmService.getGeocoding(address)
+    const addressObject = await OsmService.getGeocoding(address);
 
     if (!addressObject) {
       rep.code(400).send({
         error: true,
-        message: "This CEP value cant be search, probably is wrong!",
+        message: 'This CEP value cant be search, probably is wrong!',
       });
     }
 
@@ -46,7 +46,7 @@ export class FairController {
         code: 400,
         error: true,
         message:
-          "It is required some date and hour of work to save a new fair in the database",
+          'It is required some date and hour of work to save a new fair in the database',
       });
     }
 

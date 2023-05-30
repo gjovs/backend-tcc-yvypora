@@ -32,6 +32,7 @@ import {
 
 import { auth } from './commons/src/v1/infrastructure/decorators';
 import { checkOwner } from './fairs/src/v1/decorators';
+import { errorHandler } from './global/middlewares';
 
 class Server {
   declare app: FastifyInstance;
@@ -56,6 +57,8 @@ class Server {
     this.app.register(multipart, {
       attachFieldsToBody: true,
     });
+
+    // this.app.setErrorHandler(errorHandler);
 
     await this.app.register(cors, {
       origin: true,
@@ -129,5 +132,5 @@ class Server {
     this.app.decorate('checkOwner', checkOwner);
   }
 }
- 
+
 export default new Server().app;

@@ -1,3 +1,3 @@
-import { db } from './prisma';
+import { db, mongoDB } from './prisma';
 
-export { db };
+export { db, mongoDB };

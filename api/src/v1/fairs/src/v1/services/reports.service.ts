@@ -2,6 +2,92 @@ import { log } from 'console';
 import { db } from '../libs';
 
 class ReportsService {
+  async index(sellerId: number) {
+    // THIS QUERY FETCH ALL SOlD ORDERS
+    try {
+      const res = await db.shopping_list.findMany({
+        orderBy: {
+          updated_at: 'desc'
+        },
+        where: {
+          order: {
+            payment: {
+              status: true,
+            },
+          },
+          products_in_shopping_list: {
+            some: {
+              product: {
+                marketerId: sellerId,
+              },
+            },
+          },
+        },
+        include: {
+          products_in_shopping_list: {
+            include: {
+              product: {
+                select: {
+                  id: true,
+                  name: true,
+                  type_of_price: {
+                    select: { name: true }
+                  },
+
+                  marketerId: true,
+                  price: true,
+                  image_of_product: {
+                    include: {
+                      image: {
+                        select: {
+                          uri: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          costumer: {
+            select: {
+              name: true,
+              picture_uri: true,
+            },
+          },
+          _count: true,
+        },
+      });
+
+      if (res) {
+        res.forEach((shopping_list) => {
+          let total = 0;
+          const { products_in_shopping_list } = shopping_list;
+          const filteredProducts = products_in_shopping_list.filter(
+            ({ product }) => {
+              const { marketerId } = product;
+              return marketerId === sellerId;
+            }
+          );
+          filteredProducts.forEach(({ product, amount }) => {
+            const { price } = product;
+            total += price * (amount ? amount : 1);
+          });
+          shopping_list.total = total;
+          shopping_list.products_in_shopping_list = filteredProducts;
+        });
+      }
+
+      return res;
+    } catch (error) {
+      console.log(error);
+
+      if (error instanceof Error) {
+        return { error: true, message: error.message };
+      }
+    }
+  }
+
   async dailySellsReport(sellerId: number) {
     try {
       const currentDate = new Date();

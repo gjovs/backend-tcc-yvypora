@@ -1,10 +1,8 @@
-import Fastify, { FastifyInstance } from "fastify";
-import cors from "@fastify/cors";
-import jwt from "@fastify/jwt";
-import websocketFastify from "@fastify/websocket";
-import { auth } from "./decorators/";
-import { orderRoutes } from "./routes";
-import testRoutes from "./routes/test.routes";
+import Fastify, { FastifyInstance } from 'fastify';
+import cors from '@fastify/cors';
+import jwt from '@fastify/jwt';
+import { auth } from './decorators/';
+import chatRoutes from './routes/chat.routes';
 
 class Server {
   declare app: FastifyInstance;
@@ -14,20 +12,18 @@ class Server {
       logger: true,
     });
 
-    this.middlewares();
+    this.middleware();
     this.decorators();
     this.routes();
   }
 
-  private async middlewares() {
+  private async middleware() {
     this.app.register(jwt, {
-      secret: "12313123123",
+      secret: '12313123123',
       sign: {
-        expiresIn: "7d",
+        expiresIn: '7d',
       },
     });
-
-    this.app.register(websocketFastify);
 
     await this.app.register(cors, {
       origin: true,
@@ -35,13 +31,13 @@ class Server {
   }
 
   private routes() {
-    // change this to kafka to be completely async
-    this.app.register(orderRoutes, { prefix: "/order/" });
-    this.app.register(testRoutes, { prefix: '/test/'})
+    this.app.register(chatRoutes, {
+      prefix: 'no-relational/chat',
+    });
   }
 
   private decorators() {
-    this.app.decorate("auth", auth);
+    this.app.decorate('auth', auth);
   }
 }
 

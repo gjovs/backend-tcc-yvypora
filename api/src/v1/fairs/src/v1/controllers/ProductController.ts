@@ -3,20 +3,32 @@ import { z, ZodError } from 'zod';
 import { log } from 'console';
 import { Product } from '../services';
 
-
 interface Params {
   [key: string]: string | number;
 }
 
-
 export class ProductController {
+  async delete(
+    req: FastifyRequest<{
+      Params: {
+        id: string;
+      };
+    }>,
+    rep: FastifyReply
+  ) {
+    const { id } = req.params;
+
+    await Product.delete(parseInt(id, 10));
+
+    return rep.status(202).send();
+  }
   async get(
     req: FastifyRequest<{
-             Params: {
-                 id: string;
-             };
-         }>,
-    rep: FastifyReply,
+      Params: {
+        id: string;
+      };
+    }>,
+    rep: FastifyReply
   ) {
     // @ts-ignore
     const { id } = req.user;
@@ -52,23 +64,23 @@ export class ProductController {
 
   async create(
     req: FastifyRequest<{
-        Body: {
-            description: string
-            name: string;
-            price: number;
-            price_type: {
-                id: number;
-                name: string;
-            };
-            category: {
-                name: string;
-                id: number;
-            };
-            quantity: number;
-            available_quantity: number;
+      Body: {
+        description: string;
+        name: string;
+        price: number;
+        price_type: {
+          id: number;
+          name: string;
         };
+        category: {
+          name: string;
+          id: number;
+        };
+        quantity: number;
+        available_quantity: number;
+      };
     }>,
-    rep: FastifyReply,
+    rep: FastifyReply
   ) {
     const data = req.body;
 
@@ -97,11 +109,11 @@ export class ProductController {
 
   async update(
     req: FastifyRequest<{
-        Params: {
-            id: string;
-        };
+      Params: {
+        id: string;
+      };
     }>,
-    rep: FastifyReply,
+    rep: FastifyReply
   ) {
     // @ts-ignore
     const { id } = req.user;
@@ -123,7 +135,7 @@ export class ProductController {
     });
 
     try {
-      console.log("teste", req.body);
+      console.log('teste', req.body);
       const data = updateProductSchema.parse(req.body);
       const res = await Product.update(data, parseInt(req.params.id, 10));
 
@@ -154,8 +166,8 @@ export class ProductController {
   }
 
   async disable(
-    req: FastifyRequest<{ Params: { id: string; } }>,
-    rep: FastifyReply,
+    req: FastifyRequest<{ Params: { id: string } }>,
+    rep: FastifyReply
   ) {
     // @ts-ignore
     const { id } = req.user;
@@ -178,11 +190,11 @@ export class ProductController {
 
   async enable(
     req: FastifyRequest<{
-                   Params: {
-                       id: string;
-                   };
-               }>,
-    rep: FastifyReply,
+      Params: {
+        id: string;
+      };
+    }>,
+    rep: FastifyReply
   ) {
     // @ts-ignore
     const { id } = req.user;
@@ -204,12 +216,15 @@ export class ProductController {
     });
   }
 
-  async updateAvailableQuantity(req: FastifyRequest<{
-    Params: {
-      id: string,
-      quantity: string,
-    }
-  }>, rep: FastifyReply) {
+  async updateAvailableQuantity(
+    req: FastifyRequest<{
+      Params: {
+        id: string;
+        quantity: string;
+      };
+    }>,
+    rep: FastifyReply
+  ) {
     const params: Params = req.params;
 
     for (const key in params) {
@@ -219,23 +234,24 @@ export class ProductController {
     }
 
     const { id, quantity } = params;
-    
+
     if (quantity <= 0) {
       return rep.status(400).send({
         code: 400,
         error: true,
-        message: 'The new value setted is wrong, for update the value need to be greather than 0'
-      })
+        message:
+          'The new value setted is wrong, for update the value need to be greather than 0',
+      });
     }
 
     try {
-      await Product.updateAvailableQuantity(params)
-      return rep.status(202).send()
+      await Product.updateAvailableQuantity(params);
+      return rep.status(202).send();
     } catch (err) {
       if (err instanceof Error) {
         console.log(err);
-        return rep.status(500).send({...err})
-      } 
+        return rep.status(500).send({ ...err });
+      }
     }
   }
 }

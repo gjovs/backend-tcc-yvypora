@@ -9,6 +9,7 @@
     "start": "node ./bin/v1/www/server.js",
     "generate": "npx prisma generate --schema=./database/prisma/schema.prisma",
     "generate-mongo": "npx prisma generate --schema=./database/prisma/schema-mongo.prisma",
+    "push-mongo": "npx prisma db push --schema=./database/prisma/schema-mongo.prisma",
     "pull-db": "npx prisma db pull --schema=./database/prisma/schema.prisma"
   },
   "devDependencies": {

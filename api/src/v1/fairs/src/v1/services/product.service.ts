@@ -1,7 +1,8 @@
+import { Prisma } from '@prisma/client';
 import db from '../libs/prisma';
 
 interface IProduct {
-  description: string,
+  description: string;
   name: string;
   price: number;
   price_type: {
@@ -110,6 +111,10 @@ class Product {
         };
       }
     }
+  }
+
+  async delete(id: number): Promise<void> {
+    await db.product.delete({ where: { id } });
   }
 
   async index(marketerId: number) {
@@ -251,7 +256,7 @@ class Product {
         },
       });
 
-      console.log("teste", res);
+      console.log('teste', res);
 
       if (res.length === 0) return false;
 
@@ -285,15 +290,15 @@ class Product {
           value,
         },
       });
-      
+
       await db.product.update({
         where: {
           id: productId,
         },
         data: {
-          discount: value, 
-        }
-      })
+          discount: value,
+        },
+      });
 
       return {
         error: false,
@@ -303,7 +308,7 @@ class Product {
     } catch (error) {
       if (error instanceof Error) {
         console.log(error);
-        
+
         return {
           error: true,
           code: 401,
@@ -327,8 +332,8 @@ class Product {
           marketerId: ownerId,
         },
         include: {
-          sale_off: true
-        }
+          sale_off: true,
+        },
       });
       const { id } = product[0];
 
@@ -340,12 +345,12 @@ class Product {
 
       await db.product.update({
         where: {
-          id: productId, 
+          id: productId,
         },
         data: {
-          discount: null, 
-        }
-      })
+          discount: null,
+        },
+      });
 
       return {
         error: false,
@@ -368,11 +373,11 @@ class Product {
     };
   }
 
-  async updateAvailableQuantity(data: { quantity: number, id: number }) {
+  async updateAvailableQuantity(data: { quantity: number; id: number }) {
     return db.product.update({
       where: { id: data.id },
-      data: { available_quantity: data.quantity }
-    })
+      data: { available_quantity: data.quantity },
+    });
   }
 }
 

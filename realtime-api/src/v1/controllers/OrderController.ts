@@ -16,7 +16,7 @@ class OrderController {
 
     const order = await OrderService.get(intent_payment_id);
 
-    console.log(order);
+
 
     if (!order) {
       console.log("false");
@@ -49,7 +49,6 @@ class OrderController {
       })
     );
 
-    console.log(costumerLatLng, waypoints);
     
 
     const listOfAvailableDeliverys = await DeliverymanService.listByOnline();
@@ -72,7 +71,7 @@ class OrderController {
     const googleRoute = {
       arrived: costumerLatLng,
       origin: waypoints[0], // deliveryman
-      waypoints: waypoints.legth === 1 ? null : waypoints,
+      waypoints: waypoints.length === 1 ? null : waypoints,
     };
 
     
@@ -84,8 +83,6 @@ class OrderController {
     const costumerRoomId =  `costumer_${order.costumer_addresses.costumerId.toString()}`
     const data = { route: googleRoute, order };
 
-    console.log(data);
-    
 
     // send to best deliveryman
     await wss.sendMessage(roomId, "intent_of_travel", data);

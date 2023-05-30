@@ -13,6 +13,8 @@ import {
 } from '../domain/interfaces';
 import DecodedToken from '../domain/dto/DecodedToken';
 import { TypeOfUser } from '../domain/dto/TypeOfUser';
+import { ChatRepository } from '../domain/repositories';
+import { log } from 'console';
 
 class SocketConnector {
   public io: Server;
@@ -21,15 +23,17 @@ class SocketConnector {
     Promise.resolve(this.socketConnection(server, props));
   }
 
-  async validateToken(token: string): Promise<{ payload: DecodedToken } | undefined> {
+  async validateToken(
+    token: string
+  ): Promise<{ payload: DecodedToken } | undefined> {
     try {
       const decoded: { payload: DecodedToken } = (await jwt.verify(
         token,
         '12313123123'
       )) as {
         payload: DecodedToken;
-      }
-      return decoded
+      };
+      return decoded;
     } catch (error) {
       if (error instanceof Error) {
         return undefined;
@@ -80,7 +84,7 @@ class SocketConnector {
       });
 
       socket.on('intent_of_travel', async (data: IntentOfTravel) => {
-        console.log(decoded?.payload.id);
+      
 
         const { accepted, order, routes } = data;
 
@@ -94,9 +98,7 @@ class SocketConnector {
 
           const newOrder = await OrderService.get(order.intent_payment_id);
 
-          console.log(order.costumer_addresses);
-
-          console.log('costumer_' + order.shopping_list.costumerId.toString());
+    
 
           this.sendMessage(
             'costumer_' + order.shopping_list.costumerId.toString(),
@@ -173,12 +175,14 @@ class SocketConnector {
       socket.on('send_message', async (args: IMessage) => {
         const { content, from, to, timestamp } = args;
 
+        log(args)
+
         if (decoded?.payload.typeof === TypeOfUser.COSTUMER)
           this.sendMessage(String(to), 'chat_message', { from, content });
         else
           this.sendMessage(`costumer_${to}`, 'chat_message', { from, content });
 
-        // add saving in mongo db database ><
+        await ChatRepository.save(args);
       });
     });
   }
