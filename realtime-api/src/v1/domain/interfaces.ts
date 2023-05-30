@@ -1,6 +1,8 @@
 interface IMessage {
   from: number;
+  fromName: string;
   to: number;
+  toName: string;
   content: string;
   timestamp: Date;
 }

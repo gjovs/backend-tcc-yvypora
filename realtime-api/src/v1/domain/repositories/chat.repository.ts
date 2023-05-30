@@ -31,7 +31,9 @@ class ChatRepository {
         data: {
           id: randomUUID(),
           receiverId: message.to,
+          receiverName: message.toName,
           senderId: message.from,
+          senderName: message.fromName,
           content: message.content,
         },
       });

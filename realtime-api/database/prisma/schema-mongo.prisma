@@ -12,8 +12,13 @@ model Message {
     id         String      @id @map("_id")
 
     content    String
+   
     receiverId Int
+    receiverName String
+    
     senderId   Int
-
+    senderName String
+    
     createdAt  DateTime @default(now())
 }
+

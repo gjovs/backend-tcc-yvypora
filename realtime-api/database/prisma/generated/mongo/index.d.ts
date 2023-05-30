@@ -20,7 +20,9 @@ export type Message = {
   id: string
   content: string
   receiverId: number
+  receiverName: string
   senderId: number
+  senderName: string
   createdAt: Date
 }
 
@@ -782,7 +784,9 @@ export namespace Prisma {
     id: string | null
     content: string | null
     receiverId: number | null
+    receiverName: string | null
     senderId: number | null
+    senderName: string | null
     createdAt: Date | null
   }
 
@@ -790,7 +794,9 @@ export namespace Prisma {
     id: string | null
     content: string | null
     receiverId: number | null
+    receiverName: string | null
     senderId: number | null
+    senderName: string | null
     createdAt: Date | null
   }
 
@@ -798,7 +804,9 @@ export namespace Prisma {
     id: number
     content: number
     receiverId: number
+    receiverName: number
     senderId: number
+    senderName: number
     createdAt: number
     _all: number
   }
@@ -818,7 +826,9 @@ export namespace Prisma {
     id?: true
     content?: true
     receiverId?: true
+    receiverName?: true
     senderId?: true
+    senderName?: true
     createdAt?: true
   }
 
@@ -826,7 +836,9 @@ export namespace Prisma {
     id?: true
     content?: true
     receiverId?: true
+    receiverName?: true
     senderId?: true
+    senderName?: true
     createdAt?: true
   }
 
@@ -834,7 +846,9 @@ export namespace Prisma {
     id?: true
     content?: true
     receiverId?: true
+    receiverName?: true
     senderId?: true
+    senderName?: true
     createdAt?: true
     _all?: true
   }
@@ -930,7 +944,9 @@ export namespace Prisma {
     id: string
     content: string
     receiverId: number
+    receiverName: string
     senderId: number
+    senderName: string
     createdAt: Date
     _count: MessageCountAggregateOutputType | null
     _avg: MessageAvgAggregateOutputType | null
@@ -957,7 +973,9 @@ export namespace Prisma {
     id?: boolean
     content?: boolean
     receiverId?: boolean
+    receiverName?: boolean
     senderId?: boolean
+    senderName?: boolean
     createdAt?: boolean
   }
 
@@ -1742,7 +1760,9 @@ export namespace Prisma {
     id: 'id',
     content: 'content',
     receiverId: 'receiverId',
+    receiverName: 'receiverName',
     senderId: 'senderId',
+    senderName: 'senderName',
     createdAt: 'createdAt'
   };
 
@@ -1777,7 +1797,9 @@ export namespace Prisma {
     id?: StringFilter | string
     content?: StringFilter | string
     receiverId?: IntFilter | number
+    receiverName?: StringFilter | string
     senderId?: IntFilter | number
+    senderName?: StringFilter | string
     createdAt?: DateTimeFilter | Date | string
   }
 
@@ -1785,7 +1807,9 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     receiverId?: SortOrder
+    receiverName?: SortOrder
     senderId?: SortOrder
+    senderName?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -1797,7 +1821,9 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     receiverId?: SortOrder
+    receiverName?: SortOrder
     senderId?: SortOrder
+    senderName?: SortOrder
     createdAt?: SortOrder
     _count?: MessageCountOrderByAggregateInput
     _avg?: MessageAvgOrderByAggregateInput
@@ -1813,7 +1839,9 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter | string
     content?: StringWithAggregatesFilter | string
     receiverId?: IntWithAggregatesFilter | number
+    receiverName?: StringWithAggregatesFilter | string
     senderId?: IntWithAggregatesFilter | number
+    senderName?: StringWithAggregatesFilter | string
     createdAt?: DateTimeWithAggregatesFilter | Date | string
   }
 
@@ -1821,7 +1849,9 @@ export namespace Prisma {
     id: string
     content: string
     receiverId: number
+    receiverName: string
     senderId: number
+    senderName: string
     createdAt?: Date | string
   }
 
@@ -1829,21 +1859,27 @@ export namespace Prisma {
     id: string
     content: string
     receiverId: number
+    receiverName: string
     senderId: number
+    senderName: string
     createdAt?: Date | string
   }
 
   export type MessageUpdateInput = {
     content?: StringFieldUpdateOperationsInput | string
     receiverId?: IntFieldUpdateOperationsInput | number
+    receiverName?: StringFieldUpdateOperationsInput | string
     senderId?: IntFieldUpdateOperationsInput | number
+    senderName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageUncheckedUpdateInput = {
     content?: StringFieldUpdateOperationsInput | string
     receiverId?: IntFieldUpdateOperationsInput | number
+    receiverName?: StringFieldUpdateOperationsInput | string
     senderId?: IntFieldUpdateOperationsInput | number
+    senderName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -1851,21 +1887,27 @@ export namespace Prisma {
     id: string
     content: string
     receiverId: number
+    receiverName: string
     senderId: number
+    senderName: string
     createdAt?: Date | string
   }
 
   export type MessageUpdateManyMutationInput = {
     content?: StringFieldUpdateOperationsInput | string
     receiverId?: IntFieldUpdateOperationsInput | number
+    receiverName?: StringFieldUpdateOperationsInput | string
     senderId?: IntFieldUpdateOperationsInput | number
+    senderName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageUncheckedUpdateManyInput = {
     content?: StringFieldUpdateOperationsInput | string
     receiverId?: IntFieldUpdateOperationsInput | number
+    receiverName?: StringFieldUpdateOperationsInput | string
     senderId?: IntFieldUpdateOperationsInput | number
+    senderName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -1910,7 +1952,9 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     receiverId?: SortOrder
+    receiverName?: SortOrder
     senderId?: SortOrder
+    senderName?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -1923,7 +1967,9 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     receiverId?: SortOrder
+    receiverName?: SortOrder
     senderId?: SortOrder
+    senderName?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -1931,7 +1977,9 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     receiverId?: SortOrder
+    receiverName?: SortOrder
     senderId?: SortOrder
+    senderName?: SortOrder
     createdAt?: SortOrder
   }
 

@@ -80,8 +80,8 @@ const regularDirname = hasDirname && fs.existsSync(path.join(__dirname, 'schema.
 
 // if the client has been bundled, we need to look for the folders
 const foundDirname = !regularDirname && findSync(process.cwd(), [
-    "database/prisma/generated/mongo",
-    "prisma/generated/mongo",
+    "database\\prisma\\generated\\mongo",
+    "prisma\\generated\\mongo",
 ], ['d'], ['d'], 1)[0]
 
 const dirname = regularDirname || foundDirname || __dirname
@@ -97,7 +97,9 @@ exports.Prisma.MessageScalarFieldEnum = makeEnum({
   id: 'id',
   content: 'content',
   receiverId: 'receiverId',
+  receiverName: 'receiverName',
   senderId: 'senderId',
+  senderName: 'senderName',
   createdAt: 'createdAt'
 });
 
@@ -116,7 +118,7 @@ exports.Prisma.ModelName = makeEnum({
   Message: 'Message'
 });
 
-const dmmfString = "{\"datamodel\":{\"enums\":[],\"models\":[{\"name\":\"Message\",\"dbName\":null,\"fields\":[{\"name\":\"id\",\"dbName\":\"_id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"content\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"receiverId\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"senderId\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"DateTime\",\"default\":{\"name\":\"now\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}],\"types\":[]},\"mappings\":{\"modelOperations\":[{\"model\":\"Message\",\"plural\":\"messages\",\"findUnique\":\"findUniqueMessage\",\"findUniqueOrThrow\":\"findUniqueMessageOrThrow\",\"findFirst\":\"findFirstMessage\",\"findFirstOrThrow\":\"findFirstMessageOrThrow\",\"findMany\":\"findManyMessage\",\"create\":\"createOneMessage\",\"createMany\":\"createManyMessage\",\"delete\":\"deleteOneMessage\",\"update\":\"updateOneMessage\",\"deleteMany\":\"deleteManyMessage\",\"updateMany\":\"updateManyMessage\",\"upsert\":\"upsertOneMessage\",\"aggregate\":\"aggregateMessage\",\"groupBy\":\"groupByMessage\",\"findRaw\":\"findMessageRaw\",\"aggregateRaw\":\"aggregateMessageRaw\"}],\"otherOperations\":{\"read\":[],\"write\":[\"runCommandRaw\"]}}}"
+const dmmfString = "{\"datamodel\":{\"enums\":[],\"models\":[{\"name\":\"Message\",\"dbName\":null,\"fields\":[{\"name\":\"id\",\"dbName\":\"_id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"content\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"receiverId\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"receiverName\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"senderId\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"senderName\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"DateTime\",\"default\":{\"name\":\"now\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}],\"types\":[]},\"mappings\":{\"modelOperations\":[{\"model\":\"Message\",\"plural\":\"messages\",\"findUnique\":\"findUniqueMessage\",\"findUniqueOrThrow\":\"findUniqueMessageOrThrow\",\"findFirst\":\"findFirstMessage\",\"findFirstOrThrow\":\"findFirstMessageOrThrow\",\"findMany\":\"findManyMessage\",\"create\":\"createOneMessage\",\"createMany\":\"createManyMessage\",\"delete\":\"deleteOneMessage\",\"update\":\"updateOneMessage\",\"deleteMany\":\"deleteManyMessage\",\"updateMany\":\"updateManyMessage\",\"upsert\":\"upsertOneMessage\",\"aggregate\":\"aggregateMessage\",\"groupBy\":\"groupByMessage\",\"findRaw\":\"findMessageRaw\",\"aggregateRaw\":\"aggregateMessageRaw\"}],\"otherOperations\":{\"read\":[],\"write\":[\"runCommandRaw\"]}}}"
 const dmmf = JSON.parse(dmmfString)
 exports.Prisma.dmmf = JSON.parse(dmmfString)
 
@@ -131,7 +133,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/guilherme/backend-tcc-yvypora/realtime-api/database/prisma/generated/mongo",
+      "value": "C:\\Users\\22102359\\Documents\\backend-tcc-yvypora\\realtime-api\\database\\prisma\\generated\\mongo",
       "fromEnvVar": null
     },
     "config": {
@@ -142,10 +144,10 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../../.env",
-    "schemaEnvPath": "../../../../.env"
+    "rootEnvPath": "..\\..\\..\\..\\.env",
+    "schemaEnvPath": "..\\..\\..\\..\\.env"
   },
-  "relativePath": "../..",
+  "relativePath": "..\\..",
   "clientVersion": "4.12.0",
   "engineVersion": "659ef412370fa3b41cd7bf6e94587c1dfb7f67e7",
   "datasourceNames": [
@@ -172,7 +174,7 @@ const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
-path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
-path.join(process.cwd(), "database/prisma/generated/mongo/libquery_engine-debian-openssl-3.0.x.so.node")
+path.join(__dirname, "query_engine-windows.dll.node");
+path.join(process.cwd(), "database\\prisma\\generated\\mongo\\query_engine-windows.dll.node")
 path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "database/prisma/generated/mongo/schema.prisma")
+path.join(process.cwd(), "database\\prisma\\generated\\mongo\\schema.prisma")
