@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ChatRepository } from '../domain/repositories';
+import { log } from 'console';
 
 class ChatController {
   async index(
@@ -17,6 +18,8 @@ class ChatController {
       receiverId: parseInt(receiverId, 10),
       senderId: parseInt(senderId, 10),
     });
+
+    log(res)
 
     return rep.status(200).send({
       error: false,

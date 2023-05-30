@@ -14,6 +14,7 @@ import {
 import DecodedToken from '../domain/dto/DecodedToken';
 import { TypeOfUser } from '../domain/dto/TypeOfUser';
 import { ChatRepository } from '../domain/repositories';
+import { log } from 'console';
 
 class SocketConnector {
   public io: Server;
@@ -83,7 +84,7 @@ class SocketConnector {
       });
 
       socket.on('intent_of_travel', async (data: IntentOfTravel) => {
-        console.log(decoded?.payload.id);
+      
 
         const { accepted, order, routes } = data;
 
@@ -97,9 +98,7 @@ class SocketConnector {
 
           const newOrder = await OrderService.get(order.intent_payment_id);
 
-          console.log(order.costumer_addresses);
-
-          console.log('costumer_' + order.shopping_list.costumerId.toString());
+    
 
           this.sendMessage(
             'costumer_' + order.shopping_list.costumerId.toString(),
@@ -175,6 +174,8 @@ class SocketConnector {
 
       socket.on('send_message', async (args: IMessage) => {
         const { content, from, to, timestamp } = args;
+
+        log(args)
 
         if (decoded?.payload.typeof === TypeOfUser.COSTUMER)
           this.sendMessage(String(to), 'chat_message', { from, content });

@@ -32,7 +32,7 @@ class Server {
 
   private routes() {
     this.app.register(chatRoutes, {
-      prefix: '/chat',
+      prefix: 'no-relational/chat',
     });
   }
 
