@@ -17,7 +17,7 @@ class ChatRepository {
           receiverId,
         },
         orderBy: {
-          createdAt: 'desc',
+          createdAt: 'asc',
         },
       });
     } catch (err) {
