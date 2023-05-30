@@ -17,6 +17,9 @@
     <h1>Testing client websocket for logistic web api (DELIVERYMAN)</h1>
     <button>Produtos Retirados</button>
     <button>Corrida Finalizada</button>
+
+    <input type="text" name="" id="message">
+    <button id="send">ENVIAR</button>
 </body>
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -24,7 +27,7 @@
     let socket;
     let order;
     window.onload = async function () {
-        const { data } = await axios.post('http://costumer-api.westus3.cloudapp.azure.com/api/commons/login/', {
+        const { data } = await axios.post('http://yvypora-backend.eastus.cloudapp.azure.com/api/commons/login/', {
             email: "entregador@gmail.com", 
             password: "12345678"
         });
@@ -32,7 +35,7 @@
         const { token } = data
 
         
-        socket = io.connect("http://costumer-api.westus3.cloudapp.azure.com", {
+        socket = io.connect("http://yvypora-backend.eastus.cloudapp.azure.com/", {
             query: { token }
         });
 
@@ -45,6 +48,7 @@
     }
     function acceptedTravel(data, socket) {
         order = data.order
+        console.log(order);
         socket.emit("intent_of_travel", { order: data.order, accepted: true, routes: data.route })
         localStorage.setItem('travel', JSON.stringify({ order: data.order, accepted: true }))
     }
@@ -95,6 +99,23 @@
         await socket.emit("order_arrived", { order });
     })
 
+    document.querySelector('#send').addEventListener('click', async () => {
+        const timestamp = new Date().toISOString()
+        await socket.emit('send_message', {
+            from: order.deliverymanId,
+            to: order.costumerId,
+            content: document.querySelector('#message').value,
+            timestamp
+        })
+    })
+
 </script>
 
 </html>
+
+<!-- interface IMessage {
+    from: number;
+    to: number;
+    content: string;
+    timestamp: Date;
+  } -->

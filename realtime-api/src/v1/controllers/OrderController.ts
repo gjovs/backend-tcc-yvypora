@@ -72,7 +72,7 @@ class OrderController {
     const googleRoute = {
       arrived: costumerLatLng,
       origin: waypoints[0], // deliveryman
-      waypoints: waypoints.legth === 1 ? null : waypoints,
+      waypoints: waypoints.length === 1 ? null : waypoints,
     };
 
     

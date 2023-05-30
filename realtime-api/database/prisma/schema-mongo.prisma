@@ -8,29 +8,12 @@ generator client {
     output   = "./generated/mongo"
 }
 
-model User {
-    id       Int       @id @map("_id")
-    name     String?
-    email    String    @unique
-    chatsIds Int[]
-    chats    Chat[]    @relation(fields: [chatsIds], references: [id]) // many-to-many relationship
-    Message  Message[]
-}
-
-model Chat {
-    id              Int       @id @map("_id")
-    name            String?
-    participantsIds Int[]
-    participants    User[]    @relation(fields: [participantsIds], references: [id]) // many-to-many relationship
-    messages        Message[] // one-to-many relationship
-}
-
 model Message {
-    id        Int      @id @map("_id")
-    text      String?
-    createdAt DateTime @default(now())
-    chatId    Int?
-    senderId  Int?
-    chat      Chat?    @relation(fields: [chatId], references: [id])
-    sender    User?    @relation(fields: [senderId], references: [id])
+    id         String      @id @map("_id")
+
+    content    String
+    receiverId Int
+    senderId   Int
+
+    createdAt  DateTime @default(now())
 }

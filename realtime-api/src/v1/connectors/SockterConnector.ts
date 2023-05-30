@@ -13,6 +13,7 @@ import {
 } from '../domain/interfaces';
 import DecodedToken from '../domain/dto/DecodedToken';
 import { TypeOfUser } from '../domain/dto/TypeOfUser';
+import { ChatRepository } from '../domain/repositories';
 
 class SocketConnector {
   public io: Server;
@@ -21,15 +22,17 @@ class SocketConnector {
     Promise.resolve(this.socketConnection(server, props));
   }
 
-  async validateToken(token: string): Promise<{ payload: DecodedToken } | undefined> {
+  async validateToken(
+    token: string
+  ): Promise<{ payload: DecodedToken } | undefined> {
     try {
       const decoded: { payload: DecodedToken } = (await jwt.verify(
         token,
         '12313123123'
       )) as {
         payload: DecodedToken;
-      }
-      return decoded
+      };
+      return decoded;
     } catch (error) {
       if (error instanceof Error) {
         return undefined;
@@ -178,7 +181,7 @@ class SocketConnector {
         else
           this.sendMessage(`costumer_${to}`, 'chat_message', { from, content });
 
-        // add saving in mongo db database ><
+        await ChatRepository.save(args);
       });
     });
   }
