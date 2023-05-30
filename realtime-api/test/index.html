@@ -102,8 +102,8 @@
     document.querySelector('#send').addEventListener('click', async () => {
         const timestamp = new Date().toISOString()
         await socket.emit('send_message', {
-            from: order.deliverymanId,
-            to: order.costumerId,
+            from: 1,
+            to: order.costumer_addresses.costumerId,
             content: document.querySelector('#message').value,
             timestamp
         })
