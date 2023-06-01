@@ -171,5 +171,6 @@
     "editor.defaultFormatter": "vscode.json-language-features"
   },
   "workbench.editor.untitled.hint": "hidden",
-  "workbench.colorTheme": "Min Dark"
+  "workbench.colorTheme": "Min Dark",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

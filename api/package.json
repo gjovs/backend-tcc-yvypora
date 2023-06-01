@@ -12,9 +12,7 @@
     "seed": "tsx ./database/prisma/seed.mts",
     "studio": "npx prisma studio --schema=./database/prisma/schema.prisma",
     "migrate": "npx prisma migrate dev --schema=./database/prisma/schema.prisma"
-
   },
-
   "devDependencies": {
     "@types/node": "^18.14.6",
     "@types/ws": "^8.5.4",
@@ -42,6 +40,7 @@
     "geolib": "^3.3.3",
     "jsonwebtoken": "^9.0.0",
     "kafkajs": "^2.2.4",
+    "moment-timezone": "^0.5.43",
     "stripe": "^11.16.0",
     "ts-node": "^10.9.1",
     "tsx": "^3.12.3",

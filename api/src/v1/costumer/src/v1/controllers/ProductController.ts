@@ -36,7 +36,7 @@ export class ProductController {
     }
 
     const res = await ProductService.filteredByPriceAndScoreAndCategory(
-      parseInt(category, 10),
+      parseInt(category, 10), 
       parseFloat(score),
       parseFloat(lowerPrice),
       parseFloat(higherPrice)

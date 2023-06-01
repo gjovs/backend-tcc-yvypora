@@ -1,6 +1,6 @@
 import { orderByDistance } from 'geolib';
 import db from '../libs/prisma';
-import { getDayOfWeek, getDateFromCurrentHour  } from '../utils';
+import { getDayOfWeek, getDateFromCurrentHour, getDayInSpTz  } from '../utils';
 
 class ProductService {
   public async index() {
@@ -99,8 +99,8 @@ class ProductService {
     gte: number
   ) {
     const data = getDateFromCurrentHour()
-    const now = new Date()
-    const dayOfWeek = getDayOfWeek(now.getDay() + 1);
+    const day = getDayInSpTz()
+    const dayOfWeek = getDayOfWeek(day + 1);
     try {
       const products = await db.product.findMany({
         where: {

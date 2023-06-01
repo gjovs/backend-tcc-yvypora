@@ -1,3 +1,5 @@
+import moment from 'moment-timezone';
+
 export function getDayOfWeek(day: number): string {
   switch (day) {
     case 1:
@@ -17,11 +19,25 @@ export function getDayOfWeek(day: number): string {
   }
 }
 
+export const getHourInSpTz = (): string => {
+  const now = moment();
+  // config tz in sp
+  now.tz('America/Sao_Paulo')
+
+  return now.format('HH')
+}
+
+export const getDayInSpTz = (): number => {
+  const now = moment();
+  // config tz in sp
+  now.tz('America/Sao_Paulo')
+  return now.day()
+}
+
 export const getDateFromCurrentHour = (): Date => {
-  const now = new Date();
-  const hour = now.getHours().toString().padStart(2, '0');
+  const hour = getHourInSpTz()
   const dateString = `1900-01-01T${hour}:00:00.000Z`;
-  return new Date(dateString);
+  return moment.utc(dateString).toDate();
 };
 
 export const groupByMarketer = (objects) => {
