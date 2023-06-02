@@ -162,19 +162,10 @@ class SocketConnector {
       });
 
       socket.on('confirm_order_arrived', async (args: IOrderArrived) => {
-        let order;
-
-        if (typeof(args) === 'string') {
-          const _args = JSON.parse(args)
-          const { order: _order } = _args
-          order = _order
-        } else {
-           order = args.order
-        }
-
-        console.log(order);
+        const { order } = JSON.parse(JSON.stringify(args.toString()))
         
-
+        console.log(order, args);
+        
         await OrderService.acceptOrder(order.id);
 
         this.sendMessage(order.deliverymanId.toString(), 'accept_order', {
