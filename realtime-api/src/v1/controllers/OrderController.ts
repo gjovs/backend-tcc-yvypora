@@ -75,19 +75,16 @@ class OrderController {
     };
 
     
-    console.info("lista de deliverys", listOfAvailableDeliverys);
-    console.info("start point", startPoint);
-    console.info("list de deliverys acesseveis", approachablesDeliverys);
+    // console.info("lista de deliverys", listOfAvailableDeliverys);
+    // console.info("start point", startPoint);
+    // console.info("list de deliverys acesseveis", approachablesDeliverys);
 
     const roomId = approachablesDeliverys[0].id.toString();
-    const costumerRoomId =  `costumer_${order.costumer_addresses.costumerId.toString()}`
-    const data = { route: googleRoute, order };
 
+    const data = { routes: googleRoute, order };
 
-    // send to best deliveryman
-    await wss.sendMessage(roomId, "intent_of_travel", data);
-    
-    return null;
+    // send to closer deliveryman to costumer purchase
+    return wss.sendMessage(roomId, "intent_of_travel", data);
   }
 }
 
