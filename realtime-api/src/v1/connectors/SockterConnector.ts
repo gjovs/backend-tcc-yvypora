@@ -174,7 +174,7 @@ class SocketConnector {
       });
 
       socket.on('send_message', async (args: IMessage) => {
-        const { content, from, to, fromName, toName,timestamp } = args;
+        const { content, from, to  } = args;
 
         log(args)
 
