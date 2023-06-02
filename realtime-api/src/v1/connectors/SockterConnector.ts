@@ -172,6 +172,9 @@ class SocketConnector {
            order = args.order
         }
 
+        console.log(order);
+        
+
         await OrderService.acceptOrder(order.id);
 
         this.sendMessage(order.deliverymanId.toString(), 'accept_order', {
