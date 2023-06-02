@@ -96,6 +96,7 @@ class OrderService {
       },
       data: {
         delivered_status_for_client: true,
+        
       },
     });
   }

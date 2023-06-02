@@ -44,6 +44,21 @@ class ChatRepository {
       return null;
     }
   }
+
+  async cleanMessagesInChat(args: { senderId: number, receiverId: number}) {
+    const { receiverId, senderId } = args;
+    try {
+      await mongoDB.message.deleteMany({
+        where: {
+          senderId,
+          receiverId
+        }
+      })
+    } catch (err) {
+      console.log(err);
+      return null
+    }
+  }
 }
 
 export default new ChatRepository();

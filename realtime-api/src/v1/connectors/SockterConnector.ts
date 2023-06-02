@@ -84,8 +84,6 @@ class SocketConnector {
       });
 
       socket.on('intent_of_travel', async (data: IntentOfTravel) => {
-      
-
         const { accepted, order, routes } = data;
 
         if (accepted) {
@@ -97,8 +95,6 @@ class SocketConnector {
           });
 
           const newOrder = await OrderService.get(order.intent_payment_id);
-
-    
 
           this.sendMessage(
             'costumer_' + order.shopping_list.costumerId.toString(),
@@ -162,10 +158,15 @@ class SocketConnector {
       });
 
       socket.on('confirm_order_arrived', async (args: IOrderArrived) => {
-        const { order } = JSON.parse(JSON.stringify(args.toString()))
+        const { order } = JSON.parse(JSON.stringify(args.toString()));
         console.log(order, args);
-        
+
         await OrderService.acceptOrder(order.id);
+
+        await ChatRepository.cleanMessagesInChat({
+          senderId: order.costumer_addresses.costumerId,
+          receiverId: order.deliverymanId,
+         });
 
         this.sendMessage(order.deliverymanId.toString(), 'accept_order', {
           accepted: true,
@@ -174,9 +175,9 @@ class SocketConnector {
       });
 
       socket.on('send_message', async (args: IMessage) => {
-        const { content, from, to  } = args;
+        const { content, from, to } = args;
 
-        log(args)
+        log(args);
 
         if (decoded?.payload.typeof === TypeOfUser.COSTUMER)
           this.sendMessage(String(to), 'chat_message', { from, content });
@@ -185,7 +186,6 @@ class SocketConnector {
 
         const res = await ChatRepository.save(args);
         console.log(res);
-        
       });
     });
   }
