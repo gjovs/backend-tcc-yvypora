@@ -162,6 +162,8 @@ class SocketConnector {
       });
 
       socket.on('confirm_order_arrived', async (args: IOrderArrived) => {
+        console.log(typeof(args))
+        console.log(args)
         const { order } = args;
 
         await OrderService.acceptOrder(order.id);
