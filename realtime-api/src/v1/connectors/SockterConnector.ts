@@ -163,6 +163,9 @@ class SocketConnector {
 
         await OrderService.acceptOrder(order.id);
 
+        console.log("ACEITA PELO CLIENTE");
+        
+  
         await ChatRepository.cleanMessagesInChat({
           senderId: order.costumer_addresses.costumerId,
           receiverId: order.deliverymanId,
