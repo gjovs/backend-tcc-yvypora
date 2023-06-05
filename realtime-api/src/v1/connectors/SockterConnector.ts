@@ -15,6 +15,7 @@ import DecodedToken from '../domain/dto/DecodedToken';
 import { TypeOfUser } from '../domain/dto/TypeOfUser';
 import { ChatRepository } from '../domain/repositories';
 import { log } from 'console';
+import e from 'cors';
 
 class SocketConnector {
   public io: Server;
@@ -158,12 +159,19 @@ class SocketConnector {
       });
 
       socket.on('confirm_order_arrived', async (args: IOrderArrived) => {
-        const { order } = JSON.parse(JSON.stringify(args.toString()));
+        let data : IOrderArrived;
+        
+        if (typeof(args) == "string") {
+          data = JSON.parse(args)
+        } else {
+          data = args
+        }
 
-      
-        console.log(order, args);
+        const { order } = data;
+    
+        console.log(data, order, args);
 
-        console.log(typeof(args))
+        console.log(typeof(args), typeof(data))
         console.log(args.order)
         
 
