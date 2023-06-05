@@ -159,7 +159,13 @@ class SocketConnector {
 
       socket.on('confirm_order_arrived', async (args: IOrderArrived) => {
         const { order } = JSON.parse(JSON.stringify(args.toString()));
+
+      
         console.log(order, args);
+
+        console.log(typeof(args))
+        console.log(args.order)
+        
 
         await OrderService.acceptOrder(order.id);
 
