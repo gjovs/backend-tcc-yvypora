@@ -16,10 +16,13 @@ export class FairController {
     const check = await Fair.getByCep(address.cep);
 
     if (check.length > 0) {
-      return rep.status(401).send({
-        code: 400,
+      return rep.status(409).send({
+        code:  409,
         error: true,
-        message: 'We already have this fair in this CEP value',
+        payload: {
+          message: 'We already have this fair in this CEP value',
+          data: check[0]
+        },
       });
     }
 
