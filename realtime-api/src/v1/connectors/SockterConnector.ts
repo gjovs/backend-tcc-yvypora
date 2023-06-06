@@ -197,6 +197,7 @@ class SocketConnector {
         if (typeof(args) == "string") {
           log("string ->", args);
           data = JSON.parse(args)
+          log("convertido", data)
         } else {
           log("not String", args);
           data = args
