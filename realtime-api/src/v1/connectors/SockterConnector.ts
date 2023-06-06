@@ -195,14 +195,15 @@ class SocketConnector {
         let data : IMessage;
         
         if (typeof(args) == "string") {
+          log("string ->", args);
           data = JSON.parse(args)
         } else {
+          log("not String", args);
           data = args
         }
 
         const { content, from, to } = data;
 
-        log(args);
 
         if (decoded?.payload.typeof === TypeOfUser.COSTUMER)
           this.sendMessage(String(to), 'chat_message', { from, content });
