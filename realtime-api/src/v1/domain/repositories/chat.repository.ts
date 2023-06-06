@@ -11,8 +11,7 @@ class ChatRepository {
   }): Promise<Message[] | false> {
     try {
       const { senderId, receiverId } = args;
-      console.log(senderId, receiverId);
-
+      
       const listFromReceiver = await mongoDB.message.findMany({
         where: {
           senderId: receiverId,
@@ -35,7 +34,9 @@ class ChatRepository {
       });
 
       const response = [...listFromReceiver, ...listFromSender].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-
+      
+      if (senderId === receiverId) return listFromSender
+      
       return response
     } catch (err) {
       return [];
