@@ -211,7 +211,7 @@ class SocketConnector {
         else
           this.sendMessage(`costumer_${to}`, 'chat_message', { from, content });
 
-        const res = await ChatRepository.save(args);
+        const res = await ChatRepository.save(data);
         console.log(res);
       });
     });
