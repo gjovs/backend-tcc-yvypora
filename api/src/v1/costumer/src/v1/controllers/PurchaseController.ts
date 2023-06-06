@@ -33,7 +33,7 @@ class PurchaseController {
           if (product) {
             return {
               id: _product.id,
-              value: product.price * 100,
+              value: Number((product.price * 100).toFixed(2)),
               amount: _product.amount,
               name: product.name,
             };

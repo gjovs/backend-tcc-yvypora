@@ -32,7 +32,7 @@ class Product {
               id: data.category.id,
             },
           },
-          quantity: data.quantity,
+          quantity: Number(data.quantity),
           description: data.description,
           price: data.price,
           name: data.name,
