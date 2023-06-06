@@ -192,7 +192,15 @@ class SocketConnector {
       });
 
       socket.on('send_message', async (args: IMessage) => {
-        const { content, from, to } = args;
+        let data : IMessage;
+        
+        if (typeof(args) == "string") {
+          data = JSON.parse(args)
+        } else {
+          data = args
+        }
+
+        const { content, from, to } = data;
 
         log(args);
 

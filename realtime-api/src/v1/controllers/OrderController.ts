@@ -15,9 +15,7 @@ class OrderController {
     if (!intent_payment_id) return;
 
     const order = await OrderService.get(intent_payment_id);
-
-
-
+    
     if (!order) {
       console.log("false");
       return false;
@@ -36,6 +34,8 @@ class OrderController {
         ];
       });
 
+
+
     const startPoint = getMoreDistanceLocal(
       {
         latitude: costumerLatLng[0],
@@ -49,8 +49,7 @@ class OrderController {
       })
     );
 
-    
-
+  
     const listOfAvailableDeliverys = await DeliverymanService.listByOnline();
 
     const approachablesDeliverys = getMoreNeareastDeliverys(
