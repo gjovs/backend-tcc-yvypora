@@ -61,7 +61,8 @@ class Server {
     // this.app.setErrorHandler(errorHandler);
 
     await this.app.register(cors, {
-      origin: true,
+      origin: '*',
+      
     });
   }
 
