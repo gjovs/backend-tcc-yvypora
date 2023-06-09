@@ -3,12 +3,14 @@ import { TypeOfUser } from "../../domain/dto/TypeOfUser";
 import { UserRepository } from "../../domain/repositories";
 import { CostumerController } from "../controllers";
 import DecodedToken from "../../domain/dto/DecodedToken";
+import { log } from "console";
 
 export default async function (server: FastifyInstance) {
   server.get(
     "/details",
     { onRequest: [server.auth] },
     async (req: FastifyRequest, rep: FastifyReply) => {
+      log(req.user)
       const { typeof: userType, id } = req.user;
 
       if (userType === TypeOfUser.COSTUMER) {

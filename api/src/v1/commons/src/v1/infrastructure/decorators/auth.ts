@@ -7,6 +7,7 @@ export default async (req: FastifyRequest, rep: FastifyReply) => {
       payload: { user: DecodedToken };
     };    
 
+
     req.user = payload.user;
   } catch (e) {
     return rep.send(e);
