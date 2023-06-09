@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import ProductService from '../services/product.service';
+import ProductRepository from '../services/product.repository';
 import { getDayOfWeek } from '../utils';
 
 export class ProductController {
@@ -18,7 +18,7 @@ export class ProductController {
     const { category, score, lowerPrice, higherPrice, moreSales } = req.query;
 
     if (moreSales) {
-      const res = await ProductService.moreSales(parseInt(moreSales, 10));
+      const res = await ProductRepository.moreSales(parseInt(moreSales, 10));
       return rep.send({
         code: 200,
         error: false,
@@ -35,7 +35,7 @@ export class ProductController {
       });
     }
 
-    const res = await ProductService.filteredByPriceAndScoreAndCategory(
+    const res = await ProductRepository.filteredByPriceAndScoreAndCategory(
       parseInt(category, 10), 
       parseFloat(score),
       parseFloat(lowerPrice),
@@ -59,7 +59,7 @@ export class ProductController {
   ) {
     const { id } = req.params;
 
-    const product = await ProductService.get(parseInt(id, 10));
+    const product = await ProductRepository.get(parseInt(id, 10));
 
     if (!product) {
       return rep.status(404).send({
@@ -77,7 +77,7 @@ export class ProductController {
   }
 
   async inSaleOff(_req: FastifyRequest, rep: FastifyReply) {
-    const res = await ProductService.inSaleOff();
+    const res = await ProductRepository.inSaleOff();
 
     const data = res.map(({ product }) => ({ ...product, promo: true }));
 
@@ -89,10 +89,9 @@ export class ProductController {
   }
 
   async nearToClient(req: FastifyRequest, rep: FastifyReply) {
-    // @ts-ignore
-    const { id } = req.user as DecodedToken;
+    const { id } = req.user;
 
-    const res = await ProductService.findNearest(id);
+    const res = await ProductRepository.findNearest(id);
 
     return rep.send({
       code: 200,

@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import Marketer from '../services/marketer.service';
+import MarketerRepository from '../services/marketer.repository';
 
 export class MarketerController {
   async get(req: FastifyRequest<{
@@ -9,7 +9,7 @@ export class MarketerController {
   }>, rep: FastifyReply) {
     const { id } = req.params;
 
-    const marketer = await Marketer.get(parseInt(id, 10));
+    const marketer = await MarketerRepository.get(parseInt(id, 10));
 
     if (!marketer) {
       return rep.status(404).send({

@@ -156,7 +156,7 @@ export class CostumerController implements ICostumerController {
   }
 
   async listAddress(req: FastifyRequest, rep: FastifyReply) {
-    const { id } = req.user as DecodedToken;
+    const { id } = req.user;
     const addresses = await CostumerRepository.listAddress(id);
     return addresses;
   }

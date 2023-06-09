@@ -31,26 +31,11 @@ export const getDayInSpTz = (): number => {
   const now = moment();
   // config tz in sp
   now.tz('America/Sao_Paulo')
-  return now.day()
+  return now.day() + 1 
 }
 
 export const getDateFromCurrentHour = (): Date => {
   const hour = getHourInSpTz()
   const dateString = `1900-01-01T${hour}:00:00.000Z`;
   return moment.utc(dateString).toDate();
-};
-
-export const groupByMarketer = (objects) => {
-  const groupedObjects = objects.shopping_list.products_in_shopping_list.reduce(
-    (groups, obj) => {
-      const group = obj.product.marketer.name;
-      if (!groups[group]) {
-        groups[group] = [];
-      }
-      groups[group].push(obj);
-      return groups;
-    },
-    {}
-  );
-  return groupedObjects;
 };

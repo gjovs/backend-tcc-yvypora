@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { orderByDistance } from 'geolib';
-import Fair from '../services/fair.service';
+import FairRepository from '../services/fair.repository'; 
 
 export class FairController {
   async index(req: FastifyRequest<{
@@ -9,7 +9,7 @@ export class FairController {
       long: string
     }
   }>, rep: FastifyReply) {
-    const fairs = await Fair.index();
+    const fairs = await FairRepository.index();
 
     const { lat, long } = req.query;
 
@@ -31,7 +31,7 @@ export class FairController {
   async get(req:FastifyRequest<{ Params: { id: string } }>, rep: FastifyReply) {
     const { id } = req.params;
 
-    const res = await Fair.get(parseInt(id, 10));
+    const res = await FairRepository.get(parseInt(id, 10));
 
     if (!res) {
       return rep.status(404).send({

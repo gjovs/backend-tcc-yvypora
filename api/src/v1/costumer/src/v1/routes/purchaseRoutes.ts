@@ -4,27 +4,8 @@ import { PurchaseController } from '../controllers';
 import OrderService from '../services/order.service';
 import KafkaProducer from '../../../../Kafka';
 import ReviewController from '../controllers/ReviewController';
+import { IStripePurchaseEvent } from '../domain/dto/stripeEvent.interface';
 
-interface IStripePurchaseEvent {
-  id: string;
-  object: string;
-  api_version: string;
-  created: number;
-  type: string;
-  data: {
-    object: {
-      id: string;
-      object: string;
-      amount: number;
-      amount_capturable: number;
-      amount_details: object;
-      amout_received: number;
-      currency: string;
-      description: string;
-      status: string;
-    };
-  };
-}
 
 export default async function purchaseRoutes(server: FastifyInstance) {
   server.post(
@@ -135,9 +116,7 @@ export default async function purchaseRoutes(server: FastifyInstance) {
         default:
           console.log(`Unhandled event type ${event.type}`);
       }
-
-      // TODO req to logistic api
-
+      
       return rep.send({ received: true });
     }
   );

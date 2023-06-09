@@ -1,17 +1,9 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { log } from 'console';
-import ProductService from '../services/product.service';
-import { createSession } from '../libs/stripe';
-import OrderService from '../services/order.service';
 import PurchaseRepository from '../services/purchase.repository';
-import DecodedToken from '../../../../commons/src/v1/domain/dto/DecodedToken';
-import { groupByMarketer } from '../utils';
-
-interface IPurchase {
-  costumer_address_id: number;
-  products: { id: number; amount: number }[];
-  freight: number;
-}
+import { createSession } from '../libs/stripe';
+import { IPurchase } from '../domain/dto/purchase.interface';
+import PurchaseService from '../services/purchase.service';
+import OrderService from '../services/order.service';
 
 class PurchaseController {
   async save(
@@ -20,54 +12,43 @@ class PurchaseController {
     }>,
     rep: FastifyReply
   ) {
-    const { costumer_address_id, freight, products } = req.body;
+    const { id : costumerId } = req.user;
 
-    // @ts-ignore
-    const costumerId = req.user.id as number;
+    const { costumer_address_id } = req.body
 
     try {
-      const data_products = await Promise.all(
-        products.map(async (_product) => {
-          const product = await ProductService.get(_product.id);
+      const productsWithNecessaryData = await PurchaseService.getDetailsOfProducts(req.body)
 
-          if (product) {
-            return {
-              id: _product.id,
-              value: Number((product.price * 100).toFixed(2)),
-              amount: _product.amount,
-              name: product.name,
-            };
-          }
+      const {
+        id : sessionId ,
+        amount_total,
+        url
+      } = await createSession(productsWithNecessaryData);
 
-          return new Error('Invalid Product Id');
-        })
-      );
 
-      const session = await createSession(data_products);
+      const isSuccessful = await PurchaseService.registerIntentationOfPurchase({
+        ...req.body,
+        intent_payment_id: sessionId,
+        total : amount_total as number,
+        costumer: {
+          address_id: costumer_address_id,
+          id: costumerId,
+        }
+      })
 
-      log(products);
-
-      await OrderService.createIntent({
-        total: session.amount_total as number,
-        costumer: { id: costumerId, address_id: costumer_address_id },
-        freight,
-        products,
-        intent_payment_id: session.id,
-      });
-
-      return rep.send({ code: 200, data: session.url });
+      return rep.send({ code: 200, data: url });
     } catch (e) {
       if (e instanceof Error) {
         return rep.status(400).send({ message: e.message, error: true });
       }
     }
     return rep
-      .status(400)
+      .status(500)
       .send({ message: 'occurred an error in the server', error: true });
   }
 
   async historic(req: FastifyRequest, rep: FastifyReply) {
-    const { id } = req.user as DecodedToken;
+    const { id } = req.user;
 
     const res = await PurchaseRepository.getHistoric(id);
 
@@ -105,7 +86,7 @@ class PurchaseController {
     }
 
     // separete by marketer
-    const res = groupByMarketer(orderWithProducts);
+    const res = OrderService.groupByMarketer(orderWithProducts);
 
     return res;
   }

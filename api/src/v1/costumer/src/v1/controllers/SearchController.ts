@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getDayOfWeek } from "../utils";
+import SearchRepository from "../services/search.repository";
 import SearchService from "../services/search.service";
 
 class SearchController {
@@ -13,23 +13,15 @@ class SearchController {
   ) {
     const { q } = req.query;
 
-    const date = new Date();
+    const { hour, dayOfWeek } = SearchService.getDateOfTheSearch()
 
-    const dayOfWeek = getDayOfWeek(date.getDay() + 1);
-    const hour = date.getHours();
-
-    let hourStringify = hour.toString();
-
-    if (hour < 10) {
-      hourStringify = `0${hour}`;
-    }
-    const products = await SearchService.searchForProducts(q, {
+    const products = await SearchRepository.searchForProducts(q, {
       dayOfWeek,
-      hour: hourStringify,
+      hour,
     });
 
-    const marketers = await SearchService.searchForMarketers(q);
-    const fairs = await SearchService.searchForFairs(q);
+    const marketers = await SearchRepository.searchForMarketers(q);
+    const fairs = await SearchRepository.searchForFairs(q);
 
     const searchs = {
       fairs,

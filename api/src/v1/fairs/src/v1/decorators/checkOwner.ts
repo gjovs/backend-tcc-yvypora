@@ -6,8 +6,7 @@ export default async (
   rep: FastifyReply,
 ) => {
   try {
-    // @ts-ignore
-    const ownerId = req.user.id;
+    const { id : ownerId } = req.user;
     const productId = parseInt(req.params.id, 10);
     const res = await Product.checkOwner(ownerId, productId);
 

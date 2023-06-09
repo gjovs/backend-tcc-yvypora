@@ -13,7 +13,6 @@ export class SaleOffController {
                }>,
     rep: FastifyReply,
   ) {
-    // @ts-ignore
     const { id } = req.user;
     const productId = parseInt(req.params.id, 10);
     const value = parseFloat(req.query.value);
@@ -31,7 +30,6 @@ export class SaleOffController {
       id: string;
     };
   }>, rep: FastifyReply) {
-    // @ts-ignore
     const { id } = req.user;
     const productId = parseInt(req.params.id, 10);
 

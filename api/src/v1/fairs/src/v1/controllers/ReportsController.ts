@@ -3,7 +3,6 @@ import ReportsService from '../services/reports.service';
 
 export class ReportsController {
   async index(req: FastifyRequest, rep: FastifyReply) {
-    // @ts-ignore
     const { id } = req.user;
     const res = await ReportsService.index(id);
 
@@ -24,7 +23,6 @@ export class ReportsController {
     });
   }
   async getDailySells(req: FastifyRequest, rep: FastifyReply) {
-    // @ts-ignore
     const { id } = req.user;
 
     const res = await ReportsService.dailySellsReport(id);
@@ -47,7 +45,6 @@ export class ReportsController {
   }
 
   async getWeeklySells(req: FastifyRequest, rep: FastifyReply) {
-    // @ts-ignore
     const { id } = req.user;
 
     const res = await ReportsService.weeklySellsReport(id);
@@ -70,7 +67,6 @@ export class ReportsController {
   }
 
   async getMonthlySells(req: FastifyRequest, rep: FastifyReply) {
-    // @ts-ignore
     const { id } = req.user;
 
     const res = await ReportsService.monthlySellsReport(id);

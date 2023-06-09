@@ -27,7 +27,5 @@ export default async function productRoutes(server: FastifyInstance) {
   server.get("/inSaleOff", ProductController.inSaleOff);
 
 
-  server.get("/findNearest", {onRequest: [server.auth]},ProductController.nearToClient)
-
-  
+  server.get("/findNearest", {onRequest: [server.auth]},ProductController.nearToClient)  
 }

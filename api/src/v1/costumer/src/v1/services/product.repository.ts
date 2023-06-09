@@ -2,7 +2,7 @@ import { orderByDistance } from 'geolib';
 import db from '../libs/prisma';
 import { getDayOfWeek, getDateFromCurrentHour, getDayInSpTz  } from '../utils';
 
-class ProductService {
+class ProductRepository {
   public async index() {
     return db.product.findMany();
   }
@@ -31,6 +31,11 @@ class ProductService {
 
   async inSaleOff() {
     const products = await db.sale_off.findMany({
+      where : {
+        product: {
+          active_for_selling: true
+        }
+      },
       include: {
         product: {
           include: {
@@ -100,7 +105,7 @@ class ProductService {
   ) {
     const data = getDateFromCurrentHour()
     const day = getDayInSpTz()
-    const dayOfWeek = getDayOfWeek(day + 1);
+    const dayOfWeek = getDayOfWeek(day);
     try {
       const products = await db.product.findMany({
         where: {
@@ -303,4 +308,4 @@ class ProductService {
   }
 }
 
-export default new ProductService();
+export default new ProductRepository();

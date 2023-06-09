@@ -19,7 +19,6 @@ import {
   productRoutes,
   marketerRoutes,
   searchRoutes,
-  testRoutes,
   reviewRoutes,
 } from './costumer/src/v1/routes';
 
@@ -62,7 +61,6 @@ class Server {
 
     await this.app.register(cors, {
       origin: '*',
-      
     });
   }
 
@@ -103,9 +101,6 @@ class Server {
     });
     this.app.register(searchRoutes, {
       prefix: 'api/costumer/search/',
-    });
-    this.app.register(testRoutes, {
-      prefix: 'api/costumer/test/',
     });
     this.app.register(reviewRoutes, {
       prefix: 'api/costumer/review/',

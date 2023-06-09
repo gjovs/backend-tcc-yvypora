@@ -6,7 +6,8 @@ export default async (req: FastifyRequest, rep: FastifyReply) => {
     const { payload } = (await req.jwtVerify()) as {
       payload: { user: DecodedToken };
     };    
-    req.user = payload;
+
+    req.user = payload.user;
   } catch (e) {
     return rep.send(e);
   }

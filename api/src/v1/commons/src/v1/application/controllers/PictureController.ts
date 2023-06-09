@@ -1,9 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { Method } from 'axios';
 import { TypeOfUser } from '../../domain/dto/TypeOfUser';
 import { UserRepository } from '../../domain/repositories';
 import { FirebaseService } from '../../infrastructure/services';
-import DecodedToken from '../../domain/dto/DecodedToken';
 import { IPictureController } from '../../interfaces/controllers.interface';
 
 export class PictureController implements IPictureController {
@@ -11,13 +9,13 @@ export class PictureController implements IPictureController {
     req: FastifyRequest<{ Body: { picture: any } }>,
     rep: FastifyReply
   ) {
-    const decodedToken = req.user as DecodedToken;
+    const decodedToken = req.user;
     const { id, typeof: userType } = decodedToken;
     const { picture } = req.body;
     try {
       await picture.toBuffer();
 
-      const updateUserPhoto = async (findFn, updateFn, userId: number) => {
+      const updateUserPhoto = async (findFn: Function, updateFn: Function, userId: number) => {
         const user = await findFn(userId);
 
         if (!user) {
