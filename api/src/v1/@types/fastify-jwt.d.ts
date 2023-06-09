@@ -26,9 +26,6 @@ export interface DecodedToken {
 
 declare module "@fastify/jwt" {
   interface FastifyJWT {
-    payload: {
-      user: DecodedToken
-    }
     user: DecodedToken
   }
 }

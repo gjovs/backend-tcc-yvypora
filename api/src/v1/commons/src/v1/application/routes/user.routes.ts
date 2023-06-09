@@ -2,7 +2,6 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { TypeOfUser } from "../../domain/dto/TypeOfUser";
 import { UserRepository } from "../../domain/repositories";
 import { CostumerController } from "../controllers";
-import DecodedToken from "../../domain/dto/DecodedToken";
 import { log } from "console";
 
 export default async function (server: FastifyInstance) {

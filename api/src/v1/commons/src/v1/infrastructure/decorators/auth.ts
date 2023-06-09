@@ -1,14 +1,13 @@
+import { log } from "console";
 import { FastifyReply, FastifyRequest } from "fastify";
 import DecodedToken from "../../domain/dto/DecodedToken";
 
 export default async (req: FastifyRequest, rep: FastifyReply) => {
   try {
     const { payload } = (await req.jwtVerify()) as {
-      payload: { user: DecodedToken };
+      payload:  DecodedToken;
     };    
-
-
-    req.user = payload.user;
+    req.user = payload;
   } catch (e) {
     return rep.send(e);
   }
