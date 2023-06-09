@@ -1,10 +1,9 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { CompressionTypes } from 'kafkajs';
 import { PurchaseController } from '../controllers';
-import OrderService from '../services/order.service';
 import KafkaProducer from '../../../../Kafka';
-import ReviewController from '../controllers/ReviewController';
 import { IStripePurchaseEvent } from '../domain/dto/stripeEvent.interface';
+import OrderRepository from '../services/order.repository';
 
 
 export default async function purchaseRoutes(server: FastifyInstance) {
@@ -44,9 +43,9 @@ export default async function purchaseRoutes(server: FastifyInstance) {
   });
 
   server.get('success', async (_req, rep) => {
-    const order = await OrderService.getLast();
+    const order = await OrderRepository.getLast();
 
-    const res = await OrderService.updatePaymentStatus(
+    const res = await OrderRepository.updatePaymentStatus(
       true,
       'paid',
       order.intent_payment_id
@@ -86,7 +85,7 @@ export default async function purchaseRoutes(server: FastifyInstance) {
 
       switch (event.type) {
         case 'payment_intent.succeeded':
-          await OrderService.updatePaymentStatus(
+          await OrderRepository.updatePaymentStatus(
             true,
             paymentIntent.description,
             paymentIntent.id
@@ -106,7 +105,7 @@ export default async function purchaseRoutes(server: FastifyInstance) {
 
           break;
         case 'payment_intent.canceled':
-          await OrderService.updatePaymentStatus(
+          await OrderRepository.updatePaymentStatus(
             false,
             paymentIntent.description,
             paymentIntent.id
