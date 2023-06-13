@@ -37,7 +37,6 @@ export default async function purchaseRoutes(server: FastifyInstance) {
   );
 
   // REDIRECT AFTER PAYMENT
-
   server.get('cancel', (_req, rep) => {
     rep.redirect(`${process.env.SITE_URL as string}/?order=fail`);
   });
