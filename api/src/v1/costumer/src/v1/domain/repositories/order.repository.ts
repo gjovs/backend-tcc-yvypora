@@ -1,5 +1,5 @@
 import { log } from 'console';
-import db from '../libs/prisma';
+import db from '../../libs/prisma';
 
 class OrderRepository {
   async get(intent_payment_id: string) {

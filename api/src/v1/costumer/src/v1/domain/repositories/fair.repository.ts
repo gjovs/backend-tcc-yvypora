@@ -1,4 +1,4 @@
-import db from '../libs/prisma';
+import db from '../../libs/prisma';
 
 class FairRepository {
   async index() {

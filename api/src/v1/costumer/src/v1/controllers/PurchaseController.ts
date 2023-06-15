@@ -1,9 +1,13 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import PurchaseRepository from '../services/purchase.repository';
+import PurchaseRepository from '../domain/repositories/purchase.repository';
 import { createSession } from '../libs/stripe';
 import { IPurchase } from '../domain/dto/purchase.interface';
 import PurchaseService from '../services/purchase.service';
 import OrderService from '../services/order.service';
+import { IStripePurchaseEvent } from '../domain/dto/stripeEvent.interface';
+import OrderRepository from '../domain/repositories/order.repository';
+import { IPaymentMessage } from '../domain/dto/paymentMessage.interface';
+import kafkaService from '../services/kafka.service';
 
 class PurchaseController {
   async save(
@@ -12,7 +16,7 @@ class PurchaseController {
     }>,
     rep: FastifyReply
   ) {
-    const { id : costumerId } = req.user;
+    const { id: costumerId } = req.user;
 
     const { costumer_address_id } = req.body
 
@@ -20,7 +24,7 @@ class PurchaseController {
       const productsWithNecessaryData = await PurchaseService.getDetailsOfProducts(req.body)
 
       const {
-        id : sessionId ,
+        id: sessionId,
         amount_total,
         url
       } = await createSession(productsWithNecessaryData);
@@ -29,7 +33,7 @@ class PurchaseController {
       const isSuccessful = await PurchaseService.registerIntentationOfPurchase({
         ...req.body,
         intent_payment_id: sessionId,
-        total : amount_total as number,
+        total: amount_total as number,
         costumer: {
           address_id: costumer_address_id,
           id: costumerId,
@@ -89,6 +93,71 @@ class PurchaseController {
     const res = OrderService.groupByMarketer(orderWithProducts);
 
     return res;
+  }
+
+  async stripeEvent(req: FastifyRequest<{
+    Body: IStripePurchaseEvent;
+  }>, rep: FastifyReply) {
+    const event = req.body;
+
+    const paymentIntent = event.data.object;
+
+    console.log('EVENTO STRIPE!');
+
+    switch (event.type) {
+      case 'payment_intent.succeeded':
+        const order = await OrderRepository.getLast();
+
+        await OrderRepository.updatePaymentStatus(
+          true,
+          paymentIntent.description,
+          paymentIntent.id
+        );
+
+        const message = {
+          succeeded: true,
+          intent_payment_id: order.intent_payment_id,
+        } as IPaymentMessage;
+
+        kafkaService.sendMessageToKafka('payment_intent', [{
+          value: JSON.stringify(message)
+        }])
+
+        break;
+      case 'payment_intent.canceled':
+        await OrderRepository.updatePaymentStatus(
+          false,
+          paymentIntent.description,
+          paymentIntent.id
+        );
+
+        break;
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+    }
+
+    return rep.send({ received: true });
+  }
+
+  async success(_req: FastifyRequest, rep: FastifyReply) {
+    const order = await OrderRepository.getLast();
+
+    await OrderRepository.updatePaymentStatus(
+      true,
+      'paid',
+      order.intent_payment_id
+    );
+
+    const message = {
+      succeeded: true,
+      intent_payment_id: order.intent_payment_id,
+    } as IPaymentMessage;
+
+    kafkaService.sendMessageToKafka('payment_intent', [{
+      value: JSON.stringify(message)
+    }])
+
+    rep.redirect(`${process.env.SITE_URL as string}/order/track`);
   }
 }
 

@@ -1,5 +1,4 @@
-import db from '../libs/prisma';
-
+import db from '../../libs/prisma';
 export class MarketerRepository {
   async get(id: number) {
     const marketer = await db.marketer.findUnique({

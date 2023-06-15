@@ -1,6 +1,6 @@
 import { orderByDistance } from 'geolib';
-import db from '../libs/prisma';
-import { getDayOfWeek, getDateFromCurrentHour, getDayInSpTz  } from '../utils';
+import db from '../../libs/prisma';
+import { getDayOfWeek, getDateFromCurrentHour, getDayInSpTz  } from '../../utils';
 
 class ProductRepository {
   public async index() {

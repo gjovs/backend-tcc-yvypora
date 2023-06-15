@@ -5,7 +5,7 @@ class KafkaProducer {
 
   public producer!: Producer;
 
-  constructor(args: { clientId: string, brokers: string[]}) {
+  constructor(args: { clientId: string, brokers: string[] }) {
     this.kafka = new Kafka({
       ...args,
       logLevel: logLevel.ERROR,
@@ -24,8 +24,10 @@ class KafkaProducer {
   public async run() {
     try {
       await this.producer.connect();
-    } catch (e: Error) {
-      console.log(e);
+    } catch (e) {
+      if (e instanceof Error) {
+        console.log(e);
+      }
     }
   }
 }

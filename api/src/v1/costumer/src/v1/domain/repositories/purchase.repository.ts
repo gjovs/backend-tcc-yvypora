@@ -5,8 +5,7 @@ import {
   products_in_shopping_list,
   shopping_list,
 } from '@prisma/client';
-
-import db from '../libs/prisma';
+import db from '../../libs/prisma';
 
 type IHistoricResponse = (order & {
   shopping_list: shopping_list & {

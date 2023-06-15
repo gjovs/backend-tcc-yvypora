@@ -1,10 +1,5 @@
-import { FastifyInstance, FastifyRequest } from 'fastify';
-import { CompressionTypes } from 'kafkajs';
+import { FastifyInstance } from 'fastify';
 import { PurchaseController } from '../controllers';
-import KafkaProducer from '../../../../Kafka';
-import { IStripePurchaseEvent } from '../domain/dto/stripeEvent.interface';
-import OrderRepository from '../services/order.repository';
-
 
 export default async function purchaseRoutes(server: FastifyInstance) {
   server.post(
@@ -41,82 +36,12 @@ export default async function purchaseRoutes(server: FastifyInstance) {
     rep.redirect(`${process.env.SITE_URL as string}/?order=fail`);
   });
 
-  server.get('success', async (_req, rep) => {
-    const order = await OrderRepository.getLast();
-
-    const res = await OrderRepository.updatePaymentStatus(
-      true,
-      'paid',
-      order.intent_payment_id
-    );
-
-    const message = {
-      succeeded: true,
-      intent_payment_id: order.intent_payment_id,
-    };
-
-    // Calling the logistic service
-    await KafkaProducer.producer.send({
-      topic: 'payment_intent',
-      compression: CompressionTypes.GZIP,
-      messages: [{ value: JSON.stringify(message) }],
-    });
-
-    console.log('teste', order);
-
-    rep.redirect(`${process.env.SITE_URL as string}/order/track`);
-  });
+  server.get('success', PurchaseController.success);
 
   // WEB HOOK
   server.post(
     '/stripe-hook-payment',
-    async (
-      req: FastifyRequest<{
-        Body: IStripePurchaseEvent;
-      }>,
-      rep
-    ) => {
-      const event = req.body;
-
-      const paymentIntent = event.data.object;
-
-      console.log('EVENTO STRIPE!');
-
-      switch (event.type) {
-        case 'payment_intent.succeeded':
-          await OrderRepository.updatePaymentStatus(
-            true,
-            paymentIntent.description,
-            paymentIntent.id
-          );
-
-          const message = {
-            succeeded: true,
-            intent_payment_id: paymentIntent.id,
-          };
-
-          // Calling the logistic service
-          await KafkaProducer.producer.send({
-            topic: 'payment_intent',
-            compression: CompressionTypes.GZIP,
-            messages: [{ value: JSON.stringify(message) }],
-          });
-
-          break;
-        case 'payment_intent.canceled':
-          await OrderRepository.updatePaymentStatus(
-            false,
-            paymentIntent.description,
-            paymentIntent.id
-          );
-
-          break;
-        default:
-          console.log(`Unhandled event type ${event.type}`);
-      }
-      
-      return rep.send({ received: true });
-    }
+    PurchaseController.stripeEvent
   );
 
   server.get(

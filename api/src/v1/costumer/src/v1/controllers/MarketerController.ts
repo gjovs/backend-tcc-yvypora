@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import MarketerRepository from '../services/marketer.repository';
+import MarketerRepository from '../domain/repositories/marketer.repository';
 
 export class MarketerController {
   async get(req: FastifyRequest<{
