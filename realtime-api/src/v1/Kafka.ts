@@ -31,8 +31,7 @@ class KafkaConsumer {
       eachMessage: async ({ message }) => {
         const payload = JSON.parse(message.toString());
 
-        const res = await OrderController.toQueue({ intent_payment_id: payload.intent_payment_id});
-        
+        await OrderController.toQueue({ intent_payment_id: payload.intent_payment_id});
       },
     });
   }
