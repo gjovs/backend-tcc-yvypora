@@ -3,6 +3,11 @@ import { OrderController } from "./controllers/index";
 import { Worker } from "worker_threads";
 import { promisify } from "util";
 
+
+interface IKafkaMessage {
+  value: string;
+}
+
 class KafkaConsumer {
   private kafka: Kafka;
   public consumer: Consumer | undefined;
@@ -23,15 +28,11 @@ class KafkaConsumer {
 
   public async runConsumer() {
     await this.consumer?.run({
-      eachMessage: async ({ topic, partition, message }) => {
-        // @ts-ignore
-        const payload = JSON.parse(message.value);
-
-        console.log(payload);
+      eachMessage: async ({ message }) => {
+        const payload = JSON.parse(message.toString());
 
         const res = await OrderController.toQueue({ intent_payment_id: payload.intent_payment_id});
-
-        console.log(res);
+        
       },
     });
   }
