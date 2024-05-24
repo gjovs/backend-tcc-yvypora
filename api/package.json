@@ -35,7 +35,7 @@
     "@prisma/client": "^4.10.0",
     "axios": "^1.3.4",
     "bcryptjs": "^2.4.3",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.4.5",
     "fastify": "^4.13.0",
     "firebase-admin": "^11.5.0",
     "geolib": "^3.3.3",
