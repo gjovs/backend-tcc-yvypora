@@ -36,7 +36,7 @@
     "axios": "^1.3.4",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.3",
-    "fastify": "^4.13.0",
+    "fastify": "^4.28.1",
     "firebase-admin": "^11.5.0",
     "geolib": "^3.3.3",
     "jsonwebtoken": "^9.0.0",
